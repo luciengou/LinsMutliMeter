@@ -1,0 +1,30 @@
+  Revised: Wednesday, January 15, 2014
+          Revision: 
+
+
+
+
+
+
+
+Bill Of Materials        January 15,2014      13:10:56	Page1
+
+Item	Quantity	Reference	Part
+______________________________________________
+
+1	1	C11	102
+2	5	C55,C56,C57,C58,C74	104
+3	1	C164	100uF/25V
+4	1	D6	[P6KE18A]
+5	1	J19	IN_INTERFACE
+6	1	R5	75  1/2W
+7	1	R7	1M
+8	1	R71	20K
+9	1	R72	11.75K
+10	3	R73,R76,R77	2K
+11	1	R74	47K
+12	1	R75	[2K]
+13	1	R118	1K
+14	1	U21	MCP3421
+15	3	U116,U427,U428	OP2177
+16	1	ZD106	TL431

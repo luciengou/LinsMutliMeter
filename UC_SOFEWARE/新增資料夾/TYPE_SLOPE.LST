@@ -1,0 +1,1047 @@
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE TYPE_SLOPE
+OBJECT MODULE PLACED IN TYPE_SLOPE.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE TYPE_SLOPE.c OMF2 BROWSE DEBUG
+
+line level    source
+
+   1          /*******************************************
+   2                    TC SLOPE AND RTD SLOPE
+   3          
+   4            用 K_type 做基礎校正歸零及最高基準校正
+   5            放大倍數採最大輸入電壓 E TYPE 為最大倍數
+   6            使精度為 0.1F/COUNT  G=53
+   7            131072/65536
+   8          K_TYPE  0       //2466F //54.807mV      //24660 COUNT // 2.9431V
+   9          J_TYPE  1       //1368F //42.922mV      //13680 COUNT // 2.3049V
+  10          T_TYPE  2       //360F  //9.286mV       //3600  COUNT // 0.49866V
+  11          E_TYPE  3       //1440F //61.022mV      //14400 COUNT // 3.2768
+  12          R_TYPE  4       //2880F //18.842mV      //28800 COUNT //
+  13          S_TYPE  5       //2880F //16.771mV      //28800 COUNT //
+  14          B_TYPE  6       //3240F //13.585mV      //32400 COUNT //
+  15          
+  16              MCP 3421(18BITS ADC) READ ONLY
+  17              FOR Value_read
+  18              Count = 131071 ( Vin -(-Vin))/2.048V
+  19          ******************************************/
+  20          #include <MG82FE564.H>
+  21          #include<TYPE_SLOPE.h>
+  22          #include <IO_DEFINE.h>
+  23          /**********************************/
+  24          #define K_TYPE          0               //2466F   54.807mV      P0=0x00
+  25          #define J_TYPE          1               //1368F   42.922mV
+  26          #define T_TYPE          2               //360F    9.286mV
+  27          #define E_TYPE          3               //1440F   61.022mV
+  28          #define R_TYPE          4               //2880F   18.842mV
+  29          #define S_TYPE          5               //2880F   16.771mV
+  30          #define B_TYPE          6               //3240F   13.585mV
+  31          #define N_TYPE      7           //?       ? 
+  32          
+  33          unsigned char AV_COD = 0;
+  34          unsigned char NG_COD = 0;
+  35          unsigned char NP_COD = 0;
+  36          unsigned char ng_flog = 0;
+  37          unsigned int VA_TEST ;
+  38          xdata unsigned char K_Slope[10] = {0,36,48,56,64,76,88,104,120,200};
+  39          xdata unsigned char J_Slope[9] = {0,32,40,48,52,112,160,200,255};//32//40//48//52//256//112
+  40          xdata unsigned char T_Slope[10] = {7,8,10,16,24,32,48,56,64,72}; //8/10/16/24/48/56/64/72
+  41          xdata unsigned char E_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255}; //16 32 40      48      56      64 96 104 256 148
+  42          xdata unsigned char R_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255};
+  43          xdata unsigned char S_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255};
+  44          xdata unsigned char B_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255};
+  45          xdata unsigned char N_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255};
+  46          xdata unsigned char RTD_Slope[11] = {0,16,32,40,48,56,64,96,104,148,255};
+  47          /***********************************************
+  48               K_TYPE 2466F   54.807mV    P0=0x00
+  49          ************************************************/
+  50          unsigned int Get_K_Slope(unsigned long int Code_Value) 
+  51          {
+  52   1         unsigned int out_Value;
+  53   1      //   unsigned int reg_Value;
+  54   1      
+  55   1                              Code_Value = 320 + Code_Value/2.21;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 2   
+
+  56   1      
+  57   1                              VA_TEST = Code_Value ;
+  58   1      
+  59   1                          out_Value = Code_Value;     
+  60   1      
+  61   1               if(Code_Value > 760)   //1203   
+  62   1                 {
+  63   2                  out_Value = out_Value-(Code_Value-700)/K_Slope[1] ;  //ok
+  64   2                 }
+  65   1                if(Code_Value > 1350)         //860 2436
+  66   1                 {
+  67   2                  out_Value = out_Value-(Code_Value-1250)/K_Slope[5] ;//
+  68   2                 }
+  69   1               if(Code_Value > 2450)    //1400
+  70   1                 {    
+  71   2                 out_Value =out_Value+(Code_Value-2350)/K_Slope[3] ; //
+  72   2                 }
+  73   1               if(Code_Value > 3268)   //2480
+  74   1                 {
+  75   2                 out_Value =out_Value+(Code_Value-3150)/K_Slope[2];
+  76   2                 }
+  77   1               if(Code_Value > 4200)   //3200
+  78   1                 {
+  79   2                 out_Value =out_Value-(Code_Value-4100)/K_Slope[6];
+  80   2                 }
+  81   1               if(Code_Value > 4950)   //4460
+  82   1                 {
+  83   2                 out_Value =out_Value-(Code_Value-4800)/K_Slope[4]; 
+  84   2                 }
+  85   1               if(Code_Value > 5500)   //4460
+  86   1                 {
+  87   2                 out_Value =out_Value-(Code_Value-5450)/K_Slope[6];
+  88   2                 }
+  89   1               if(Code_Value > 6586)   //5360 
+  90   1                 {
+  91   2                 out_Value =out_Value-(Code_Value-6460)/K_Slope[5];  //
+  92   2                 }
+  93   1               if(Code_Value > 7680)  //6260 
+  94   1                 {
+  95   2                 out_Value =out_Value-(Code_Value-7600)/K_Slope[8];
+  96   2                 }
+  97   1               if(Code_Value > 9343)  //7520  
+  98   1                 {
+  99   2                 out_Value =out_Value-(Code_Value-9220)/K_Slope[9];
+ 100   2                 }
+ 101   1               if(Code_Value > 11120) //9140 
+ 102   1                 {
+ 103   2                 out_Value =out_Value+(Code_Value-11030)/K_Slope[9];
+ 104   2                 }
+ 105   1               if(Code_Value > 12310) //9140 
+ 106   1                 {
+ 107   2                 out_Value =out_Value+(Code_Value-12240)/K_Slope[10];
+ 108   2                 }
+ 109   1           if(Code_Value > 12860)     //11480
+ 110   1                 {
+ 111   2                 out_Value =out_Value+(Code_Value-12680)/K_Slope[8]; 
+ 112   2                 }
+ 113   1               if(Code_Value > 13780)  //12920
+ 114   1                 {
+ 115   2                 out_Value =out_Value+(Code_Value-13540)/K_Slope[8];
+ 116   2                 }
+ 117   1               if(Code_Value > 14330)  //12920
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 3   
+
+ 118   1                 {
+ 119   2                 out_Value =out_Value+(Code_Value-14300)/K_Slope[9];
+ 120   2                 }
+ 121   1               if(Code_Value > 15050)   //14000
+ 122   1                 {
+ 123   2                 out_Value =out_Value+(Code_Value-14900)/K_Slope[7];                                                                                                                                                                                                                                                                                                  
+ 124   2                 }
+ 125   1               if(Code_Value > 15850)   //14000
+ 126   1                 {
+ 127   2                 out_Value =out_Value+(Code_Value-15660)/K_Slope[6];                                                                                                                                                                                                                                                                                                  
+ 128   2                 }
+ 129   1               if(Code_Value > 16704)    //14900
+ 130   1                 {
+ 131   2                 out_Value =out_Value+(Code_Value-16580)/K_Slope[6];
+ 132   2                 }
+ 133   1               if(Code_Value > 17480)  //15980                                                                                                                                                                                                                                                        
+ 134   1                 {
+ 135   2                 out_Value =out_Value+(Code_Value-17280)/K_Slope[6];
+ 136   2                 }
+ 137   1               if(Code_Value > 18250)  //17240
+ 138   1                 {
+ 139   2                 out_Value =out_Value+(Code_Value-18100)/K_Slope[5];
+ 140   2                 }
+ 141   1               if(Code_Value > 19246) //18140
+ 142   1                 {
+ 143   2                 out_Value =out_Value+(Code_Value-19160)/K_Slope[4];
+ 144   2                 }
+ 145   1               if(Code_Value > 20126)  //19220
+ 146   1                 {
+ 147   2                 out_Value =out_Value+(Code_Value-20100)/K_Slope[6];
+ 148   2                 }
+ 149   1               if(Code_Value > 20810) //20300
+ 150   1                 {
+ 151   2                 out_Value =out_Value+(Code_Value-20740)/K_Slope[2]; 
+ 152   2                 }
+ 153   1               if(Code_Value > 21810) //20300
+ 154   1                 {
+ 155   2                 out_Value =out_Value+(Code_Value-21760)/K_Slope[3]; 
+ 156   2                 }
+ 157   1               if(Code_Value > 22570)   //21200
+ 158   1                 {
+ 159   2                 out_Value =out_Value+(Code_Value-22480)/K_Slope[3];
+ 160   2                 }
+ 161   1               if(Code_Value > 23020)   //22100
+ 162   1                 {
+ 163   2                 out_Value =out_Value+(Code_Value-22840)/K_Slope[5];
+ 164   2                 }
+ 165   1               if(Code_Value > 23556)   // 22820
+ 166   1                 {
+ 167   2                 out_Value =out_Value+(Code_Value-23440)/K_Slope[2];//
+ 168   2                 }
+ 169   1               if(Code_Value > 24350)    //23360
+ 170   1                 {
+ 171   2                 out_Value =out_Value+(Code_Value-24300)/K_Slope[3];
+ 172   2                 }
+ 173   1               if(Code_Value > 24560)    //24080
+ 174   1                 {
+ 175   2                 out_Value =out_Value+(Code_Value-24420)/K_Slope[3];
+ 176   2                 }
+ 177   1                 if(Code_Value > 25000)          //24080
+ 178   1                 {
+ 179   2                 out_Value =out_Value-(Code_Value-24860)/K_Slope[4];
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 4   
+
+ 180   2                 }
+ 181   1                    return out_Value;                                   // 20240 2530   920 176
+ 182   1      }
+ 183          /**********************************************
+ 184               J_TYPE     1368F 42.922mV P0=0X01
+ 185          ***********************************************/
+ 186          unsigned int Get_J_Slope(unsigned long int Code_Value)  
+ 187          {
+ 188   1         unsigned int out_Value;
+ 189   1                      
+ 190   1                      Code_Value = 320 + Code_Value/2.82;
+ 191   1              
+ 192   1                      VA_TEST = Code_Value ;
+ 193   1      
+ 194   1                 out_Value = Code_Value;      
+ 195   1      
+ 196   1               if(Code_Value > 854)   //864
+ 197   1                 {
+ 198   2                 out_Value =out_Value-(Code_Value-730)/J_Slope[1] ;
+ 199   2                 }
+ 200   1               if(Code_Value > 1340)  //864
+ 201   1                 {
+ 202   2                 out_Value =out_Value-(Code_Value-1250)/J_Slope[3] ;
+ 203   2                 }      
+ 204   1               if(Code_Value > 1610) //
+ 205   1                 {
+ 206   2                 out_Value =out_Value-(Code_Value-1530)/J_Slope[6] ;
+ 207   2                 }
+ 208   1               if(Code_Value > 2445)
+ 209   1                 {
+ 210   2                 out_Value =out_Value-(Code_Value-2330)/J_Slope[4] ;
+ 211   2                 }
+ 212   1           if(Code_Value > 3698)
+ 213   1                 {
+ 214   2                 out_Value =out_Value-(Code_Value-3550)/J_Slope[5] ;
+ 215   2                 }
+ 216   1                 if(Code_Value > 5668)
+ 217   1                 {
+ 218   2                 out_Value = out_Value + (Code_Value-5450)/J_Slope[7] ; 
+ 219   2                 }
+ 220   1               if(Code_Value > 7260) 
+ 221   1                 {
+ 222   2                 out_Value =out_Value + (Code_Value-7160)/J_Slope[8] ;
+ 223   2                 }
+ 224   1               if(Code_Value > 8430)
+ 225   1                 {
+ 226   2                 out_Value =out_Value-(Code_Value-8260)/J_Slope[6] ;
+ 227   2                 }
+ 228   1                 if(Code_Value > 9550)
+ 229   1                 {
+ 230   2                 out_Value =out_Value-(Code_Value-9450)/J_Slope[5];
+ 231   2                 }
+ 232   1               if(Code_Value > 10550)
+ 233   1                 {
+ 234   2                 out_Value =out_Value-(Code_Value-10470)/J_Slope[5];
+ 235   2                 }
+ 236   1               if(Code_Value > 10950) 
+ 237   1                 {
+ 238   2                 out_Value =out_Value-(Code_Value-10850)/J_Slope[5];
+ 239   2                 }
+ 240   1                 if(Code_Value > 11550) 
+ 241   1                 {
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 5   
+
+ 242   2                 out_Value =out_Value-(Code_Value-11480)/J_Slope[4];
+ 243   2                 }
+ 244   1               if(Code_Value > 12355) 
+ 245   1                 {
+ 246   2                 out_Value =out_Value-(Code_Value-12240)/J_Slope[4];
+ 247   2                 }
+ 248   1               if(Code_Value > 13193)
+ 249   1                 {
+ 250   2                 out_Value =out_Value-(Code_Value-13050)/J_Slope[4];  
+ 251   2                 }
+ 252   1               if(Code_Value > 14050)
+ 253   1                 {
+ 254   2                 out_Value =out_Value-(Code_Value-13950)/J_Slope[3] ; 
+ 255   2                 }
+ 256   1               if(Code_Value > 14920) 
+ 257   1                 {
+ 258   2                 out_Value =out_Value-(Code_Value-14750)/J_Slope[5] ;  //3
+ 259   2                 }
+ 260   1         return out_Value;
+ 261   1      
+ 262   1      }
+ 263          /**********************************************
+ 264               T_TYPE     2               //360F    9.286mV
+ 265          ***********************************************/
+ 266          unsigned int Get_T_Slope(unsigned long int Code_Value) 
+ 267          {
+ 268   1         unsigned int outlo_Value;
+ 269   1         unsigned int outhi_Value;
+ 270   1         unsigned int out_Value;
+ 271   1         unsigned int neg_Value;
+ 272   1      
+ 273   1                      out_Value =  Code_Value ;
+ 274   1                      outhi_Value =  Code_Value >> 16 ;
+ 275   1      
+ 276   1         if (outhi_Value != 0 )
+ 277   1               {
+ 278   2                NP_COD = 1;
+ 279   2                      out_Value = ~out_Value;
+ 280   2      
+ 281   2                      outlo_Value = out_Value ; 
+ 282   2      
+ 283   2                        if(out_Value <= 694)  
+ 284   2                          {
+ 285   3                            outlo_Value =320-(out_Value/2.17);
+ 286   3      
+ 287   3                                outlo_Value = outlo_Value-(231-outlo_Value)/24;
+ 288   3                                neg_Value = outlo_Value;
+ 289   3                                ng_flog = 1;
+ 290   3      
+ 291   3                                 AV_COD = 0;
+ 292   3                              }                
+ 293   2                        else
+ 294   2                          {
+ 295   3                           outlo_Value =(out_Value/2.17)-320;
+ 296   3      
+ 297   3                               outlo_Value = outlo_Value+(outlo_Value+231)/24;
+ 298   3                               ng_flog = 0;
+ 299   3      
+ 300   3                               AV_COD = 1;
+ 301   3                      }
+ 302   2                      
+ 303   2                 if((outlo_Value >110)&&(ng_flog == 0)) 
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 6   
+
+ 304   2              {
+ 305   3                       outlo_Value =outlo_Value+(outlo_Value-100)/T_Slope[3];
+ 306   3                  }
+ 307   2                 if((outlo_Value > 437)&&(ng_flog == 0))
+ 308   2                  {
+ 309   3                       outlo_Value =outlo_Value+(outlo_Value-420)/T_Slope[6];
+ 310   3                  }
+ 311   2                 if((outlo_Value > 600)&&(ng_flog == 0))
+ 312   2                  {
+ 313   3                      outlo_Value =outlo_Value+(outlo_Value-550)/T_Slope[5];
+ 314   3                  }
+ 315   2                      if((outlo_Value > 734)&&(ng_flog == 0))
+ 316   2                  {
+ 317   3                      outlo_Value =outlo_Value+(outlo_Value-710)/T_Slope[4];
+ 318   3                  }
+ 319   2                 if((outlo_Value > 960)&&(ng_flog == 0)) 
+ 320   2                  {
+ 321   3                      outlo_Value =outlo_Value+(outlo_Value-950)/T_Slope[5];
+ 322   3                  }
+ 323   2                 if((outlo_Value > 1150)&&(ng_flog == 0))
+ 324   2                  {
+ 325   3                      outlo_Value =outlo_Value+(outlo_Value-1100)/T_Slope[4];
+ 326   3                  }
+ 327   2                 if((outlo_Value > 1350)&&(ng_flog == 0))
+ 328   2                  {
+ 329   3                      outlo_Value =outlo_Value+(outlo_Value-1300)/T_Slope[5];
+ 330   3                  }                                                                    
+ 331   2                      if((outlo_Value > 1540)&&(ng_flog == 0))
+ 332   2                  {
+ 333   3                      outlo_Value =outlo_Value+(outlo_Value-1520)/T_Slope[3]; 
+ 334   3                  }
+ 335   2                 if((outlo_Value> 1780)&&(ng_flog == 0)) 
+ 336   2                  {
+ 337   3                      outlo_Value =outlo_Value+(outlo_Value-1750)/T_Slope[4];
+ 338   3                  }
+ 339   2                      if((outlo_Value > 1910)&&(ng_flog == 0)) 
+ 340   2                  {
+ 341   3                      outlo_Value =outlo_Value+(outlo_Value-1900)/T_Slope[3];
+ 342   3                  }
+ 343   2                 if((outlo_Value > 2180)&&(ng_flog == 0))
+ 344   2                  {
+ 345   3                   outlo_Value =outlo_Value+(outlo_Value-2160)/T_Slope[3];
+ 346   3                  }
+ 347   2                if((outlo_Value > 2280)&&(ng_flog == 0))
+ 348   2                  {
+ 349   3                   outlo_Value =outlo_Value+(outlo_Value-2270)/T_Slope[3];
+ 350   3                  }
+ 351   2                if((outlo_Value > 2550)&&(ng_flog == 0))
+ 352   2                  {
+ 353   3                   outlo_Value =outlo_Value+(outlo_Value-2520)/T_Slope[5];
+ 354   3                  }
+ 355   2                if((outlo_Value > 2720)&&(ng_flog == 0))
+ 356   2                  {
+ 357   3                   outlo_Value =outlo_Value+(outlo_Value-2600)/T_Slope[3];
+ 358   3                  }
+ 359   2                if((outlo_Value > 2890)&&(ng_flog == 0))
+ 360   2                  {
+ 361   3                   outlo_Value =outlo_Value+(outlo_Value-2850)/T_Slope[2]; 
+ 362   3                  }
+ 363   2                if((outlo_Value > 2970)&&(ng_flog == 0))
+ 364   2                  {
+ 365   3                   outlo_Value =outlo_Value+(outlo_Value-2840)/T_Slope[6]; 
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 7   
+
+ 366   3                  }
+ 367   2                if((outlo_Value > 3150)&&(ng_flog == 0))
+ 368   2                  {
+ 369   3                   outlo_Value =outlo_Value+(outlo_Value-3130)/T_Slope[2];//
+ 370   3                  }
+ 371   2                if(outlo_Value > 5000) outlo_Value = 0;
+ 372   2              }       
+ 373   1         else
+ 374   1          {
+ 375   2               if ((outhi_Value == 0) && (out_Value <= 11000))
+ 376   2                 {
+ 377   3                    AV_COD = 0;
+ 378   3                        NP_COD = 0;
+ 379   3                        outlo_Value = out_Value ;
+ 380   3      
+ 381   3                   outlo_Value = 320 + out_Value/2.18;
+ 382   3      
+ 383   3                   if(outlo_Value > 680)
+ 384   3                    {
+ 385   4                     outlo_Value =outlo_Value-(outlo_Value-610)/T_Slope[5] ;
+ 386   4                    }
+ 387   3                   if(outlo_Value > 940)
+ 388   3                    {
+ 389   4                     outlo_Value =outlo_Value-(outlo_Value-910)/T_Slope[4] ;
+ 390   4                    }
+ 391   3                   if(outlo_Value > 1300) 
+ 392   3                    {
+ 393   4                     outlo_Value =outlo_Value-(outlo_Value-1270)/T_Slope[4] ;
+ 394   4                    }
+ 395   3                   if(outlo_Value > 1720)
+ 396   3                    {
+ 397   4                     outlo_Value =outlo_Value-(outlo_Value-1700)/T_Slope[4] ;
+ 398   4                    }
+ 399   3                   if(outlo_Value > 2170)
+ 400   3                    {
+ 401   4                     outlo_Value =outlo_Value-(outlo_Value-2150)/28 ;
+ 402   4                    }
+ 403   3                       if(outlo_Value > 2610)
+ 404   3                    {
+ 405   4                     outlo_Value =outlo_Value-(outlo_Value-2580)/T_Slope[5] ; 
+ 406   4                    }
+ 407   3                   if(outlo_Value > 2980)
+ 408   3                    {
+ 409   4                     outlo_Value =outlo_Value-(outlo_Value-2960)/T_Slope[5] ; 
+ 410   4                    }
+ 411   3                   if(outlo_Value > 3511) 
+ 412   3                    {
+ 413   4                     outlo_Value =outlo_Value-(outlo_Value-3410)/T_Slope[5] ;
+ 414   4                    }
+ 415   3                   if(outlo_Value > 3984) 
+ 416   3                    {
+ 417   4                     outlo_Value =outlo_Value-(outlo_Value-3870)/T_Slope[6] ;
+ 418   4                    }
+ 419   3                       if(outlo_Value > 11000) outlo_Value = 0;
+ 420   3                }
+ 421   2         }
+ 422   1                    return outlo_Value;
+ 423   1      }
+ 424          /***********************************************
+ 425                       E_Slope
+ 426          ************************************************/
+ 427          unsigned int Get_E_Slope(unsigned long int Code_Value)
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 8   
+
+ 428          {
+ 429   1         unsigned int out_Value;
+ 430   1      
+ 431   1                      Code_Value = 320 + Code_Value/2.82;
+ 432   1              
+ 433   1                      VA_TEST = Code_Value ;
+ 434   1      
+ 435   1                 out_Value = Code_Value;      
+ 436   1      
+ 437   1               if(Code_Value > 684)
+ 438   1                 {
+ 439   2                  out_Value = Code_Value ;                                                                              
+ 440   2                 }
+ 441   1               if(Code_Value  > 1058)
+ 442   1                 { 
+ 443   2                 out_Value = out_Value-(Code_Value-560)/E_Slope[6] ; 
+ 444   2                 }    
+ 445   1               if(Code_Value  > 1443)
+ 446   1                 { 
+ 447   2                 out_Value = out_Value-(Code_Value-780)/E_Slope[6] ; 
+ 448   2                 }
+ 449   1               if(Code_Value > 2042)
+ 450   1                 {
+ 451   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 452   2                 }
+ 453   1               if(Code_Value  > 2250)
+ 454   1                 {
+ 455   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 456   2                 }
+ 457   1               if(Code_Value  > 3250)
+ 458   1                 {
+ 459   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 460   2                 }
+ 461   1               if(Code_Value > 4100)
+ 462   1                 {
+ 463   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 464   2                 }
+ 465   1               if(Code_Value > 5300)
+ 466   1                 {
+ 467   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 468   2                 }
+ 469   1               if(Code_Value > 6750)
+ 470   1                {
+ 471   2                out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 472   2                 }
+ 473   1               if(Code_Value > 7800)
+ 474   1                 {
+ 475   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 476   2                 }
+ 477   1               if(Code_Value > 9100)
+ 478   1                 {
+ 479   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 480   2                 }
+ 481   1               if(Code_Value > 11400)
+ 482   1                 {
+ 483   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 484   2                 }
+ 485   1               if(Code_Value > 14500)
+ 486   1                 {
+ 487   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];                             
+ 488   2                 }
+ 489   1               if(Code_Value > 16700)
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 9   
+
+ 490   1                 {
+ 491   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 492   2                 }
+ 493   1               if(Code_Value > 17600)
+ 494   1                 {
+ 495   2                 out_Value = out_Value-(Code_Value-1390)/E_Slope[6];
+ 496   2                 }
+ 497   1               if(Code_Value > 18000)
+ 498   1                 {
+ 499   2                  out_Value =out_Value-(Code_Value-3870)/E_Slope[6] ;
+ 500   2                 }
+ 501   1         return out_Value;
+ 502   1      
+ 503   1      }
+ 504          /**********************************************
+ 505                 R_Slope
+ 506          ***********************************************/
+ 507          unsigned int Get_R_Slope(unsigned long int Code_Value)
+ 508          {
+ 509   1         unsigned int out_Value;
+ 510   1      
+ 511   1                      Code_Value = 320 + Code_Value/2.82;
+ 512   1              
+ 513   1                      VA_TEST = Code_Value ;
+ 514   1      
+ 515   1                 out_Value = Code_Value;
+ 516   1      
+ 517   1               if(Code_Value > 580)
+ 518   1                 {
+ 519   2                      out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 520   2                 }
+ 521   1               if(Code_Value > 1040)
+ 522   1                 {
+ 523   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 524   2                 }    
+ 525   1           if(Code_Value > 1360)
+ 526   1                 {
+ 527   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 528   2                 }
+ 529   1            if(Code_Value > 1920)
+ 530   1                 {
+ 531   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 532   2                 }
+ 533   1              if(Code_Value > 2320)
+ 534   1                 {
+ 535   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 536   2                 }
+ 537   1               if(Code_Value > 2900)
+ 538   1                 {
+ 539   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 540   2                 }
+ 541   1               if(Code_Value > 3600)
+ 542   1                 {
+ 543   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 544   2                 }
+ 545   1               if(Code_Value > 5460)
+ 546   1                 {
+ 547   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 548   2                 }
+ 549   1               if(Code_Value > 6400)
+ 550   1                 {
+ 551   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 10  
+
+ 552   2                 }
+ 553   1               if(Code_Value > 7500)
+ 554   1                 {
+ 555   2                      out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 556   2                 }
+ 557   1               if(Code_Value > 8500)
+ 558   1                 {
+ 559   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 560   2                 }
+ 561   1               if(Code_Value > 9900)
+ 562   1                 {
+ 563   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 564   2                 }
+ 565   1             if(Code_Value > 11100)
+ 566   1                 {
+ 567   2                      out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 568   2                 }
+ 569   1               if(Code_Value > 12100)
+ 570   1                 {
+ 571   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 572   2                 }
+ 573   1               if(Code_Value >13100)
+ 574   1                 {
+ 575   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 576   2                 }
+ 577   1               if(Code_Value > 14600)
+ 578   1                 {
+ 579   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 580   2                 }
+ 581   1               if(Code_Value > 16200)
+ 582   1                 {
+ 583   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 584   2                 }
+ 585   1               if(Code_Value > 17200)
+ 586   1                 {
+ 587   2                out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 588   2                 }
+ 589   1               if(Code_Value > 19100)
+ 590   1                 {
+ 591   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 592   2                 }
+ 593   1           if(Code_Value > 21100)
+ 594   1                 {
+ 595   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 596   2                 }
+ 597   1               if(Code_Value > 22600)
+ 598   1                 {
+ 599   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 600   2                 }
+ 601   1              if(Code_Value > 24500)
+ 602   1                 {
+ 603   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 604   2                 }
+ 605   1               if(Code_Value > 26600)
+ 606   1                 {
+ 607   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 608   2                 }
+ 609   1               if(Code_Value > 28600)
+ 610   1                 {
+ 611   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 612   2                 }
+ 613   1               if(Code_Value > 31000)
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 11  
+
+ 614   1                 {
+ 615   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 616   2                 }
+ 617   1              if(Code_Value >33400)
+ 618   1                 {
+ 619   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 620   2                 }
+ 621   1              if(Code_Value > 36600)
+ 622   1                 {
+ 623   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 624   2                 }
+ 625   1               if(Code_Value > 39700)
+ 626   1                 {
+ 627   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 628   2                 }
+ 629   1               if(Code_Value > 43800)
+ 630   1                 {
+ 631   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 632   2                 }
+ 633   1               if(Code_Value > 48700)
+ 634   1                 {
+ 635   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 636   2                 }
+ 637   1               if(Code_Value > 59300)
+ 638   1                 {
+ 639   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 640   2                 }
+ 641   1               if(Code_Value > 62000)
+ 642   1                 {
+ 643   2                 out_Value =out_Value-(Code_Value-3870)/R_Slope[6] ;
+ 644   2                 }
+ 645   1         return out_Value;
+ 646   1      
+ 647   1      }
+ 648          /***********************************************
+ 649                         S_Slope
+ 650          *************************************************/
+ 651          unsigned int Get_S_Slope(unsigned long int Code_Value)
+ 652          {
+ 653   1         unsigned int out_Value;
+ 654   1                      Code_Value = 320 + Code_Value/2.82;
+ 655   1              
+ 656   1                      VA_TEST = Code_Value ;
+ 657   1      
+ 658   1                 out_Value = Code_Value;
+ 659   1      
+ 660   1               if(Code_Value >= 610)
+ 661   1                 {
+ 662   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 663   2                 }
+ 664   1               if(Code_Value >= 1000)
+ 665   1                 {
+ 666   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 667   2                 }
+ 668   1               if(Code_Value >= 1420)
+ 669   1                 {
+ 670   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 671   2                 }
+ 672   1           if(Code_Value >= 1860)  
+ 673   1                 {
+ 674   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 675   2                 }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 12  
+
+ 676   1               if(Code_Value >= 2480) 
+ 677   1                 {
+ 678   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 679   2                 }
+ 680   1               if(Code_Value >= 3280)
+ 681   1                 {
+ 682   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 683   2                 }
+ 684   1               if(Code_Value >= 4300)
+ 685   1                 {
+ 686   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 687   2                 }
+ 688   1               if(Code_Value >= 5400) 
+ 689   1                 {
+ 690   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 691   2                 }
+ 692   1               if(Code_Value >= 6600) 
+ 693   1                 {
+ 694   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 695   2                 }
+ 696   1               if(Code_Value >= 8100)
+ 697   1                 {
+ 698   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 699   2                 }
+ 700   1               if(Code_Value >= 9550)
+ 701   1                 {
+ 702   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 703   2                 }
+ 704   1               if(Code_Value >= 11600) 
+ 705   1                 {
+ 706   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 707   2                 }                                                                     
+ 708   1               if(Code_Value >= 13800) 
+ 709   1                 {
+ 710   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 711   2                 }
+ 712   1               if(Code_Value >= 16500) 
+ 713   1                 {
+ 714   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 715   2                 }
+ 716   1               if(Code_Value >= 18500)
+ 717   1                 {
+ 718   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 719   2                 }
+ 720   1               if(Code_Value >= 20450)
+ 721   1                 {
+ 722   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 723   2                 }
+ 724   1               if(Code_Value >= 22700)
+ 725   1                 {
+ 726   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 727   2                 }
+ 728   1               if(Code_Value >= 25200)
+ 729   1                 {
+ 730   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 731   2                 }
+ 732   1               if(Code_Value >= 27500)
+ 733   1                 {
+ 734   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 735   2                 }
+ 736   1               if(Code_Value >= 30300) 
+ 737   1                 {
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 13  
+
+ 738   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 739   2                 }
+ 740   1               if(Code_Value >= 33200)
+ 741   1                 {
+ 742   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 743   2                 }
+ 744   1               if(Code_Value >= 36300)
+ 745   1                 {
+ 746   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 747   2                 }
+ 748   1               if(Code_Value >= 39700) 
+ 749   1                 {
+ 750   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;                                                            
+ 751   2                 }
+ 752   1               if(Code_Value >= 50800) 
+ 753   1                 {
+ 754   2                 out_Value =out_Value-(Code_Value-3870)/S_Slope[6] ;
+ 755   2                 }
+ 756   1         return out_Value;
+ 757   1      
+ 758   1      }
+ 759          /***********************************************
+ 760          
+ 761          ************************************************/
+ 762          unsigned int Get_B_Slope(unsigned long int Code_Value)
+ 763          {
+ 764   1         unsigned int out_Value;
+ 765   1      
+ 766   1                      Code_Value = 320 + Code_Value/2.82;
+ 767   1              
+ 768   1                      VA_TEST = Code_Value ;
+ 769   1      
+ 770   1                 out_Value = Code_Value;
+ 771   1      
+ 772   1      
+ 773   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 774   1                 {
+ 775   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 776   2                 }
+ 777   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 778   1                 {
+ 779   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 780   2                 }    
+ 781   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 782   1                 {
+ 783   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 784   2                 }
+ 785   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 786   1                 {
+ 787   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 788   2                 }
+ 789   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 790   1                 {
+ 791   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 792   2                 }
+ 793   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 794   1                 {
+ 795   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 796   2                 }
+ 797   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 798   1                 {
+ 799   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 14  
+
+ 800   2                 }
+ 801   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 802   1                 {
+ 803   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 804   2                 }
+ 805   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 806   1                 {
+ 807   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 808   2                 }
+ 809   1      
+ 810   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 811   1                 {
+ 812   2                 out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 813   2                 }
+ 814   1      
+ 815   1         return out_Value;
+ 816   1      
+ 817   1      }
+ 818          /***********************************************
+ 819                   N_Slope
+ 820          ************************************************/
+ 821          unsigned int Get_N_Slope(unsigned long int Code_Value)
+ 822          {
+ 823   1         unsigned int out_Value;
+ 824   1      
+ 825   1                      Code_Value = 320 + Code_Value/2.82;
+ 826   1              
+ 827   1                      VA_TEST = Code_Value ;
+ 828   1      
+ 829   1                 out_Value = Code_Value;
+ 830   1      
+ 831   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 832   1                 {
+ 833   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 834   2                 }
+ 835   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 836   1                 {
+ 837   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 838   2                 }    
+ 839   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 840   1                 {
+ 841   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 842   2                 }
+ 843   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 844   1                 {
+ 845   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 846   2                 }
+ 847   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 848   1                 {
+ 849   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 850   2                 }
+ 851   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 852   1                 {
+ 853   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 854   2                 }
+ 855   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 856   1                 {
+ 857   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 858   2                 }
+ 859   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 860   1                 {
+ 861   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 15  
+
+ 862   2                 }
+ 863   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 864   1                 {
+ 865   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 866   2                 }
+ 867   1               if((Code_Value > 2000) && (Code_Value < 3000))
+ 868   1                 {
+ 869   2                 out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 870   2                 }
+ 871   1      
+ 872   1         return out_Value;
+ 873   1      
+ 874   1      }
+ 875          
+ 876          /*****************************************************
+ 877                 RTD_SLOPE
+ 878          ******************************************************/
+ 879          unsigned int Get_RTD_Slope(unsigned long int Code_Value) 
+ 880          {
+ 881   1         unsigned int RTD_Value;
+ 882   1      
+ 883   1         unsigned int out_Value;
+ 884   1                      Code_Value = 320 + Code_Value/2.82;
+ 885   1              
+ 886   1                      VA_TEST = Code_Value ;
+ 887   1      
+ 888   1                 out_Value = Code_Value;      
+ 889   1                      
+ 890   1                              RTD_Value = Code_Value;                                                                                 
+ 891   1               if((RTD_Value >= 3200) && (RTD_Value < 2600))
+ 892   1                 {
+ 893   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 894   2                 }
+ 895   1              else if((RTD_Value >= 2600) && (RTD_Value <1950))
+ 896   1                 {
+ 897   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 898   2                 }    
+ 899   1              else if((RTD_Value >= 1950) && (RTD_Value < 950))
+ 900   1                 {
+ 901   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 902   2                 } 
+ 903   1              else if((RTD_Value >= 950) && (RTD_Value < 40))
+ 904   1                 {
+ 905   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 906   2                 } 
+ 907   1              else if((RTD_Value >= 40) && (RTD_Value < 0))
+ 908   1                 {
+ 909   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 910   2                 } 
+ 911   1              else if((RTD_Value >= 0) && (RTD_Value < 1300))
+ 912   1                 {
+ 913   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 914   2                 } 
+ 915   1              else if((RTD_Value >= 1300) && (RTD_Value < 2200))
+ 916   1                 {
+ 917   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 918   2                 } 
+ 919   1              else if((RTD_Value >= 2200) && (RTD_Value < 3250))
+ 920   1                 {
+ 921   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 922   2                 } 
+ 923   1              else if((RTD_Value >= 3250) && (RTD_Value < 4100))
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 16  
+
+ 924   1                 {
+ 925   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 926   2                 } 
+ 927   1              else if((RTD_Value >= 4100) && (RTD_Value < 5000))
+ 928   1                 {
+ 929   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 930   2                 } 
+ 931   1              else if((RTD_Value >= 5000) && (RTD_Value < 5750))
+ 932   1                 {
+ 933   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 934   2                 } 
+ 935   1              else if((RTD_Value >= 5750) && (RTD_Value < 6450))
+ 936   1                 {
+ 937   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 938   2                 } 
+ 939   1              else if((RTD_Value >= 6450) && (RTD_Value < 7350))
+ 940   1                 {
+ 941   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 942   2                 } 
+ 943   1              else if((RTD_Value >= 7350) && (RTD_Value < 7950))
+ 944   1                 {
+ 945   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 946   2                 } 
+ 947   1              else if((RTD_Value >= 7950) && (RTD_Value < 8700))
+ 948   1                 {
+ 949   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 950   2                 } 
+ 951   1              else if((RTD_Value >= 8700) && (RTD_Value < 9300))
+ 952   1                 {
+ 953   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 954   2                 } 
+ 955   1              else if((RTD_Value >= 9300) && (RTD_Value < 9900))
+ 956   1                 {
+ 957   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 958   2                 } 
+ 959   1              else if((RTD_Value >= 9900) && (RTD_Value < 10500))
+ 960   1                 {
+ 961   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 962   2                 } 
+ 963   1              else if((RTD_Value >= 10500) && (RTD_Value < 11500))
+ 964   1                 {
+ 965   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 966   2                 } 
+ 967   1              else if((RTD_Value >= 11500) && (RTD_Value < 11700))
+ 968   1                 {
+ 969   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 970   2                 } 
+ 971   1              else if((RTD_Value >= 11700) && (RTD_Value < 12300))
+ 972   1                 {
+ 973   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 974   2                 } 
+ 975   1              else if((RTD_Value >= 12300) && (RTD_Value <12850))
+ 976   1                 {
+ 977   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 978   2                 } 
+ 979   1              else if((RTD_Value >= 12850) && (RTD_Value < 13400))
+ 980   1                 {
+ 981   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+ 982   2                 }
+ 983   1              else if((RTD_Value >= 13400) && (RTD_Value < 13600))
+ 984   1                 {
+ 985   2                 out_Value =out_Value-(Code_Value-3870)/T_Slope[6] ;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            08/16/2014 08:07:50 PAGE 17  
+
+ 986   2                 }
+ 987   1                 return RTD_Value ;
+ 988   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =  11885    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     95    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6      60
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

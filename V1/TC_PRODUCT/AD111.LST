@@ -1,0 +1,221 @@
+C51 COMPILER V7.50   AD111                                                                 12/19/2013 16:33:13 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE AD111
+OBJECT MODULE PLACED IN AD111.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE AD111.C LARGE OMF2
+
+line level    source
+
+   1          /***********************************************
+   2            PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   3             CPU : MPC82G516
+   4             BEGIN DATE: 2013.11.01
+   5             FINISHED  : 2014.01.25
+   6             WRITEBY   :JOHNSON LIN
+   7             AD111  setup   SET 1001 0000 FOR A0 TYPE 
+   8              8CH =  pga =1 ,32767BITS
+   9          **************************************************/
+  10          #include <MPC82G516.h>
+  11          #include <AD111.h>
+  12          #include <COUNTER.H>
+  13          
+  14          
+  15          
+  16          #define   read_com  0x91    //    10010001
+  17          #define   write_com 0x90    //    10010000
+  18          #define   ic_com    0x8C    //    define PGA and counter
+  19          
+  20          sbit Value_SCL  = P2^6;
+  21          sbit Value_SDA  = P2^7;
+  22          sbit BEEP       = P3^4;  //for relay
+  23          unsigned char  _i2c_ack;      // bit array of error types
+  24          
+  25          extern unsigned char Value_Hi,Value_Lo;
+  26          extern void delay(unsigned int i);
+  27          extern idata unsigned char Soft_Timer[8];
+  28          
+  29          /********************************************************/
+  30          unsigned int Get_AD111_Value(void)
+  31          {
+  32   1       idata unsigned int res;
+  33   1        res = 0;
+  34   1        AD111_Init();
+  35   1        AD111_write_com(write_com,ic_com);
+  36   1        AD111_read_com(read_com,ic_com);
+  37   1        return(res);
+  38   1      }
+  39          /*******************************************************************/
+  40          void _i2cBitDly(void)               // wait 4.7uS, or thereabouts
+  41          {                                   // tune to xtal. This works at 11.0592MHz
+  42   1              unsigned char   i;
+  43   1              
+  44   1              for (i=0; i<0x12; i++);
+  45   1      }
+  46          /*****************************************************/
+  47          void AD111_Init(void)
+  48          {
+  49   1              unsigned int i;
+  50   1              Value_SCL = 1 ;
+  51   1              Value_SDA = 1 ;
+  52   1          Value_SDA = 1 ;
+  53   1              Value_SDA = 1 ;
+  54   1              _i2cBitDly();
+  55   1              _i2cBitDly();
+C51 COMPILER V7.50   AD111                                                                 12/19/2013 16:33:13 PAGE 2   
+
+  56   1              _i2cBitDly();
+  57   1              _i2cBitDly();
+  58   1              Value_SDA = 0;
+  59   1      
+  60   1              for(i = 0; i < 0x100; i++);    
+  61   1      }
+  62          /*********************************************************************/
+  63          void AD111_start(void)
+  64          {
+  65   1              Value_SDA = 1 ;
+  66   1              _i2cBitDly();
+  67   1              Value_SCL = 1 ;
+  68   1              _i2cBitDly();
+  69   1         Value_SDA = 0 ;
+  70   1         _i2cBitDly();
+  71   1         Value_SCL = 0 ;
+  72   1      }
+  73          /*************************************/
+  74          void AD111_stop(void)
+  75          {
+  76   1              Value_SCL = 1 ;
+  77   1              _i2cBitDly();
+  78   1          Value_SDA = 1 ;
+  79   1              _i2cBitDly();
+  80   1      }
+  81          /********************************************/
+  82          void AD111_write_byte(unsigned char bt)
+  83          {
+  84   1              idata unsigned char i;
+  85   1      
+  86   1              _i2c_ack = TRUE;                                                //default have ack
+  87   1        
+  88   1              for (i=0; i<8; i++)
+  89   1              {
+  90   2                      if (bt & 0x80)
+  91   2                      Value_SDA = 1;                      // send each bit, MSB first
+  92   2                      else
+  93   2                              Value_SDA = 0;
+  94   2                      Value_SCL = 1;
+  95   2                      _i2cBitDly();
+  96   2                      Value_SCL = 0;
+  97   2                      _i2cBitDly();
+  98   2                      bt <<= 1;
+  99   2              }
+ 100   1      
+ 101   1              Value_SDA = 1;                       // change input and listen for ACK
+ 102   1              Value_SCL = 1;
+ 103   1              _i2cBitDly();
+ 104   1              if (Value_SDA)
+ 105   1                      _i2c_ack = FALSE;                       // ack didn't happen, may be nothing out there
+ 106   1              Value_SCL = 0;
+ 107   1              _i2cBitDly();
+ 108   1      }
+ 109          /********************************************************/
+ 110          unsigned char AD111_read_byte(unsigned char lastbyte)   // lastone == 1 for last byte
+ 111          {
+ 112   1              idata unsigned char i, res;
+ 113   1              res = 0;
+ 114   1              Value_SDA = 1;
+ 115   1              for (i=0; i<8; i++)                 // each bit at a time, MSB first
+ 116   1              {
+ 117   2                      Value_SCL = 1;
+C51 COMPILER V7.50   AD111                                                                 12/19/2013 16:33:13 PAGE 3   
+
+ 118   2                      _i2cBitDly();
+ 119   2                      res <<= 1;
+ 120   2                      if (Value_SDA)          res |= 1;
+ 121   2                      Value_SCL = 0;
+ 122   2                      _i2cBitDly();
+ 123   2              }
+ 124   1              Value_SDA = lastbyte;                   // send ACK according to 'lastone'
+ 125   1              Value_SCL = 1;
+ 126   1              _i2cBitDly();
+ 127   1              Value_SCL = 0;
+ 128   1              Value_SDA = 1;
+ 129   1              _i2cBitDly();
+ 130   1              return(res);
+ 131   1      }
+ 132          /********************************************************/
+ 133          void AD111_write_com(unsigned char dev_id, unsigned char reg_addr)
+ 134          {
+ 135   1               AD111_start();                                                         //send start bit
+ 136   1               AD111_write_byte((dev_id));
+ 137   1               AD111_write_byte(reg_addr);               //send high address
+ 138   1               AD111_stop();                              //stop
+ 139   1      }
+ 140          /*****************************************************/
+ 141          unsigned int AD111_read_com(unsigned char dev_id, unsigned char reg_addr)
+ 142          {
+ 143   1              unsigned int i;
+ 144   1      
+ 145   1               AD111_start();                                                                         //send start bit
+ 146   1               AD111_write_byte(dev_id);                                      //send address byte
+ 147   1              i = ((unsigned int)  AD111_read_byte(0)) << 8;     //get high data
+ 148   1              i |=  AD111_read_byte(1);                                                 //get low data
+ 149   1              AD111_write_byte(reg_addr);
+ 150   1              AD111_stop();                              //stop
+ 151   1          
+ 152   1              return i;
+ 153   1      }
+ 154          /************************************/
+ 155          
+ 156          
+ 157          
+ 158          
+ 159          
+ 160          
+ 161          
+ 162          
+ 163          
+ 164          
+ 165          
+ 166          
+ 167          
+ 168          
+ 169          
+ 170          
+ 171          
+ 172          
+ 173          
+ 174          
+ 175          
+ 176          /************************************/
+ 177          void S_Delay(unsigned int n)
+ 178          {
+ 179   1              while(n--);
+C51 COMPILER V7.50   AD111                                                                 12/19/2013 16:33:13 PAGE 4   
+
+ 180   1      }
+ 181          /****************************************/
+ 182          void PlaySound(unsigned char n)
+ 183          {
+ 184   1              if(n==1)
+ 185   1                { BEEP = 1;}
+ 186   1                else 
+ 187   1                 { BEEP = 0 ;}
+ 188   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    309    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----       5
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

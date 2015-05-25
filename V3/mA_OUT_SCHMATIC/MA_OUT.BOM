@@ -1,0 +1,31 @@
+  Revised: Wednesday, January 15, 2014
+          Revision: 
+
+
+
+
+
+
+
+Bill Of Materials        January 15,2014      13:01:37	Page1
+
+Item	Quantity	Reference	Part
+______________________________________________
+
+1	1	C59	0.1uF/50V
+2	1	C60	220uF/16V
+3	1	C61	102
+4	5	C409,C410,C411,C412,C413	104
+5	1	J3	mA_OUT
+6	1	J11	CON8
+7	1	MOV401	9G330K
+8	1	Q406	2SC1623
+9	2	R42,R408	10K
+10	1	R79	4.7R
+11	1	R410	47K
+12	2	R411,R418	4.7K
+13	1	R412	98.7K
+14	1	R415	1K
+15	1	R417	10   1/2W
+16	1	U11	DAC6571
+17	2	U403,U404	LM358

@@ -1,0 +1,35 @@
+  Revised: Wednesday, January 15, 2014
+          Revision: 
+
+
+
+
+
+
+
+Bill Of Materials        January 15,2014      14:08:42	Page1
+
+Item	Quantity	Reference	Part
+______________________________________________
+
+1	9	C2,C3,C20,C26,C28,C31,	104
+		C32,C33,C34
+2	1	C163	100uF/25V
+3	1	J19	IN_INTERFACE
+4	1	R1	10M
+5	6	R2,R3,R4,R11,R13,R20	10K
+6	1	R14	28.2K
+7	1	R15	18.1K
+8	1	R16	150K
+9	1	R17	470K
+10	1	R36	47
+11	1	R45	20K
+12	1	R48	11.75K
+13	1	R49	47K
+14	3	R50,R52,R53	2K
+15	1	R51	[2K]
+16	1	R117	1K
+17	3	SW1,SW2,SW3	DIG-1
+18	4	U7,U416,U417,U418	OP2177
+19	1	U15	MCP3421
+20	1	ZD105	TL431

@@ -1,0 +1,178 @@
+(ExpressProject ""
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (File ".\rtd_main.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (NoModify)
+    (BOM_Scope "0")
+    (BOM_Mode "0")
+    (BOM_Report_File
+       "C:\Documents and Settings\林志強\桌面\銓盛\外包LAYOUT\RTD_MAIN.DSN")
+    (BOM_Merge_Include "FALSE")
+    (BOM_Property_Combine_7.0
+       "{Item}\t{Quantity}\t{Reference}_/\t{Value}____/\t{PCB FootPrint}")
+    (BOM_Header "Item\tQ/0x27/ty\tReference\tPart\tPCB FootPrint")
+    (BOM_Include_File "C:\DOCUMENTS AND SETTINGS\林志強\桌面\RTD.INC")
+    (BOM_Include_File_Combine_7.0 "{Item}\t{Quantity}\t{Reference}\t{Value}")
+    (BOM_One_Part_Per_Line "FALSE")
+    (BOM_View_Output "FALSE")
+    (Netlist_TAB "8")
+    (OTHER_Part_Value "{Value}")
+    (OTHER_Netlist_File "RTD.asc")
+    (OTHER_Netlist_File2 "RTD.CMP")
+    (OTHER_View_Output "FALSE")
+    (OTHER_View_Output2 "FALSE")
+    (OTHER_Formatter "pads2k.dll")
+    (OTHER_PCB_Footprint "{PCB Footprint}")
+    (OTHER_Switch0 "FALSE")
+    (OTHER_Switch1 "FALSE")
+    (OTHER_Switch2 "FALSE")
+    (OTHER_Switch3 "FALSE")
+    (OTHER_Switch4 "FALSE")
+    (OTHER_Switch5 "FALSE")
+    (OTHER_Switch6 "FALSE")
+    (CrossRef_Scope "0")
+    (Crossref__Mode "0")
+    (CrossRef_Sorting "0")
+    (CrossRef_Destination_File "C:\DOCUMENTS AND SETTINGS\林志強\桌面\RTD.XRF")
+    (CrossRef_XY "FALSE")
+    (CrossRef_Unused "FALSE")
+    (XRF_View_Output "FALSE")
+    (DRC_Scope "0")
+    (DRC_Action "0")
+    (DRC_Create_Warnings "TRUE")
+    (DRC_Check_Ports "FALSE")
+    (DRC_Check_Off-Page_Connectors "FALSE")
+    (DRC_Identical_References "TRUE")
+    (DRC_Type_Mismatch "TRUE")
+    (DRC_Report_Ports_and_Off-page_Connectors "FALSE")
+    (DRC_SDT_Compatibility "FALSE")
+    (DRC_Report_Off-grid_Objects "FALSE")
+    (DRC_Check_Unconnected_Nets "TRUE")
+    (DRC_Report_Netnames "FALSE")
+    (DRC_View_Output "FALSE")
+    (DRC_Report_File "C:\DOCUMENTS AND SETTINGS\林志強\桌面\RTD.DRC"))
+  (Folder "Outputs"
+    (Sort User)
+    (File ".\rtd.asc"
+      (Type "Report")))
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (CAP
+      (FullPartName "CAP.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\MY LIBRARY.OLB")
+      (DeviceIndex "0"))
+    (CAPACITOR_0603_0
+      (FullPartName "CAPACITOR_0603_0.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\洪銘澤\MY DOCUMENTS\MY PROGRAM\CMA_ITM\CMA421\線路圖\MAIN.DSN")
+      (DeviceIndex "0"))
+    (78L05_1
+      (FullPartName "78L05_1.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CS2-1.DSN")
+      (DeviceIndex "0"))
+    (R
+      (FullPartName "R.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (CON3
+      (FullPartName "CON3.Normal")
+      (LibraryName "C:\CADENCE\PSD_14.2\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("TRANSFORMER POWER"
+      (FullPartName "TRANSFORMER POWER.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (LED56/TO
+      (FullPartName "LED56/TO.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (2N1613
+      (FullPartName "2N1613.Normal")
+      (LibraryName "C:\CADENCE\PSD_14.2\TOOLS\CAPTURE\LIBRARY\TRANSISTOR.OLB")
+      (DeviceIndex "0"))
+    (CON2
+      (FullPartName "CON2.Normal")
+      (LibraryName "C:\CADENCE\PSD_14.2\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (C0603
+      (FullPartName "C0603.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\MY LIBRARY.OLB")
+      (DeviceIndex "0"))
+    (NPN-2SC1623_0
+      (FullPartName "NPN-2SC1623_0.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\ML\MY DOCUMENTS\CSEC\鍾中鋒\CS2-2\CS2-2.DSN")
+      (DeviceIndex "0"))
+    (NJM4565_1
+      (FullPartName "NJM4565_1.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\DUAL PANEL3.DSN")
+      (DeviceIndex "0"))
+    (OP07
+      (FullPartName "OP07.Normal")
+      (LibraryName
+         "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\MY LIBRARY\MY LIBRARY.OLB")
+      (DeviceIndex "0"))
+    (4052
+      (FullPartName "4052.Normal")
+      (LibraryName "C:\CADENCE\PSD_14.2\TOOLS\CAPTURE\LIBRARY\MUXDECODER.OLB")
+      (DeviceIndex "0"))
+    (VCC
+      (LibraryName "C:\CADENCE\PSD_14.2\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (DIODE
+      (FullPartName "DIODE.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (LED
+      (FullPartName "LED.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (LM358
+      (FullPartName "LM358.Normal")
+      (LibraryName
+         "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\MY LIBRARY\MY LIBRARY.OLB")
+      (DeviceIndex "0"))
+    ("DIODE GS1M_0"
+      (FullPartName "DIODE GS1M_0.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\RUNTOP\MY DOCUMENTS\LIN\CSEC\藍致軒\DSP\DCP.DSN")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Select "Design Resources"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 0 598 -4 -34 0 200 0 397"))
+      (Tab 0)))
+  (MPSSessionName "林志強")
+  (Folder "Simulation Resources"
+    (Folder "Indesign"
+      (File ".\indesign\cds.lib"
+        (Type "Report")
+        (DisplayName ".\Indesign\cds.lib"))
+      (File ".\indesign\hdl.var"
+        (Type "Report")
+        (DisplayName ".\Indesign\hdl.var"))
+      (File ".\indesign\rtd.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\rtd.vhd"))
+      (File ".\indesign\stubi.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\StubI.vhd"))
+      (File ".\indesign\sdf.cmd"
+        (Type "Report")
+        (DisplayName ".\Indesign\sdf.cmd"))
+      (File ".\indesign\detail.log"
+        (Type "Report")
+        (DisplayName ".\Indesign\detail.log")))))

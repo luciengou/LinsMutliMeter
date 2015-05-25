@@ -1,0 +1,984 @@
+(PCB LED
+ (description
+  (timeStamp "2014 01 12 01 16 01")
+  (program "CAPTURE.EXE" (Version "10.5.0.p001 CIS"))
+  (source "Original data from OrCAD/CAPTURE schematic")
+  (title "")
+  (date "Sunday, January 12, 2014")
+  (document "C:\\UC_PRODUCT\\UC_PRODUCT\\LED_SCHMATIC\\LED.DSN")
+  (revision "")
+  (organization "")
+  (address1 "")
+  (address2 "")
+  (address3 "")
+  (address4 "")
+  (partvaluecombine "{Value}")
+  (pcbfootprintcombine "{PCB Footprint}"))
+ (structure )
+ (placement
+  (component R_0
+   (place R450
+    (property 
+     (timestamp 01126881)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R451
+    (property 
+     (timestamp 01129994)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R452
+    (property 
+     (timestamp 0112999C)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R453
+    (property 
+     (timestamp 011299A4)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R454
+    (property 
+     (timestamp 011299AC)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R455
+    (property 
+     (timestamp 011299B4)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R456
+    (property 
+     (timestamp 011299BC)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R457
+    (property 
+     (timestamp 011299C4)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R458
+    (property 
+     (timestamp 011299CC)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R459
+    (property 
+     (timestamp 01129A12)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R460
+    (property 
+     (timestamp 01129A1C)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R461
+    (property 
+     (timestamp 01129A24)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R430
+    (property 
+     (timestamp 011200BD)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R462
+    (property 
+     (timestamp 01129A2C)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R431
+    (property 
+     (timestamp 01121010)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R463
+    (property 
+     (timestamp 01129A36)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R464
+    (property 
+     (timestamp 01129A3E)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R432
+    (property 
+     (timestamp 0112113D)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R465
+    (property 
+     (timestamp 01129A46)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R433
+    (property 
+     (timestamp 0112126C)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R466
+    (property 
+     (timestamp 01129A52)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R434
+    (property 
+     (timestamp 0112139D)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R467
+    (property 
+     (timestamp 01129D07)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R435
+    (property 
+     (timestamp 01124056)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R436
+    (property 
+     (timestamp 01124303)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R468
+    (property 
+     (timestamp 01129D0F)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R469
+    (property 
+     (timestamp 01129D17)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R437
+    (property 
+     (timestamp 01124370)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R438
+    (property 
+     (timestamp 011243DD)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R439
+    (property 
+     (timestamp 0112444A)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R470
+    (property 
+     (timestamp 01129D1F)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R471
+    (property 
+     (timestamp 01129D27)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R440
+    (property 
+     (timestamp 011244B7)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R472
+    (property 
+     (timestamp 01129D2F)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R473
+    (property 
+     (timestamp 01129D37)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R441
+    (property 
+     (timestamp 01124524)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R474
+    (property 
+     (timestamp 01129D3F)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R442
+    (property 
+     (timestamp 01124591)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R443
+    (property 
+     (timestamp 01126849)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R444
+    (property 
+     (timestamp 01126851)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R445
+    (property 
+     (timestamp 01126859)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R446
+    (property 
+     (timestamp 01126861)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R447
+    (property 
+     (timestamp 01126869)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R448
+    (property 
+     (timestamp 01126871)
+     ("Source Package" R_0)
+     (Value R_0)))
+   (place R449
+    (property 
+     (timestamp 01126879)
+     ("Source Package" R_0)
+     (Value R_0))))
+  (component CON3
+   (place J16
+    (property 
+     (timestamp 0121969C)
+     ("Source Package" CON3)
+     (Value V_SEL)))
+   (place J17
+    (property 
+     (timestamp 012197F7)
+     ("Source Package" CON3)
+     (Value GND_SEL))))
+  (component CON8
+   (place J7
+    (property 
+     (timestamp 0121514F)
+     ("Source Package" CON8)
+     (Value Dispaly1))))
+  (component LED
+   (place D140
+    (property 
+     (timestamp 01129CB9)
+     ("Source Package" LED)
+     (Value a1)))
+   (place D141
+    (property 
+     (timestamp 01129CC1)
+     ("Source Package" LED)
+     (Value b1)))
+   (place D110
+    (property 
+     (timestamp 01123C3D)
+     ("Source Package" LED)
+     (Value c5)))
+   (place D142
+    (property 
+     (timestamp 01129CD1)
+     ("Source Package" LED)
+     (Value c1)))
+   (place D143
+    (property 
+     (timestamp 01129CD9)
+     ("Source Package" LED)
+     (Value d1)))
+   (place D111
+    (property 
+     (timestamp 01123CAA)
+     ("Source Package" LED)
+     (Value d5)))
+   (place D112
+    (property 
+     (timestamp 01123D17)
+     ("Source Package" LED)
+     (Value e5)))
+   (place D144
+    (property 
+     (timestamp 01129CE5)
+     ("Source Package" LED)
+     (Value e1)))
+   (place D145
+    (property 
+     (timestamp 01129CED)
+     ("Source Package" LED)
+     (Value f1)))
+   (place D113
+    (property 
+     (timestamp 01123D84)
+     ("Source Package" LED)
+     (Value f5)))
+   (place D114
+    (property 
+     (timestamp 01123DF1)
+     ("Source Package" LED)
+     (Value g5)))
+   (place D146
+    (property 
+     (timestamp 01129CF5)
+     ("Source Package" LED)
+     (Value g1)))
+   (place D147
+    (property 
+     (timestamp 01129CFF)
+     ("Source Package" LED)
+     (Value dp1)))
+   (place D115
+    (property 
+     (timestamp 01123E5E)
+     ("Source Package" LED)
+     (Value dp5)))
+   (place D116
+    (property 
+     (timestamp 01126809)
+     ("Source Package" LED)
+     (Value a4)))
+   (place D117
+    (property 
+     (timestamp 01126811)
+     ("Source Package" LED)
+     (Value b4)))
+   (place D118
+    (property 
+     (timestamp 01126819)
+     ("Source Package" LED)
+     (Value c4)))
+   (place D119
+    (property 
+     (timestamp 01126821)
+     ("Source Package" LED)
+     (Value d4)))
+   (place D120
+    (property 
+     (timestamp 01126829)
+     ("Source Package" LED)
+     (Value e4)))
+   (place D121
+    (property 
+     (timestamp 01126831)
+     ("Source Package" LED)
+     (Value f4)))
+   (place D122
+    (property 
+     (timestamp 01126839)
+     ("Source Package" LED)
+     (Value g4)))
+   (place D123
+    (property 
+     (timestamp 01126841)
+     ("Source Package" LED)
+     (Value dp4)))
+   (place D124
+    (property 
+     (timestamp 01129944)
+     ("Source Package" LED)
+     (Value a3)))
+   (place D125
+    (property 
+     (timestamp 0112994C)
+     ("Source Package" LED)
+     (Value b3)))
+   (place D126
+    (property 
+     (timestamp 01129954)
+     ("Source Package" LED)
+     (Value a2)))
+   (place D127
+    (property 
+     (timestamp 0112995C)
+     ("Source Package" LED)
+     (Value b2)))
+   (place D128
+    (property 
+     (timestamp 01129964)
+     ("Source Package" LED)
+     (Value c2)))
+   (place D129
+    (property 
+     (timestamp 0112996C)
+     ("Source Package" LED)
+     (Value d2)))
+   (place D130
+    (property 
+     (timestamp 01129974)
+     ("Source Package" LED)
+     (Value e2)))
+   (place D131
+    (property 
+     (timestamp 0112997C)
+     ("Source Package" LED)
+     (Value f2)))
+   (place D132
+    (property 
+     (timestamp 01129984)
+     ("Source Package" LED)
+     (Value g2)))
+   (place D133
+    (property 
+     (timestamp 0112998C)
+     ("Source Package" LED)
+     (Value dp2)))
+   (place D134
+    (property 
+     (timestamp 011299DC)
+     ("Source Package" LED)
+     (Value c3)))
+   (place D135
+    (property 
+     (timestamp 011299E4)
+     ("Source Package" LED)
+     (Value d3)))
+   (place D136
+    (property 
+     (timestamp 011299F0)
+     ("Source Package" LED)
+     (Value e3)))
+   (place D137
+    (property 
+     (timestamp 011299F8)
+     ("Source Package" LED)
+     (Value f3)))
+   (place D138
+    (property 
+     (timestamp 01129A00)
+     ("Source Package" LED)
+     (Value g3)))
+   (place D139
+    (property 
+     (timestamp 01129A0A)
+     ("Source Package" LED)
+     (Value dp3)))
+   (place D108
+    (property 
+     (timestamp 01123358)
+     ("Source Package" LED)
+     (Value a5)))
+   (place D109
+    (property 
+     (timestamp 011233C0)
+     ("Source Package" LED)
+     (Value b5))))
+  (component 4051/SO_1
+   (place U410
+    (property 
+     (timestamp 0111FF58)
+     ("Source Package" 4051/SO_1)
+     (Value MBI5168)))
+   (place U406
+    (property 
+     (timestamp 0111CF1B)
+     ("Source Package" 4051/SO_1)
+     (Value MBI5168)))
+   (place U407
+    (property 
+     (timestamp 0111FB11)
+     ("Source Package" 4051/SO_1)
+     (Value MBI5168)))
+   (place U408
+    (property 
+     (timestamp 0111FC74)
+     ("Source Package" 4051/SO_1)
+     (Value MBI5168)))
+   (place U409
+    (property 
+     (timestamp 0111FDE1)
+     ("Source Package" 4051/SO_1)
+     (Value MBI5168))))
+  (component C
+   (place C418
+    (property 
+     (timestamp 0111F304)
+     ("Source Package" C)
+     (Value C)))
+   (place C419
+    (property 
+     (timestamp 0111FAEA)
+     ("Source Package" C)
+     (Value C)))
+   (place C420
+    (property 
+     (timestamp 0111FC4D)
+     ("Source Package" C)
+     (Value C)))
+   (place C421
+    (property 
+     (timestamp 0111FDBA)
+     ("Source Package" C)
+     (Value C)))
+   (place C422
+    (property 
+     (timestamp 0111FF31)
+     ("Source Package" C)
+     (Value C)))))
+ (library
+  (image LED
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\DISCRETE.OLB))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image R_0
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image 4051/SO_1
+   (property 
+    (sourcelib C:\\UC_PRODUCT\\UC_SCHMATIC\\RTD_TC.DSN))
+   (pin 999 6
+    (property 
+     (pinname /OUT1)
+     (pintype 0)))
+   (pin 999 8
+    (property 
+     (pinname /OUT3)
+     (pintype 4)))
+   (pin 999 11
+    (property 
+     (pinname /OUT6)
+     (pintype 0)))
+   (pin 999 10
+    (property 
+     (pinname /OUT5)
+     (pintype 0)))
+   (pin 999 9
+    (property 
+     (pinname /OUT4)
+     (pintype 0)))
+   (pin 999 16
+    (property 
+     (pinname VDD)
+     (pintype 7)))
+   (pin 999 7
+    (property 
+     (pinname /OUT2)
+     (pintype 5)))
+   (pin 999 3
+    (property 
+     (pinname CLK)
+     (pintype 1)))
+   (pin 999 13
+    (property 
+     (pinname /OE)
+     (pintype 1)))
+   (pin 999 14
+    (property 
+     (pinname SDO)
+     (pintype 1)))
+   (pin 999 15
+    (property 
+     (pinname "R-EXT")
+     (pintype 1)))
+   (pin 999 12
+    (property 
+     (pinname /OUT7)
+     (pintype 1)))
+   (pin 999 1
+    (property 
+     (pinname GND)
+     (pintype 5)))
+   (pin 999 5
+    (property 
+     (pinname /OUT0)
+     (pintype 1)))
+   (pin 999 2
+    (property 
+     (pinname SDI)
+     (pintype 1)))
+   (pin 999 4
+    (property 
+     (pinname LE)
+     (pintype 1))))
+  (image CON3
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\CONNECTOR.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4))))
+  (image C
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\HANK\\орн▒\\TTEAT\\HANK.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image CON8
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\CONNECTOR.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname 4)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname 5)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname 6)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname 7)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname 8)
+     (pintype 4)))))
+ (network
+  (net N17966525
+   (pins
+     R433-2 U409-15))
+  (net N17967407
+   (pins
+     R434-2 U410-15))
+  (net LED1_LE
+   (pins
+     U406-4 U407-4 U408-4 U409-4 U410-4 J7-8))
+  (net N17997123
+   (pins
+     U410-8 R471-2))
+  (net N17996979
+   (pins
+     R467-2 U410-5))
+  (net N17997129
+   (pins
+     R470-2 U410-9))
+  (net N17996997
+   (pins
+     R472-2 U410-10))
+  (net N17997049
+   (pins
+     R474-2 U410-12))
+  (net N17997141
+   (pins
+     R468-2 U410-6))
+  (net N17997135
+   (pins
+     R469-2 U410-7))
+  (net N17997003
+   (pins
+     R473-2 U410-11))
+  (net N17997597
+   (pins
+     D108-2 R435-1))
+  (net N17998051
+   (pins
+     D109-2 R436-1))
+  (net N17998507
+   (pins
+     D110-2 R437-1))
+  (net N17998965
+   (pins
+     D111-2 R439-1))
+  (net N17999425
+   (pins
+     D112-2 R438-1))
+  (net N17999887
+   (pins
+     D113-2 R440-1))
+  (net N18000351
+   (pins
+     D114-2 R441-1))
+  (net N18000817
+   (pins
+     D115-2 R442-1))
+  (net N18001285
+   (pins
+     D116-2 R443-1))
+  (net N18001755
+   (pins
+     D117-2 R444-1))
+  (net N18002227
+   (pins
+     D118-2 R445-1))
+  (net N18002701
+   (pins
+     D119-2 R447-1))
+  (net N18003177
+   (pins
+     D120-2 R446-1))
+  (net N18003655
+   (pins
+     D121-2 R448-1))
+  (net N18004135
+   (pins
+     D122-2 R449-1))
+  (net N18004617
+   (pins
+     D123-2 R450-1))
+  (net N18005101
+   (pins
+     D124-2 R459-1))
+  (net N18005587
+   (pins
+     D125-2 R460-1))
+  (net N18006075
+   (pins
+     D134-2 R461-1))
+  (net N18006565
+   (pins
+     D135-2 R463-1))
+  (net N17975060
+   (pins
+     U406-8 R439-2))
+  (net N18007057
+   (pins
+     D136-2 R462-1))
+  (net N17976167
+   (pins
+     R438-2 U406-9))
+  (net VLED
+    (property 
+     (nettype S))
+   (pins
+     D147-1 D108-1 D109-1 D110-1 D111-1 D112-1 D113-1 D114-1 D115-1
+     D116-1 D117-1 D118-1 D119-1 D120-1 D121-1 D122-1 D123-1 D124-1
+     D125-1 D134-1 D135-1 D136-1 D137-1 D138-1 D139-1 D126-1 D127-1
+     D128-1 D129-1 D130-1 D131-1 D132-1 D133-1 D140-1 D141-1 D142-1
+     D143-1 D144-1 D145-1 D146-1 J16-2))
+  (net N18007551
+   (pins
+     D137-2 R464-1))
+  (net N17977097
+   (pins
+     U406-7 R437-2))
+  (net N18008047
+   (pins
+     D138-2 R465-1))
+  (net N17978343
+   (pins
+     U406-6 R436-2))
+  (net N18008545
+   (pins
+     D139-2 R466-1))
+  (net N17979293
+   (pins
+     U406-5 R435-2))
+  (net N18009045
+   (pins
+     D126-2 R451-1))
+  (net N18009547
+   (pins
+     D127-2 R452-1))
+  (net N18010051
+   (pins
+     D128-2 R453-1))
+  (net N18010557
+   (pins
+     D129-2 R454-1))
+  (net N18011065
+   (pins
+     D130-2 R455-1))
+  (net N18011575
+   (pins
+     D131-2 R457-1))
+  (net N18012087
+   (pins
+     D132-2 R456-1))
+  (net N18012601
+   (pins
+     D133-2 R458-1))
+  (net N18013117
+   (pins
+     D140-2 R467-1))
+  (net N18013635
+   (pins
+     D141-2 R468-1))
+  (net N18014155
+   (pins
+     D142-2 R469-1))
+  (net N18014677
+   (pins
+     D143-2 R471-1))
+  (net N18015201
+   (pins
+     D144-2 R470-1))
+  (net N18015727
+   (pins
+     D145-2 R472-1))
+  (net N18016255
+   (pins
+     D146-2 R473-1))
+  (net N18016785
+   (pins
+     D147-2 R474-1))
+  (net +12V
+    (property 
+     (nettype S))
+   (pins
+     J7-3 J16-1))
+  (net GND
+    (property 
+     (nettype S))
+   (pins
+     R430-1 R431-1 R432-1 R433-1 R434-1 J17-2))
+  (net ALL_SDA
+   (pins
+     U406-2 J7-7))
+  (net +5V
+    (property 
+     (nettype S))
+   (pins
+     U406-16 C418-1 U407-16 C419-1 U408-16 C420-1 U409-16 C421-1 U410-16
+     C422-1 J7-4))
+  (net N17983732
+   (pins
+     U406-10 R440-2))
+  (net N17984706
+   (pins
+     U406-11 R441-2))
+  (net N17985695
+   (pins
+     U406-12 R442-2))
+  (net LED1_SCL
+   (pins
+     U406-3 U407-3 U408-3 U409-3 U410-3 J7-6))
+  (net N17986030
+   (pins
+     U407-5 R443-2))
+  (net N17987201
+   (pins
+     U407-8 R447-2))
+  (net N17987882
+   (pins
+     U407-9 R446-2))
+  (net N17988571
+   (pins
+     U407-7 R445-2))
+  (net N17989617
+   (pins
+     U407-6 R444-2))
+  (net N17992086
+   (pins
+     U407-10 R448-2))
+  (net N17993162
+   (pins
+     U407-11 R449-2))
+  (net N17994253
+   (pins
+     U407-12 R450-2))
+  (net AG
+    (property 
+     (nettype S))
+   (pins
+     U406-1 C418-2 C419-2 U407-1 C420-2 U408-1 C421-2 U409-1 C422-2
+     U410-1 U406-13 U407-13 U408-13 U409-13 U410-13 J7-5 J17-1))
+  (net +24V
+    (property 
+     (nettype S))
+   (pins
+     J7-1 J16-3))
+  (net POG
+    (property 
+     (nettype S))
+   (pins
+     J7-2 J17-3))
+  (net N17957813
+   (pins
+     R430-2 U406-15))
+  (net N17958370
+   (pins
+     U406-14 U407-2))
+  (net N17955929
+   (pins
+     U408-2 U407-14))
+  (net N17996402
+   (pins
+     R461-2 U408-7))
+  (net N17996398
+   (pins
+     R452-2 U409-6))
+  (net N17996410
+   (pins
+     R460-2 U408-6))
+  (net N17996094
+   (pins
+     R458-2 U409-12))
+  (net N17996336
+   (pins
+     U409-8 R454-2))
+  (net N17996080
+   (pins
+     R459-2 U408-5))
+  (net N17996376
+   (pins
+     U408-8 R463-2))
+  (net N17996240
+   (pins
+     R464-2 U408-10))
+  (net N17996374
+   (pins
+     U409-9 R455-2))
+  (net N17996292
+   (pins
+     R466-2 U408-12))
+  (net N17996088
+   (pins
+     R456-2 U409-11))
+  (net N17996082
+   (pins
+     R457-2 U409-10))
+  (net N17962931
+   (pins
+     R431-2 U407-15))
+  (net N17996310
+   (pins
+     R451-2 U409-5))
+  (net N17996388
+   (pins
+     R462-2 U408-9))
+  (net N17965483
+   (pins
+     R432-2 U408-15))
+  (net N17996246
+   (pins
+     R465-2 U408-11))
+  (net N17996386
+   (pins
+     R453-2 U409-7))
+  (net N17956294
+   (pins
+     U409-2 U408-14))
+  (net N17956669
+   (pins
+     U410-2 U409-14)))
+)

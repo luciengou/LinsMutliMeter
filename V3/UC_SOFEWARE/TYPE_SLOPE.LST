@@ -1,0 +1,63 @@
+C51 COMPILER V9.02   TYPE_SLOPE                                                            01/15/2014 14:31:01 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE TYPE_SLOPE
+OBJECT MODULE PLACED IN TYPE_SLOPE.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE TYPE_SLOPE.c OMF2 OPTIMIZE(4,SPEED) BROWSE DEBUG
+
+line level    source
+
+   1          /*******************************************
+   2                    TC SLOPE AND RTD SLOPE
+   3          
+   4            用 K_type 做基礎校正歸零及最高基準校正
+   5            放大倍數採最大輸入電壓 E TYPE 為最大倍數
+   6            使精度為 0.1F/COUNT  G=53
+   7            131072/65536
+   8          K_TYPE  0       //2466F //54.807mV      //24660 COUNT // 2.9431V
+   9          J_TYPE  1       //1368F //42.922mV      //13680 COUNT // 2.3049V
+  10          T_TYPE  2       //360F  //9.286mV       //3600  COUNT // 0.49866V
+  11          E_TYPE  3       //1440F //61.022mV      //14400 COUNT // 3.2768
+  12          R_TYPE  4       //2880F //18.842mV      //28800 COUNT //
+  13          S_TYPE  5       //2880F //16.771mV      //28800 COUNT //
+  14          B_TYPE  6       //3240F //13.585mV      //32400 COUNT //
+  15          
+  16              ADS1110 (16BITS ADC) READ ONLY
+  17              FOR Value_read
+  18              Count = 65536 X ( Vin -(-Vin))/2.048V
+  19          
+  20          ******************************************/
+  21          #include<MPC82G516.h>
+  22          #include<TYPE_SLOPE.h>
+  23          
+  24          /**********************************/
+  25          #define K_TYPE          0               //2466F   54.807mV      P0=0x00
+  26          #define J_TYPE          1               //1368F   42.922mV
+  27          #define T_TYPE          2               //360F    9.286mV
+  28          #define E_TYPE          3               //1440F   61.022mV
+  29          #define R_TYPE          4               //2880F   18.842mV
+  30          #define S_TYPE          5               //2880F   16.771mV
+  31          #define B_TYPE          6               //3240F   13.585mV
+  32          #define N_TYPE      7           //?       ? 
+  33          
+  34          
+  35          
+  36          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,32 @@
+  Revised: Wednesday, January 15, 2014
+          Revision: 
+
+
+
+
+
+
+
+Bill Of Materials        January 15,2014      13:18:43	Page1
+
+Item	Quantity	Reference	Part
+______________________________________________
+
+1	8	C10,C27,C43,C44,C45,C46,	104
+		C47,C48
+2	2	D8,D9	[P6KE18A]
+3	1	D107	IN4148
+4	1	J19	IN_INTERFACE
+5	1	Q1	2SC1623
+6	1	R8	1K
+7	1	R31	10M
+8	7	R32,R33,R34,R35,R38,R40,	10K
+		R41
+9	1	R37	15K
+10	1	R56	20K
+11	1	R57	11.75K
+12	3	R58,R61,R62	2K
+13	1	R59	47K
+14	1	R60	[2K]
+15	5	U9,U113,U114,U422,U423	OP2177
+16	1	U18	MCP3421

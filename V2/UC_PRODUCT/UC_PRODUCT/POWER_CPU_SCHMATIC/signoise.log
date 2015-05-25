@@ -1,0 +1,3 @@
+INFO: Using default signal_devlibs = [devices.dml cds_models.ndx *.ndx *.dml]
+INFO: Finished loading SigNoise device libraries
+INFO: Using working device library 'C:/UC_PRODUCT/UC_SCHMATIC/devices.dml'

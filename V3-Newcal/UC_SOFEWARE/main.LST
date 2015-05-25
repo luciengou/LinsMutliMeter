@@ -1,0 +1,1395 @@
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c OMF2 OPTIMIZE(4,SPEED) BROWSE DEBUG
+
+line level    source
+
+   1          /***********************************************
+   2            PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   3             CPU : MPC82G516
+   4             BEGIN DATE: 2013.11.01
+   5             FINISHED  : 2014.01.25
+   6             WRITEBY   :JOHNSON LIN
+   7             AD111  setup   SET 1001 0000 FOR A0 TYPE 
+   8              8CH =  pga =1 ,32767BITS
+   9          **************************************************/
+  10          #include <MPC82G516.h>
+  11          #include <intrins.h>
+  12          #include <LED.h>
+  13          #include <AD3421.h>
+  14          #include <DAC6571_mV.h>
+  15          #include <DAC6571_mA.h>
+  16          #include <RTC3130.h>
+  17          #include <EEPROM.H>
+  18          #include <STDLIB.H>
+  19          #include <TYPE_SLOPE.H>
+  20          
+  21          #define   BASE_TEMP             32               //F & C Transfor Data
+  22          #define   MAX_TEMP              3240     //F 1800C
+  23          #define   MAX_VOLT              4400     //mV
+  24          #define   EEP_START             60
+  25          #define   EEP_END                       20000
+  26          #define   JOHNSON             0x5a
+  27          #define   LIN                 0xa5
+  28          
+  29          #define   K_TYPE                0               //2466F   54.807mV      P0=0x00
+  30          #define   J_TYPE                1               //1368F   42.922mV
+  31          #define   T_TYPE            2           //360F    9.286mV
+  32          #define   E_TYPE                3               //1440F   61.022mV
+  33          #define   R_TYPE                4               //2880F   18.842mV
+  34          #define   S_TYPE                5               //2880F   16.771mV
+  35          #define   B_TYPE                6               //3240F   13.585mV
+  36          #define   N_TYPE            7           //?       ?
+  37          
+  38          #define TC_FUNCTION             0
+  39          #define RTD_FUNCTION    1
+  40          #define mV_FUNCTION             2
+  41          #define mA_FUNCTION             3
+  42          #define RESET_FUNCTION  4
+  43          #define SETUP_FUNCTION  5
+  44          
+  45          #define   ON    1
+  46          #define   OFF   0
+  47          
+  48          
+  49          #define DISPLAY_SEND_TIME  0       //timer out work select
+  50          #define DATA_SAVE_TIME     1
+  51          #define DATA_SEND_TIME     2
+  52          #define SETUP_TIMEOUT      3
+  53          #define TIMEUP_TIME        4
+  54          
+  55          #define ITEM              0
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 2   
+
+  56          #define MODE_CAL          1
+  57          #define C_F_CAL           2
+  58          #define TYPE_CAL          3
+  59          #define TC_ZERO_CAL       4
+  60          #define TC_SPAN_CAL       5
+  61          #define RTD_ZERO_CAL      6
+  62          #define RTD_SPAN_CAL      7
+  63          #define mV_ZERO_CAL       8
+  64          #define mV_SPAN_CAL       9
+  65          #define mA_ZERO_CAL       10
+  66          #define mA_SPAN_CAL       11
+  67          #define ALARM_LO_CAL      12
+  68          #define ALARM_HI_CAL      13
+  69          #define YEAR_DATE_CAL     14
+  70          #define MON_DATE_CAL      15
+  71          #define DAY_DATE_CAL      16
+  72          #define HOUR_DATE_CAL     17
+  73          #define MIN_DATE_CAL      18
+  74          #define PRODUCT_RESET     19
+  75          #define NOMAL_FUNCTION    0
+  76          
+  77                             
+  78          #define  Mode_Select 18    //EEP Address
+  79          #define  C_F_Select  19
+  80          #define  Type_Select 20
+  81          #define  TC_Zero     21   
+  82          #define  TC_Span     23
+  83          #define  RTD_Zero    25
+  84          #define  RTD_Span    27
+  85          #define  mV_Zero     29                                                                   
+  86          #define  mV_Span     31
+  87          #define  mA_Zero     33
+  88          #define  mA_Span     35
+  89          #define  Alarm_Low   37
+  90          #define  Alarm_Hi    39
+  91          #define  Year_Date   41
+  92          #define  Mon_Date    42
+  93          #define  Day_Date    43
+  94          #define  Week_Date   44
+  95          #define  Hour_Date   45
+  96          #define  Min_Date    46
+  97          #define  EEP_ADR     50
+  98          
+  99          sbit TC_C    = P0^0;    //k=0x00;j=0x01;t=0x02;e=0x03; 
+ 100          sbit RTD_C   = P0^1;    //r=0x04;s=0x05;b=0x06;n=0x07;
+ 101          sbit mV_C    = P0^2;
+ 102          sbit mA_C    = P0^3;     //tc= 000 00xxx;  rtd=000 01xxx;    mV=000 10xxx
+ 103          sbit mV_OUT  = P0^4;     //mA= 000 11xxx;
+ 104          sbit mA_OUT  = P0^5;
+ 105          sbit UP_KEY   = P0^6;
+ 106          sbit DOWN_KEY = P0^7;
+ 107          
+ 108          sbit LED1_SCL = P1^0;
+ 109          sbit LED1_LE  = P1^1;
+ 110          sbit LED2_SCL = P1^2;
+ 111          sbit LED2_LE  = P1^3;
+ 112          sbit NONE_8   = P1^4;
+ 113          sbit NONE_1   = P1^5;
+ 114          sbit NONE_2   = P1^6;
+ 115          sbit NONE_3   = P1^7;
+ 116          
+ 117          sbit AD_SDA   = P2^0;
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 3   
+
+ 118          sbit AD_SCL   = P2^1;
+ 119          sbit ALL_SDA  = P2^2;
+ 120          sbit EEP_SCL  = P2^3;
+ 121          sbit OUT_SCL  = P2^4;
+ 122          sbit RTC_SCL  = P2^5;
+ 123          sbit NONE_4   = P2^6;
+ 124          sbit NONE_5   = P2^7;
+ 125          
+ 126          sbit R485_RX           = P3^0;
+ 127          sbit R485_TX           = P3^1;
+ 128          sbit FUNCTION_KEY      = P3^2;
+ 129          sbit OFFSET_KEY        = P3^3;
+ 130          sbit BEEP_OUT          = P3^4;   //for relay
+ 131          sbit R485_DE_RE        = P3^5;
+ 132          sbit NONE_6            = P3^6;
+ 133          sbit NONE_7            = P3^7;
+ 134          //===============================
+ 135          extern unsigned int KX; 
+ 136          extern unsigned int R;  
+ 137          extern unsigned int     TC_type_zero[8];         
+ 138          extern unsigned int     TC_type_span[8];
+ 139          extern unsigned char key_delay[16];
+ 140          
+ 141          idata unsigned char Soft_Timer[8] = {0,0,0,0,0,0,0,0};
+ 142          idata unsigned char T0_cnt, T1_cnt;
+ 143          
+ 144          unsigned char MAIN_SW;
+ 145          unsigned char Work_Type;
+ 146          unsigned char C_F_Type;
+ 147          unsigned char TC_Type;
+ 148          unsigned int  TC_Zero_offset;
+ 149          unsigned int  TC_Span_offset;
+ 150          unsigned int  RTD_Zero_offset;
+ 151          unsigned int  RTD_Span_offset;
+ 152          unsigned int  mV_Zero_offset;
+ 153          unsigned int  mV_Span_offset;
+ 154          unsigned int  mA_Zero_offset;
+ 155          unsigned int  mA_Span_offset;
+ 156          unsigned int  alarm_Low_set;
+ 157          unsigned int  alarm_Hi_set;
+ 158          unsigned char  use_year;
+ 159          unsigned char  use_mon;
+ 160          unsigned char  use_day;
+ 161          unsigned char  use_week;
+ 162          unsigned char  use_hour;
+ 163          unsigned char  use_min;
+ 164          unsigned char  eep_count;
+ 165          unsigned int   Disp_year;
+ 166          unsigned int  TempValue;
+ 167          
+ 168          unsigned int  LeftLiter;
+ 169          unsigned int left_FlowCnt, UseSec, UseHour;
+ 170          
+ 171          unsigned char tmp1;
+ 172          unsigned char C_F_Type;
+ 173          unsigned char ADH;
+ 174          unsigned char ADL;
+ 175          unsigned char Soft_Timer_Enable = 0;
+ 176          unsigned char Key_backup, ReceiveDate;
+ 177          unsigned char WashLiter, r_step, r_step_max, r_step_cnt;
+ 178          
+ 179          bit f_half_sec, f_key_hold, f_water_out, f_alarm_no_water,f_Power_on,f_reflash;
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 4   
+
+ 180          bit ReceiveFlag=0,f_acid3=0, f_clean=0, f_lock, f_show_orp=0;
+ 181          
+ 182          
+ 183          const unsigned char code TC_tab_offset[10] = {10, 15, 20, 30, 40, 60, 80};
+ 184          const unsigned char code TC_tab_slope[10] = {4, 3, 2, 1, 17, 6, 7, 5};
+ 185          const unsigned char code TC_tab_type[8] = {0x02, 0x0B, 0x2D, 0x36, 0x00};
+ 186          
+ 187          const unsigned char code RTD_tab_offset[10] = {10, 15, 20, 30, 40, 60, 80};
+ 188          const unsigned char code RTD_tab_slop[10] = {4, 3, 2, 1, 17, 6, 7, 5};
+ 189          
+ 190          const int code tab_k[22] = {
+ 191               4, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 192                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 193                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 194          };
+ 195          const int code tab_j[22] = {
+ 196               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 197                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 198                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 199          };
+ 200          const int code tab_t[22] = {
+ 201               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 202                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 203                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 204          };
+ 205          const int code tab_e[22] = {
+ 206               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 207                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 208                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 209          };
+ 210          const int code tab_r[22] = {
+ 211               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 212                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 213                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 214          };
+ 215          const int code tab_s[22] = {
+ 216               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 217                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 218                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 219          };
+ 220          const int code tab_b[22] = {
+ 221               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 222                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 223                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 224          };
+ 225          const int code tab_n[22] = {
+ 226               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 227                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 228                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 229          };
+ 230          const int code tab_rtd[22] = {
+ 231               0, 800, 1150, 1500, 1800, 2150, 2500, 2800,
+ 232                  1500, 1850, 2200, 2500, 2850, 3200, 3500,
+ 233                  2000, 2350, 2700, 3000, 3350, 3700, 4000
+ 234          };
+ 235          /***************************************
+ 236                     Port In/Out Setting
+ 237          *****************************************/
+ 238          void PORT_Init(void)
+ 239          {
+ 240   1              P0M0 = 0xFF;      //00=Qb,01=pull output, 10= input only,11=open drain
+ 241   1              P0M1 = 0x00;     //P0= ALL INPUT
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 5   
+
+ 242   1      
+ 243   1              P1M0 = 0x00;     //P1= ALL OUTPUT
+ 244   1              P1M1 = 0xFF;     //SETUP P1 ALL LO //  define P1.3 P1.4 P1.5 as push-pull
+ 245   1              P2M0 = 0x00;     //P2= ALL OUTOUT
+ 246   1              P2M1 = 0xFF;     //SETUP P2 ALL LO
+ 247   1          P3M0 = 0xFF;         //
+ 248   1              P3M1 = 0xff;
+ 249   1              P0 = 0xff;
+ 250   1              P1 = 0x00;
+ 251   1              P2 = 0x00; 
+ 252   1              P3 = 0x00;
+ 253   1      }
+ 254          /*******************************************
+ 255               interrupt   0
+ 256          *******************************************/
+ 257          void ex_int0(void) interrupt 0
+ 258          {
+ 259   1      ;       
+ 260   1      }
+ 261          /*******************************************
+ 262               interrupt   1
+ 263          *******************************************/
+ 264          void time0(void) interrupt  1     //   T=1/16 sec 
+ 265          {
+ 266   1       unsigned int Value_code;
+ 267   1              TR0 = 0;
+ 268   1              T1_cnt++;
+ 269   1              if ((T1_cnt%8)==0)
+ 270   1              SBUF = Value_code;
+ 271   1              TH0 = 0x0B;
+ 272   1              TL0 = 0xDC;
+ 273   1              TR0 = 1;
+ 274   1      }
+ 275          
+ 276          /*******************************************
+ 277               interrupt   3
+ 278          *******************************************/
+ 279          void time1(void) interrupt   3   //    T=1/16 sec 
+ 280          {
+ 281   1              TR1 = 0;
+ 282   1              T0_cnt++;
+ 283   1      
+ 284   1              if (Soft_Timer[DISPLAY_SEND_TIME] != 0)         Soft_Timer[DISPLAY_SEND_TIME]--;
+ 285   1      
+ 286   1              if ((T0_cnt%8)==0)                f_half_sec = 1;
+ 287   1                              
+ 288   1              if (T0_cnt == 16)
+ 289   1              {
+ 290   2                      T0_cnt = 0;
+ 291   2                      if (Soft_Timer[DATA_SAVE_TIME] != 0)    Soft_Timer[DATA_SAVE_TIME]--;   
+ 292   2                      if (Soft_Timer[DATA_SEND_TIME] != 0)    Soft_Timer[DATA_SEND_TIME]--;
+ 293   2                      if (Soft_Timer[SETUP_TIMEOUT] != 0)       Soft_Timer[SETUP_TIMEOUT]--;  
+ 294   2                      if (Soft_Timer[TIMEUP_TIME] != 0)               Soft_Timer[TIMEUP_TIME]--;
+ 295   2              }               
+ 296   1              TH1 = 0x0B;
+ 297   1              TL1 = 0xDC;
+ 298   1              TR1 = 1;
+ 299   1                      
+ 300   1      }
+ 301          //      DISPLAY_SEND_TIME  0       //timer out work select
+ 302          //      DATA_SAVE_TIME     1
+ 303          //      DATA_SEND_TIME     2
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 6   
+
+ 304          //      SETUP_TIMEOUT      3
+ 305          //      OTHER_SEND_TIME    4
+ 306          /*******************************************
+ 307              
+ 308          *******************************************/
+ 309          void T0_Init(void)
+ 310          {
+ 311   1              TR0 = 0;
+ 312   1              TMOD = 0x11;
+ 313   1              TH0 = 0x0B;
+ 314   1              TL0 = 0xDC;
+ 315   1              T0_cnt = 0;
+ 316   1              ET0 = 1;
+ 317   1              TR0 = 1;
+ 318   1      }
+ 319          /*******************************************
+ 320              
+ 321          *******************************************/
+ 322          void T1_Init(void)
+ 323          {
+ 324   1              TR1 = 0;
+ 325   1              TMOD = 0x11;
+ 326   1              TH1 = 0x0B;
+ 327   1              TL1 = 0xDC;
+ 328   1              T1_cnt = 0;
+ 329   1      //      AD111_Init();
+ 330   1              ET1 = 1;
+ 331   1              TR1 = 1;
+ 332   1      }
+ 333          /*******************************************
+ 334              
+ 335          *******************************************/
+ 336          void INT0_Init(void)
+ 337          {
+ 338   1          INT0 = 1;    
+ 339   1              IE0  = 0;                  
+ 340   1              IT0  = 1;
+ 341   1              EX0  = 1;         
+ 342   1      }
+ 343          /*******************************************/
+ 344          void InitUart()    //InitUart use timer2
+ 345          {
+ 346   1         SCON |= 0x50;                          /* uart in mode 1 (8 bit), REN=1 */
+ 347   1         T2CON &= 0xF0;               /* EXEN2=0; TR2=0; C/T2#=0; CP/RL2#=0; */
+ 348   1         T2CON |= 0x30;               /* RCLK = 1; TCLK=1; */
+ 349   1         TH2=0xFF;                    /* init value */
+ 350   1         TL2=0xD0;                    /* init value */
+ 351   1         RCAP2H=0xFF;                 /* reload value, 9600 Bds at 11.059MHz */
+ 352   1         RCAP2L=0xDC;                 /* reload value, 9600 Bds at 11.059MHz */
+ 353   1         ES = 1;                                                   /* Enable serial interrupt */
+ 354   1         TR2 = 1;                     /* Timer 2 run */
+ 355   1      }
+ 356          /******************************************
+ 357          void InitUart()              //InitUart use timer2
+ 358          {
+ 359             SCON |= 0x50;                            // uart in mode 1 (8 bit), REN=1 
+ 360             T2CON &= 0xF0;               // EXEN2=0; TR2=0; C/T2#=0; CP/RL2#=0; 
+ 361             T2CON |= 0x30;               // RCLK = 1; TCLK=1; 
+ 362             TH2=0xFF;                    // init value 
+ 363             TL2=0xDC;                    // init value 
+ 364             RCAP2H=0xFF;                 // reload value, 9600 Bds at 11.059MHz 
+ 365             RCAP2L=0xDC;                 // reload value, 9600 Bds at 11.059MHz 
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 7   
+
+ 366             ES = 1;                                              // Enable serial interrupt 
+ 367             TR2 = 1;                     // Timer 2 run 
+ 368          }
+ 369          /*************************************************/
+ 370          void serial() interrupt 4
+ 371          {
+ 372   1              if(TI==1)
+ 373   1              {
+ 374   2                 TI=0;
+ 375   2              }
+ 376   1              if(RI==1)
+ 377   1              {
+ 378   2                 RI=0;
+ 379   2                 ReceiveDate = SBUF;
+ 380   2                 ReceiveFlag = 1;
+ 381   2              }
+ 382   1      }
+ 383          /*******************************************/
+ 384          void sendchar(unsigned char SendData)
+ 385          {
+ 386   1         SBUF = SendData;
+ 387   1      }
+ 388          /******************************************
+ 389             Delay Time  250uS*i
+ 390          *******************************************/
+ 391          void delay(unsigned int i)
+ 392          {
+ 393   1              unsigned char j;
+ 394   1              for (; i>0; i--)
+ 395   1                      for (j=0; j<255; j++);
+ 396   1      }
+ 397          /*******************************************
+ 398              
+ 399          *******************************************/
+ 400          void Buzzer(unsigned char status)
+ 401          {
+ 402   1              if (status)
+ 403   1            P2 =      P2 |= 0x20;
+ 404   1              else
+ 405   1                P2 = P2 &= ~0x20;
+ 406   1      }
+ 407          /*******************************************
+ 408                CHECK PCB TYPE
+ 409          *******************************************/
+ 410          void Check_PCB(void)
+ 411          {
+ 412   1         unsigned char PCB_TYPE,PCB_SELECT,PCB_SETUP;
+ 413   1      
+ 414   1             PCB_TYPE = P0;
+ 415   1                 if(PCB_SELECT == PCB_TYPE & 0x01)        //tc
+ 416   1                   {
+ 417   2                           PCB_SETUP = 0x01;
+ 418   2                         
+ 419   2                           if(PCB_SELECT == PCB_TYPE & 0x010) //mV_out
+ 420   2                             {PCB_SETUP = 0x11 ;}
+ 421   2                               else if(PCB_SELECT == PCB_TYPE & 0x020)        //mA_out
+ 422   2                                 {PCB_SETUP = 0x21 ;}
+ 423   2                       }
+ 424   1                 else if(PCB_SELECT == PCB_TYPE & 0x02)       //rtd
+ 425   1                           {
+ 426   2                                  PCB_SETUP = 0x02 ;
+ 427   2      
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 8   
+
+ 428   2                            if(PCB_SELECT == PCB_TYPE & 0x010)        //mV_out
+ 429   2                              {PCB_SETUP = 0x21 ;}
+ 430   2                               else if(PCB_SELECT == PCB_TYPE & 0x020)        //mA_out
+ 431   2                                 {PCB_SETUP = 0x22 ;}
+ 432   2                           }
+ 433   1                else if(PCB_SELECT == PCB_TYPE & 0x04)        //mV
+ 434   1                           {
+ 435   2                                PCB_SETUP = 0x04 ;
+ 436   2      
+ 437   2                                if(PCB_SELECT == PCB_TYPE & 0x010)    //mV_out
+ 438   2                              {PCB_SETUP = 0x41 ;}
+ 439   2                               else if(PCB_SELECT == PCB_TYPE & 0x020)        //mA_out
+ 440   2                                 {PCB_SETUP = 0x42 ;}
+ 441   2                           } 
+ 442   1                else if(PCB_SELECT == PCB_TYPE & 0x08)        //mA
+ 443   1                          { 
+ 444   2                                 PCB_SETUP = 0x08 ;
+ 445   2      
+ 446   2                               if(PCB_SELECT == PCB_TYPE & 0x010)     //mV_out
+ 447   2                              {PCB_SETUP = 0x81 ;}
+ 448   2                               else if(PCB_SELECT == PCB_TYPE & 0x020)        //mA_out
+ 449   2                                 {PCB_SETUP = 0x82 ;}  
+ 450   2                          }
+ 451   1      }
+ 452          //==============================================
+ 453          void EEPROM_write_word(unsigned char addr, unsigned int intdata)
+ 454          {
+ 455   1              EEPROM_write_byte(addr++, (unsigned char)(intdata));
+ 456   1              EEPROM_write_byte(addr, (unsigned char)(intdata>>8));
+ 457   1      }
+ 458          //======================================
+ 459          unsigned int EEPROM_read_word(unsigned char addr)
+ 460          {
+ 461   1              unsigned int rdata;
+ 462   1      
+ 463   1              rdata = (unsigned int)(EEPROM_read_byte(addr+1));
+ 464   1              rdata <<= 8;
+ 465   1              rdata += (unsigned int)(EEPROM_read_byte(addr));
+ 466   1      
+ 467   1              return(rdata);  
+ 468   1      }
+ 469          //===========================================
+ 470          void EEPROM_WriteDefault(void)
+ 471          {
+ 472   1         unsigned char switch_status;
+ 473   1          
+ 474   1               switch_status = P2 & 0x1f;
+ 475   1      
+ 476   1          EEPROM_write_byte(Mode_Select,5);
+ 477   1          EEPROM_write_byte(C_F_Select, 0);
+ 478   1              EEPROM_write_byte(Type_Select,0);  //Type define k=0.j=1,t=2
+ 479   1              EEPROM_write_word(TC_Zero, 0);  
+ 480   1              EEPROM_write_word(TC_Span, 0);
+ 481   1              EEPROM_write_word(RTD_Zero, 0);
+ 482   1              EEPROM_write_word(RTD_Span, 0);
+ 483   1              EEPROM_write_word(mV_Zero, 0);
+ 484   1              EEPROM_write_word(mV_Span, 0);
+ 485   1              EEPROM_write_word(mA_Zero, 0);  
+ 486   1          EEPROM_write_word(mA_Span, 0);
+ 487   1              EEPROM_write_word(Alarm_Low, 0);
+ 488   1              EEPROM_write_word(Alarm_Hi, 5000);
+ 489   1          EEPROM_write_byte(Year_Date, 2014);
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 9   
+
+ 490   1          EEPROM_write_byte(Mon_Date, 1);
+ 491   1          EEPROM_write_byte(Day_Date, 1);
+ 492   1              EEPROM_write_byte(Week_Date, 3);
+ 493   1          EEPROM_write_byte(Hour_Date, 12);
+ 494   1          EEPROM_write_byte(Min_Date, 0);
+ 495   1              EEPROM_write_word(EEP_ADR, 50);
+ 496   1      }
+ 497          //==============================
+ 498          unsigned char Setup_time_is_up(void)
+ 499          {
+ 500   1              unsigned int i, reti;
+ 501   1      
+ 502   1              reti = 0;
+ 503   1              i = UseHour/24;
+ 504   1              return(reti);    
+ 505   1      }
+ 506          //======================================
+ 507          void Init_Volt_Detect(void)
+ 508          {
+ 509   1              r_step = 0;
+ 510   1              r_step_max = 0;
+ 511   1              r_step_cnt = 0;
+ 512   1              delay(1000);
+ 513   1      }
+ 514          //==================================
+ 515          unsigned char CurrentSeg(unsigned int i)
+ 516          {
+ 517   1              unsigned char retc;
+ 518   1      
+ 519   1              if (i < 12)
+ 520   1                      retc = 0;
+ 521   1              else if (i < 15)
+ 522   1                      retc = 1;
+ 523   1              else if (i < 18)
+ 524   1                      retc = 2;
+ 525   1              else if (i < 22)
+ 526   1                      retc = 3;
+ 527   1              else if (i < 25)
+ 528   1                      retc = 4;
+ 529   1              else if (i < 28)
+ 530   1                      retc = 5;
+ 531   1              else
+ 532   1                      retc = 6;
+ 533   1      
+ 534   1              return retc;
+ 535   1      }
+ 536          /************************************************/
+ 537          void do_reset(void)
+ 538          {
+ 539   1      }
+ 540          /************************************************/
+ 541          void Volt_Ctrl(void)
+ 542          {
+ 543   1      }
+ 544          /***********************************************/
+ 545          unsigned char Get_Key(void)
+ 546          {
+ 547   1          unsigned char key = 0;
+ 548   1              unsigned char key_bak ;                                 // key1為了記錄按鍵是否被釋放過
+ 549   1      
+ 550   1        if(FUNCTION_KEY == 0)
+ 551   1          {
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 10  
+
+ 552   2               if(key_bak == 0)
+ 553   2                 {
+ 554   3                   key = (key |0x01);
+ 555   3                   key_bak = (key |0x01); 
+ 556   3                 }
+ 557   2                else
+ 558   2                 {
+ 559   3                      key = (key & 0xfe) ;
+ 560   3                 }
+ 561   2               }
+ 562   1         if(OFFSET_KEY == 0)
+ 563   1          {
+ 564   2               if(key_bak == 0)
+ 565   2                 {
+ 566   3                   key = (key |0x02);
+ 567   3                   key_bak = (key |0x02); 
+ 568   3                 }
+ 569   2                else
+ 570   2                 {
+ 571   3                      key = (key & 0xfd) ;
+ 572   3                 }
+ 573   2               }
+ 574   1         if(UP_KEY == 0)
+ 575   1          {
+ 576   2               if(key_bak == 0)
+ 577   2                 {
+ 578   3                   key = (key |0x04);
+ 579   3                   key_bak = (key |0x04); 
+ 580   3                 }
+ 581   2                else
+ 582   2                 {
+ 583   3                      key = (key & 0xfb) ;
+ 584   3                 }
+ 585   2               }
+ 586   1         if(DOWN_KEY == 0)
+ 587   1          {
+ 588   2               if(key_bak == 0)
+ 589   2                 {
+ 590   3                   key = (key |0x08);
+ 591   3                   key_bak = (key |0x08); 
+ 592   3                 }
+ 593   2                else
+ 594   2                 {
+ 595   3                      key = (key & 0xf7) ;
+ 596   3                 }
+ 597   2               }
+ 598   1      
+ 599   1         return key;
+ 600   1      }
+ 601          /************************************************/
+ 602          void do_electrolyze(void)
+ 603          {
+ 604   1              unsigned char key=0;                                    // key1為了記錄按鍵是否被釋放過
+ 605   1              unsigned char rr=0, rr1=0;
+ 606   1              unsigned char Time_of_NoWater=0;
+ 607   1              unsigned char NoWaterVoice_Counter=0;
+ 608   1              unsigned char seg0=0,off_cut=0;
+ 609   1              bit rr2=0;
+ 610   1      }
+ 611          /************************************************/
+ 612          unsigned int DO_TC_TYPE(void)
+ 613          {
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 11  
+
+ 614   1           unsigned int Code_Value,TC_Value;
+ 615   1               unsigned char key;
+ 616   1      
+ 617   1            key = Get_Key();
+ 618   1               
+ 619   1                if(key == 0x01)
+ 620   1                {
+ 621   2                   Work_Type = 5;
+ 622   2                }
+ 623   1         else
+ 624   1           {
+ 625   2              Code_Value = Get_AD3421_Value();
+ 626   2      
+ 627   2             if (TC_Type == K_TYPE)
+ 628   2               {
+ 629   3                      Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset)); 
+ 630   3                      TC_Value = Get_K_Slope(Code_Value);
+ 631   3                    }
+ 632   2              else if (TC_Type == J_TYPE)
+ 633   2                {
+ 634   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 635   3                       TC_Value = Get_J_Slope(Code_Value); 
+ 636   3                    }
+ 637   2              else if (TC_Type == T_TYPE)
+ 638   2                {
+ 639   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 640   3                       TC_Value = Get_T_Slope(Code_Value); 
+ 641   3                    }
+ 642   2              else if (TC_Type == E_TYPE)
+ 643   2                {
+ 644   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 645   3                       TC_Value = Get_E_Slope(Code_Value); 
+ 646   3                    }
+ 647   2              else if (TC_Type == R_TYPE)
+ 648   2                {
+ 649   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 650   3                       TC_Value = Get_R_Slope(Code_Value); 
+ 651   3                    }
+ 652   2              else if (TC_Type == S_TYPE)
+ 653   2                {
+ 654   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 655   3                       TC_Value = Get_S_Slope(Code_Value); 
+ 656   3                    }
+ 657   2              else if (TC_Type == B_TYPE)
+ 658   2                {
+ 659   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 660   3                       TC_Value = Get_B_Slope(Code_Value); 
+ 661   3                    }
+ 662   2              else if (TC_Type == N_TYPE)
+ 663   2                {
+ 664   3                       Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+ 665   3                       TC_Value = Get_N_Slope(Code_Value); 
+ 666   3                    }
+ 667   2            }
+ 668   1      
+ 669   1          return TC_Value;
+ 670   1      }
+ 671          /************************************************/
+ 672          unsigned int Get_K_Slope(unsigned int Code_Value)
+ 673          {
+ 674   1         unsigned int out_Value;
+ 675   1      
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 12  
+
+ 676   1      
+ 677   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 678   1                 {
+ 679   2                 }
+ 680   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 681   1                 {
+ 682   2                 }    
+ 683   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 684   1                 {
+ 685   2                 }
+ 686   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 687   1                 {
+ 688   2                 }
+ 689   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 690   1                 {
+ 691   2                 }
+ 692   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 693   1                 {
+ 694   2                 }
+ 695   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 696   1                 {
+ 697   2                 }
+ 698   1      
+ 699   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 700   1                 {
+ 701   2                 }
+ 702   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 703   1                 {
+ 704   2                 }
+ 705   1      
+ 706   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 707   1                 {
+ 708   2                 }
+ 709   1      
+ 710   1         return out_Value;
+ 711   1      
+ 712   1      }
+ 713          /************************************************/
+ 714          unsigned int Get_J_Slope(unsigned int Code_Value)
+ 715          {
+ 716   1         unsigned int out_Value;
+ 717   1      
+ 718   1      
+ 719   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 720   1                 {
+ 721   2                 }
+ 722   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 723   1                 {
+ 724   2                 }    
+ 725   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 726   1                 {
+ 727   2                 }
+ 728   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 729   1                 {
+ 730   2                 }
+ 731   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 732   1                 {
+ 733   2                 }
+ 734   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 735   1                 {
+ 736   2                 }
+ 737   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 13  
+
+ 738   1                 {
+ 739   2                 }
+ 740   1      
+ 741   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 742   1                 {
+ 743   2                 }
+ 744   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 745   1                 {
+ 746   2                 }
+ 747   1      
+ 748   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 749   1                 {
+ 750   2                 }
+ 751   1      
+ 752   1         return out_Value;
+ 753   1      
+ 754   1      }
+ 755          /************************************************/
+ 756          unsigned int Get_T_Slope(unsigned int Code_Value)
+ 757          {
+ 758   1         unsigned int out_Value;
+ 759   1      
+ 760   1      
+ 761   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 762   1                 {
+ 763   2                 }
+ 764   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 765   1                 {
+ 766   2                 }    
+ 767   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 768   1                 {
+ 769   2                 }
+ 770   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 771   1                 {
+ 772   2                 }
+ 773   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 774   1                 {
+ 775   2                 }
+ 776   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 777   1                 {
+ 778   2                 }
+ 779   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 780   1                 {
+ 781   2                 }
+ 782   1      
+ 783   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 784   1                 {
+ 785   2                 }
+ 786   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 787   1                 {
+ 788   2                 }
+ 789   1      
+ 790   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 791   1                 {
+ 792   2                 }
+ 793   1      
+ 794   1         return out_Value;
+ 795   1      
+ 796   1      }
+ 797          /************************************************/
+ 798          unsigned int Get_E_Slope(unsigned int Code_Value)
+ 799          {
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 14  
+
+ 800   1         unsigned int out_Value;
+ 801   1      
+ 802   1      
+ 803   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 804   1                 {
+ 805   2                 }
+ 806   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 807   1                 {
+ 808   2                 }    
+ 809   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 810   1                 {
+ 811   2                 }
+ 812   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 813   1                 {
+ 814   2                 }
+ 815   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 816   1                 {
+ 817   2                 }
+ 818   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 819   1                 {
+ 820   2                 }
+ 821   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 822   1                 {
+ 823   2                 }
+ 824   1      
+ 825   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 826   1                 {
+ 827   2                 }
+ 828   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 829   1                 {
+ 830   2                 }
+ 831   1      
+ 832   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 833   1                 {
+ 834   2                 }
+ 835   1      
+ 836   1         return out_Value;
+ 837   1      
+ 838   1      }
+ 839          /************************************************/
+ 840          unsigned int Get_R_Slope(unsigned int Code_Value)
+ 841          {
+ 842   1         unsigned int out_Value;
+ 843   1      
+ 844   1      
+ 845   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 846   1                 {
+ 847   2                 }
+ 848   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 849   1                 {
+ 850   2                 }    
+ 851   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 852   1                 {
+ 853   2                 }
+ 854   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 855   1                 {
+ 856   2                 }
+ 857   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 858   1                 {
+ 859   2                 }
+ 860   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 861   1                 {
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 15  
+
+ 862   2                 }
+ 863   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 864   1                 {
+ 865   2                 }
+ 866   1      
+ 867   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 868   1                 {
+ 869   2                 }
+ 870   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 871   1                 {
+ 872   2                 }
+ 873   1      
+ 874   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 875   1                 {
+ 876   2                 }
+ 877   1      
+ 878   1         return out_Value;
+ 879   1      
+ 880   1      }
+ 881          /************************************************/
+ 882          unsigned int Get_S_Slope(unsigned int Code_Value)
+ 883          {
+ 884   1         unsigned int out_Value;
+ 885   1      
+ 886   1      
+ 887   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 888   1                 {
+ 889   2                 }
+ 890   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 891   1                 {
+ 892   2                 }    
+ 893   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 894   1                 {
+ 895   2                 }
+ 896   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 897   1                 {
+ 898   2                 }
+ 899   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 900   1                 {
+ 901   2                 }
+ 902   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 903   1                 {
+ 904   2                 }
+ 905   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 906   1                 {
+ 907   2                 }
+ 908   1      
+ 909   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 910   1                 {
+ 911   2                 }
+ 912   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 913   1                 {
+ 914   2                 }
+ 915   1      
+ 916   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 917   1                 {
+ 918   2                 }
+ 919   1      
+ 920   1         return out_Value;
+ 921   1      
+ 922   1      }
+ 923          /************************************************/
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 16  
+
+ 924          unsigned int Get_B_Slope(unsigned int Code_Value)
+ 925          {
+ 926   1         unsigned int out_Value;
+ 927   1      
+ 928   1      
+ 929   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 930   1                 {
+ 931   2                 }
+ 932   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 933   1                 {
+ 934   2                 }    
+ 935   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 936   1                 {
+ 937   2                 }
+ 938   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 939   1                 {
+ 940   2                 }
+ 941   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 942   1                 {
+ 943   2                 }
+ 944   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 945   1                 {
+ 946   2                 }
+ 947   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 948   1                 {
+ 949   2                 }
+ 950   1      
+ 951   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 952   1                 {
+ 953   2                 }
+ 954   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 955   1                 {
+ 956   2                 }
+ 957   1      
+ 958   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 959   1                 {
+ 960   2                 }
+ 961   1      
+ 962   1         return out_Value;
+ 963   1      
+ 964   1      }
+ 965          /************************************************/
+ 966          unsigned int Get_N_Slope(unsigned int Code_Value)
+ 967          {
+ 968   1         unsigned int out_Value;
+ 969   1      
+ 970   1      
+ 971   1               if((Code_Value > 1000) && (Code_Value < 2000))
+ 972   1                 {
+ 973   2                 }
+ 974   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 975   1                 {
+ 976   2                 }    
+ 977   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 978   1                 {
+ 979   2                 }
+ 980   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 981   1                 {
+ 982   2                 }
+ 983   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 984   1                 {
+ 985   2                 }
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 17  
+
+ 986   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 987   1                 {
+ 988   2                 }
+ 989   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 990   1                 {
+ 991   2                 }
+ 992   1      
+ 993   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 994   1                 {
+ 995   2                 }
+ 996   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+ 997   1                 {
+ 998   2                 }
+ 999   1      
+1000   1              else if((Code_Value > 2000) && (Code_Value < 3000))
+1001   1                 {
+1002   2                 }
+1003   1      
+1004   1         return out_Value;
+1005   1      
+1006   1      }
+1007          
+1008          /************************************************/
+1009          unsigned int DO_RTD_TYPE(void)
+1010          {
+1011   1           unsigned int Code_Value,RTD_Value;
+1012   1               unsigned char key;
+1013   1      
+1014   1            key = Get_Key();
+1015   1               
+1016   1                if(key == 0x01)
+1017   1                {
+1018   2                   Work_Type = 5;
+1019   2                }
+1020   1              else
+1021   1               {
+1022   2             Code_Value = Get_AD3421_Value();
+1023   2                 Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset)); 
+1024   2                 RTD_Value = Code_Value*(Code_Value/(RTD_Span_offset- RTD_Zero_offset)); 
+1025   2      
+1026   2      
+1027   2               if((RTD_Value > 1000) && (RTD_Value < 2000))
+1028   2                 {
+1029   3                 }
+1030   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1031   2                 {
+1032   3                 }    
+1033   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1034   2                 {
+1035   3                 }
+1036   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1037   2                 {
+1038   3                 }
+1039   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1040   2                 {
+1041   3                 }
+1042   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1043   2                 {
+1044   3                 }
+1045   2              else if((RTD_Value > 2000) && (RTD_Value < 3000))
+1046   2                 {
+1047   3                 }
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 18  
+
+1048   2              }
+1049   1         return RTD_Value;
+1050   1      }
+1051          /************************************************/
+1052          unsigned int DO_mV_TYPE(void)
+1053          {
+1054   1           unsigned int Code_Value,mV_Value;
+1055   1               unsigned char key;
+1056   1      
+1057   1            key = Get_Key();
+1058   1               
+1059   1                if(key == 0x01)
+1060   1                  {
+1061   2                    Work_Type = 5;
+1062   2                  }
+1063   1               else
+1064   1                 {
+1065   2               Code_Value = Get_AD3421_Value();
+1066   2               mV_Value = Code_Value*( Code_Value/(mV_Span_offset - mV_Zero_offset));
+1067   2                 }
+1068   1               return mV_Value ;
+1069   1      }
+1070          /************************************************/
+1071          unsigned int DO_mA_TYPE(void)
+1072          {
+1073   1           unsigned int Code_Value,mA_Value;
+1074   1               unsigned char key;
+1075   1      
+1076   1            key = Get_Key();
+1077   1               
+1078   1                if(key == 0x01)
+1079   1                  {
+1080   2                    Work_Type = 5;
+1081   2                  }
+1082   1               else
+1083   1                 {
+1084   2               Code_Value = Get_AD3421_Value();
+1085   2               mA_Value = Code_Value*(Code_Value/(mA_Span_offset - mA_Zero_offset));
+1086   2                 }
+1087   1               return mA_Value;
+1088   1      }
+1089          /************************************************/
+1090          void RTC_WRITE_SET()
+1091          {
+1092   1      RTC_write_byte(0,0x02);
+1093   1      RTC_write_byte(3,use_min);
+1094   1      RTC_write_byte(4,use_hour);
+1095   1      RTC_write_byte(5,use_week);
+1096   1      RTC_write_byte(6,use_day);
+1097   1      RTC_write_byte(7,use_mon);
+1098   1      RTC_write_byte(8,use_year);
+1099   1      RTC_write_byte(0,0);
+1100   1      }
+1101          
+1102          /************************************************/
+1103          void RTC_READ_SET()
+1104          {
+1105   1       RTC_write_byte(0,0x01);
+1106   1       use_min = RTC_read_byte(3);
+1107   1       use_hour = RTC_read_byte(4);
+1108   1       use_week = RTC_read_byte(5);
+1109   1       use_day = RTC_read_byte(6);
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 19  
+
+1110   1       use_mon = RTC_read_byte(7);
+1111   1       use_mon = RTC_read_byte(8);
+1112   1       RTC_write_byte(0,0);
+1113   1      }
+1114          
+1115          /*************************************************/     
+1116          void DO_SETUP_TYPE(void)
+1117          {
+1118   1              unsigned int  zero_cal = 0;
+1119   1              unsigned int  span_cal = 0;
+1120   1              unsigned char cExit;
+1121   1              unsigned char set_key = 0,  times = 0;
+1122   1              unsigned char confrom_key,up_key,don_key,item_key;
+1123   1      
+1124   1              
+1125   1              while (ITEM < PRODUCT_RESET)
+1126   1                       {
+1127   2                             if (ITEM == NOMAL_FUNCTION)
+1128   2                               {
+1129   3                                     SETUP_LED_Disp(0,0);
+1130   3                                     tmp1 = EEPROM_read_byte(C_F_Select);  //sbit FUNCTION_SELECT   = P3^2;sbit OFFSET_SELECT     = P
+             -3^3;
+1131   3                                     SETUP_LED_Disp(0,tmp1);
+1132   3                                     cExit = 0;
+1133   3      
+1134   3                                     while (! cExit)
+1135   3                                          {
+1136   4                                                set_key = Get_Key();
+1137   4      
+1138   4                                                        if((set_key & 0x01) == 1) item_key = 1 ; else item_key = 0 ;
+1139   4                                                        if((set_key & 0x02) == 1) confrom_key = 1 ; else confrom_key = 0 ;
+1140   4                                                        if((set_key & 0x04) == 1) up_key = 1 ;  else up_key = 0 ;
+1141   4                                            if((set_key & 0x08) == 1) don_key = 1 ; else don_key = 0 ;
+1142   4                                      }
+1143   3      
+1144   3                                        if (ITEM == TYPE_CAL)
+1145   3                                           {  }
+1146   3                                    if (ITEM == C_F_CAL)
+1147   3                                           {  }
+1148   3                                    if (ITEM == TC_ZERO_CAL)
+1149   3                                           {   }
+1150   3                                    if (ITEM == TC_SPAN_CAL)
+1151   3                                           {          }
+1152   3                                    if (ITEM == RTD_ZERO_CAL)
+1153   3                                           {   }
+1154   3                                        if (ITEM == RTD_SPAN_CAL)
+1155   3                                           {   }
+1156   3                                        if (ITEM == mV_ZERO_CAL)
+1157   3                                           {   }
+1158   3                                        if (ITEM == mV_SPAN_CAL)
+1159   3                                           {   }
+1160   3                                        if (ITEM == mA_ZERO_CAL)
+1161   3                                           {   }
+1162   3                                        if (ITEM == mA_SPAN_CAL)
+1163   3                                           {   }
+1164   3                                        if (ITEM == ALARM_LO_CAL)
+1165   3                                           {   }
+1166   3                                        if (ITEM == ALARM_HI_CAL)
+1167   3                                           {   }
+1168   3                                        if (ITEM == YEAR_DATE_CAL)
+1169   3                                           {   }
+1170   3                                        if (ITEM == MON_DATE_CAL)
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 20  
+
+1171   3                                           {   }
+1172   3                                        if (ITEM == DAY_DATE_CAL)                     //add week setup
+1173   3                                           {   }
+1174   3                                        if (ITEM == HOUR_DATE_CAL)
+1175   3                                           {   }
+1176   3                                    if (ITEM == MIN_DATE_CAL)
+1177   3                                           {   }
+1178   3                                              }
+1179   2                               }
+1180   1      
+1181   1                      if( MAIN_SW == OFF)
+1182   1                    {
+1183   2                       Work_Type = EEPROM_read_byte(Mode_Select); 
+1184   2                    }
+1185   1      }
+1186          //*******************************
+1187          void DO_RESET_TYPE(void)
+1188          {
+1189   1              
+1190   1           EEPROM_WriteDefault();
+1191   1           LED_Fill();                                     //  LED all light
+1192   1               Work_Type = EEPROM_read_byte(Mode_Select);
+1193   1               C_F_Type = EEPROM_read_byte(C_F_Select);
+1194   1               TC_Type = EEPROM_read_byte(Type_Select);       //Type define k=0.j=1,t=2
+1195   1               TC_Zero_offset = EEPROM_read_word(TC_Zero);    
+1196   1               TC_Span_offset = EEPROM_read_word(TC_Span);
+1197   1               RTD_Zero_offset = EEPROM_read_word(RTD_Zero);
+1198   1               RTD_Span_offset = EEPROM_read_word(RTD_Span);
+1199   1               mA_Zero_offset = EEPROM_read_word(mA_Zero);
+1200   1               mA_Span_offset = EEPROM_read_word(mA_Span);
+1201   1               mV_Zero_offset = EEPROM_read_word(mV_Zero);    
+1202   1           mV_Span_offset = EEPROM_read_word(mV_Span);
+1203   1               alarm_Low_set = EEPROM_read_word(Alarm_Low);
+1204   1               alarm_Hi_set = EEPROM_read_word(Alarm_Hi);
+1205   1           use_year = EEPROM_read_word(Year_Date);
+1206   1           use_mon = EEPROM_read_word(Mon_Date);
+1207   1           use_day = EEPROM_read_word(Day_Date);
+1208   1               use_week = EEPROM_read_word(Week_Date);
+1209   1           use_hour = EEPROM_read_word(Hour_Date);
+1210   1           use_min = EEPROM_read_word(Min_Date);
+1211   1               eep_count = EEPROM_read_word(EEP_ADR);
+1212   1      }
+1213          /***********************************
+1214          ****      System_Start          ****
+1215          ***********************************/ 
+1216          main(void)
+1217          {
+1218   1              PORT_Init();
+1219   1              EEPROM_Init();
+1220   1              LED_Init();
+1221   1          LED_Fill();
+1222   1              T0_Init();
+1223   1              T1_Init();
+1224   1              INT0_Init();
+1225   1              AD3421_Init();
+1226   1              InitUart();
+1227   1          Set_mA(0);
+1228   1              Set_mV(0);
+1229   1              Buzzer(OFF);
+1230   1              Soft_Timer_Enable = 0;
+1231   1              EX0 = 0;
+1232   1      
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 21  
+
+1233   1              if ((EEPROM_read_byte(0) != 'N')||(EEPROM_read_byte(1) != 'E')||(EEPROM_read_byte(2) != 'W')||(EEPROM_re
+             -ad_byte(3) != JOHNSON)||(EEPROM_read_byte(4) != LIN))
+1234   1                {
+1235   2                      EEPROM_write_byte(0, 'N');      
+1236   2                      EEPROM_write_byte(1, 'E');
+1237   2                      EEPROM_write_byte(2, 'W');
+1238   2                      EEPROM_write_byte(3, JOHNSON);  
+1239   2                      EEPROM_write_byte(4, LIN);      
+1240   2                      EEPROM_WriteDefault();
+1241   2            }
+1242   1      
+1243   1            LED_Fill();                                     //  LED all light
+1244   1              
+1245   1               Check_PCB();
+1246   1      
+1247   1               Work_Type = EEPROM_read_byte(Mode_Select);     
+1248   1               C_F_Type = EEPROM_read_byte(C_F_Select);
+1249   1               TC_Type  = EEPROM_read_byte(Type_Select);       //Type define k=0.j=1,t=2
+1250   1               TC_Zero_offset = EEPROM_read_word(TC_Zero);    
+1251   1               TC_Span_offset = EEPROM_read_word(TC_Span);
+1252   1               RTD_Zero_offset = EEPROM_read_word(RTD_Zero);
+1253   1               RTD_Span_offset = EEPROM_read_word(RTD_Span);
+1254   1               mA_Zero_offset = EEPROM_read_word(mV_Zero);
+1255   1               mA_Span_offset = EEPROM_read_word(mV_Span);
+1256   1               mV_Zero_offset = EEPROM_read_word(mA_Zero);    
+1257   1           mV_Span_offset = EEPROM_read_word(mA_Span);
+1258   1               alarm_Low_set = EEPROM_read_word(Alarm_Low);
+1259   1               alarm_Hi_set = EEPROM_read_word(Alarm_Hi);
+1260   1           use_year = EEPROM_read_byte(Year_Date);
+1261   1           use_mon = EEPROM_read_byte(Mon_Date);
+1262   1           use_day = EEPROM_read_byte(Day_Date);
+1263   1           use_hour = EEPROM_read_byte(Hour_Date);
+1264   1           use_min = EEPROM_read_byte(Min_Date);
+1265   1               eep_count =EEPROM_read_word(EEP_ADR);
+1266   1               Disp_year = use_year+1911;
+1267   1               EA = 1;
+1268   1               MAIN_SW = 1 ;
+1269   1               RTC_WRITE_SET();
+1270   1       // if ((C_F_Type & 0x01) != 1)                      // 0 = C , 1 = F
+1271   1      //        {     
+1272   1      //              TempValue  = ((TempValue - 320)*5/9) ;                                                             
+1273   1      //        }
+1274   1               Work_Type = EEPROM_read_byte(Type_Select);  //Type define k=0.j=1,t=2
+1275   1      
+1276   1      //***************************************
+1277   1              while (1)
+1278   1              {
+1279   2                      switch (Work_Type)
+1280   2                        {
+1281   3                              case TC_FUNCTION:
+1282   3                                      DO_TC_TYPE();
+1283   3                                      break;
+1284   3      
+1285   3                              case RTD_FUNCTION:
+1286   3                              DO_RTD_TYPE();
+1287   3                                      break;
+1288   3      
+1289   3                              case mV_FUNCTION:
+1290   3                                      DO_mV_TYPE();
+1291   3                                      break;
+1292   3      
+1293   3                              case mA_FUNCTION:
+C51 COMPILER V9.02   MAIN                                                                  01/15/2014 14:31:00 PAGE 22  
+
+1294   3                                  DO_mA_TYPE();
+1295   3                                      break;
+1296   3                              
+1297   3                              case RESET_FUNCTION:      //ok
+1298   3                                      DO_RESET_TYPE();
+1299   3                                      break;
+1300   3      
+1301   3                               case SETUP_FUNCTION:
+1302   3                                      DO_SETUP_TYPE();         //
+1303   3                                      break;
+1304   3              
+1305   3                   }
+1306   2               }
+1307   1      /*        
+1308   1      #define K_TYPE          0               //2466F   54.807mV      P0=0x00
+1309   1      #define J_TYPE          1               //1368F   42.922mV
+1310   1      #define T_TYPE          2               //360F    9.286mV
+1311   1      #define E_TYPE          3               //1440F   61.022mV
+1312   1      #define R_TYPE          4               //2880F   18.842mV
+1313   1      #define S_TYPE          5               //2880F   16.771mV
+1314   1      #define B_TYPE          6               //3240F   13.585mV
+1315   1      #define N_TYPE      7           //?       ?
+1316   1      sbit TC_SW1    = P0^0;  //k=0x00;j=0x01;t=0x02;e=0x03; 
+1317   1      sbit TC_SW2    = P0^1;  //r=0x04;s=0x05;b=0x06;n=0x07;
+1318   1      sbit TC_SW3    = P0^2;
+1319   1      
+1320   1      sbit TYPE_SW1  = P0^3;   //tc= 000 00xxx;  rtd=000 01xxx;    mV=000 10xxx
+1321   1      sbit TYPE_SW2  = P0^4;   //mA= 000 11xxx;
+1322   1      sbit TYPE_SW3  = P0^5;
+1323   1      */
+1324   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2338    ----
+   CONSTANT SIZE    =    444    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     53      71
+   IDATA SIZE       =     10    ----
+   BIT SIZE         =     11       1
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

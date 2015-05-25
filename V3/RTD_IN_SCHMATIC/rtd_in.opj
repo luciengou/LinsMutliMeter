@@ -1,0 +1,56 @@
+(ExpressProject ""
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (File ".\rtd_in.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (BOM_Scope "0")
+    (BOM_Mode "0")
+    (BOM_Report_File "C:\UC_PRODUCT\UC_PRODUCT\RTD_SCHMATIC\RTD_IN.BOM")
+    (BOM_Merge_Include "FALSE")
+    (BOM_Property_Combine_7.0 "{Item}\t{Quantity}\t{Reference}\t{Value}")
+    (BOM_Header "Item\tQuantity\tReference\tPart")
+    (BOM_Include_File "C:\UC_PRODUCT\UC_PRODUCT\RTD_SCHMATIC\RTD_IN.INC")
+    (BOM_Include_File_Combine_7.0 "{Item}\t{Quantity}\t{Reference}\t{Value}")
+    (BOM_One_Part_Per_Line "FALSE")
+    (Open_BOM_in_Excel "FALSE")
+    (BOM_View_Output "FALSE")
+    (Netlist_TAB "8")
+    (OTHER_Part_Value "{Value}")
+    (OTHER_Netlist_File "RTD_IN.NET")
+    (OTHER_Netlist_File2 "RTD_IN.CMP")
+    (OTHER_View_Output "FALSE")
+    (OTHER_View_Output2 "FALSE")
+    (OTHER_Formatter "future.dll")
+    (OTHER_PCB_Footprint "{PCB Footprint}")
+    (OTHER_Switch0 "TRUE")
+    (OTHER_Switch1 "TRUE")
+    (OTHER_Switch2 "FALSE")
+    (OTHER_Switch3 "TRUE")
+    (OTHER_Switch4 "FALSE")
+    (OTHER_Switch5 "FALSE")
+    (OTHER_Switch6 "FALSE")
+    (NoModify))
+  (Folder "Outputs"
+    (File ".\rtd_in.bom"
+      (Type "Report"))
+    (File ".\rtd_in.net"
+      (Type "Report")))
+  (Folder "Referenced Projects")
+  (PartMRUSelector)
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" ".\rtd_in.dsn")
+      (Path "Design Resources" ".\rtd_in.dsn" "SCHEMATIC1")
+      (Path "Outputs")
+      (Select "Design Resources" ".\rtd_in.dsn" "SCHEMATIC1" "RTD_IN_SCH"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -4 -30 0 200 0 391"))
+      (Tab 0))))

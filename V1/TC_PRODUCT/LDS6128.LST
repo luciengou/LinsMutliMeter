@@ -1,0 +1,240 @@
+C51 COMPILER V7.50   LDS6128                                                               12/09/2013 13:46:47 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE LDS6128
+OBJECT MODULE PLACED IN LDS6128.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LDS6128.C BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*
+   2          *********************************************************************************************************
+   3          * Copyright 2010 IDT Technology, Inc. ALL RIGHTS RESERVED.
+   4          * This software is provided under license and contains proprietary and
+   5          * confidential material which is the property of IDT Technology, Inc.
+   6          *
+   7          * FileName     : LDS6100.c
+   8          * Description  : LDS6100 ctrl & function code.
+   9          *
+  10          * Version control:
+  11          *  $Revision: 0.1 $    Date: 2010/01/01 12:00:00   ue.fu@idt.com
+  12          *      first implemetation
+  13          *
+  14          *********************************************************************************************************
+  15          */
+  16          #include "i2c.h"
+*** WARNING C318 IN LINE 16 OF LDS6128.C: can't open file 'i2c.h'
+  17          #include "lds6128.h"
+*** ERROR C129 IN LINE 8 OF LDS6128.H: missing ';' before 'LDS6128_connect'
+  18          /*
+  19          *********************************************************************************************************
+  20          *
+  21          *                                              GLOBAL Value
+  22          *
+  23          *********************************************************************************************************
+  24          */
+  25          
+  26          Bool lds6128_connect;
+  27          
+  28          
+  29          /*************************************************/
+  30          U32 LDS6128_key_status(void)
+  31           {
+  32                  U32   key_status; 
+  33          
+  34                  //key_status = ((U32)i2c_read_word(LDS6100_ADDR, 0x0046) << 16) | i2c_read_word(LDS6100_ADDR, 0x0045);
+  35                  key_status = i2c_read_word(LDS6100_ADDR, 0x0045);
+  36                  //                         11 1111                          0000 0000 1100 0000                                        1 1111
+  37                  key_status = (key_status & 0x003f) | ((key_status & 0x0300) >> 2) | ((i2c_read_word(LDS6100_ADDR, 0x0046)
+             - & 0x001f) << 8);
+  38          
+  39                  return key_status ;
+  40           }
+  41          
+  42          /*
+  43          *********************************************************************************************************
+  44          * LDS6100_init()
+  45          * Description   : 
+  46          *
+  47          * Arguments    :
+  48          * Returns        : TRUE / FALSE
+  49          *********************************************************************************************************
+  50          */
+  51          Bool LDS6128_init(void)
+  52          {
+C51 COMPILER V7.50   LDS6128                                                               12/09/2013 13:46:47 PAGE 2   
+
+  53                  // ***********************************
+  54                  // LDS6100 - IDT Touch Initial Code
+  55                  // ***********************************
+  56          
+  57                  // COLD RESET, must be the same for this command
+  58                  // WR 0x0000 0x0000
+  59                  i2c_write_word(LDS6100_ADDR, 0x0000, 0x0000);      
+  60          
+  61                  // TOUCH DISABLE, just disable first then write below config.
+  62                  // WR 0x0040 0x0030
+  63                  i2c_write_word(LDS6100_ADDR, 0x0040, 0x0030);      
+  64          
+  65                  // DCM CONFIG, if not used DCM output need write 0x0000
+  66                  // WR 0x000A 0x0000
+  67                  i2c_write_word(LDS6100_ADDR, 0x000A, 0x0000);      
+  68          
+  69                  // SCROLL CONFIG, if you board not have scroll, please write 0x0000 and don't care this register
+  70                  // WR 0x0074 0x801F
+  71                  i2c_write_word(LDS6100_ADDR, 0x0074, 0x0000);      //disable  07/12 11
+  72          
+  73                  // PSEL, this register depend on your schematic. if connect touch sensor pad please setting '1'
+  74                  // WR 0x0041 0x03FF
+  75                  // WR 0x0042 0x0001
+  76                  i2c_write_word(LDS6100_ADDR, 0x0041, 0x033f);       
+  77                  i2c_write_word(LDS6100_ADDR, 0x0042, 0x001f);       
+  78          
+  79                  // INTERRUPT, should be the same 0x41/0x42
+  80                  // WR 0x0043 0x03FF
+  81                  // WR 0x0044 0x0001
+  82                  i2c_write_word(LDS6100_ADDR, 0x0043, 0x033f);       
+  83                  i2c_write_word(LDS6100_ADDR, 0x0044, 0x001f);       
+  84          
+  85                  // INTERRUPT PIN DEFINE, this register default only send 2usec pulse, so must be setting for latch
+             --mode(01) or read-reset-mode(1x)
+  86                  // WR 0x0008 0x0002
+  87                  i2c_write_word(LDS6100_ADDR, 0x0008, 0x0002);      
+  88                  //i2c_write_word(LDS6100_ADDR, 0x0008, 0x0001);   
+  89          
+  90                  // disable all led
+  91                  i2c_write_word(LDS6100_ADDR, 0x003f, 0x0000);               
+  92                  i2c_write_word(LDS6100_ADDR, 0x003e, 0x0000);
+  93          
+  94                  // Ambient Config, don't care just write the same.
+  95                  // WR 0x0051 0x0A1F
+  96                  i2c_write_word(LDS6100_ADDR, 0x0051, 0x0a1f);       
+  97                  //i2c_write_word(LDS6100_ADDR, 0x0051, 0x1f1f);     
+  98                  
+  99                  // Recalib Config, don't care just write the same.
+ 100                  // WR 0x0052 0x07FF 
+ 101                  i2c_write_word(LDS6100_ADDR, 0x0052, 0x00bf);  // 19.96 Sec
+ 102                  
+ 103                  // Long Touch, don't care just write the same.
+ 104                  // WR 0x0053 0x07FF
+ 105                  i2c_write_word(LDS6100_ADDR, 0x0053, 0x07ff);        
+ 106                  
+ 107                  // SELC_Unit Configuration, don't care just writer the same.
+ 108                  // WR 0x004E 0x5000
+ 109                  //i2c_write_word(LDS6100_ADDR, 0x004e, 0x5001);   //org 5000               
+ 110                  i2c_write_word(LDS6100_ADDR, 0x004e, 0x5000);   //org 5000          
+ 111                  
+ 112                  // Button Thershold:  all enable channel should be initial threshold value. if you don't know this
+             - value just all write 0x0020 should be ok.
+C51 COMPILER V7.50   LDS6128                                                               12/09/2013 13:46:47 PAGE 3   
+
+ 113          #if 0
+                      i2c_write_word(LDS6100_ADDR, 0x005f, 0x0001);       
+                      i2c_write_word(LDS6100_ADDR, 0x0060, 0x0032);//0=32   ,1=52,2=32
+                      i2c_write_word(LDS6100_ADDR, 0x0061, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0062, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0063, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0064, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0065, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0068, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x0069, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x006a, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x006b, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x006c, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x006d, 0x0032);      
+                      i2c_write_word(LDS6100_ADDR, 0x006e, 0x0032);      
+              #else
+ 129                  i2c_write_word(LDS6100_ADDR, 0x005f, 0x0001);       
+ 130                  i2c_write_word(LDS6100_ADDR, 0x0060, 0x0040);//0=32   ,1=52,2=32
+ 131                  i2c_write_word(LDS6100_ADDR, 0x0061, 0x0040);      
+ 132                  i2c_write_word(LDS6100_ADDR, 0x0062, 0x0040);      
+ 133                  i2c_write_word(LDS6100_ADDR, 0x0063, 0x0040);      
+ 134                  i2c_write_word(LDS6100_ADDR, 0x0064, 0x0040);      
+ 135                  i2c_write_word(LDS6100_ADDR, 0x0065, 0x0040);      
+ 136                  i2c_write_word(LDS6100_ADDR, 0x0068, 0x0040);      
+ 137                  i2c_write_word(LDS6100_ADDR, 0x0069, 0x0040);      
+ 138                  i2c_write_word(LDS6100_ADDR, 0x006a, 0x0040);      
+ 139                  i2c_write_word(LDS6100_ADDR, 0x006b, 0x0040);      
+ 140                  i2c_write_word(LDS6100_ADDR, 0x006c, 0x0040);      
+ 141                  i2c_write_word(LDS6100_ADDR, 0x006d, 0x0040);      
+ 142                  i2c_write_word(LDS6100_ADDR, 0x006e, 0x0040);      
+ 143          
+ 144          #endif
+ 145          
+ 146          #if 1
+ 147                  // Button Thershold:  ambient setting
+ 148                  i2c_write_word(LDS6100_ADDR, 0x005f, 0x0002);       
+ 149                  i2c_write_word(LDS6100_ADDR, 0x0060, 0x0010);      //default = 0x0a, change to 0x14
+ 150                  i2c_write_word(LDS6100_ADDR, 0x0061, 0x0010);      
+ 151                  i2c_write_word(LDS6100_ADDR, 0x0062, 0x0010);      
+ 152                  i2c_write_word(LDS6100_ADDR, 0x0063, 0x0010);      
+ 153                  i2c_write_word(LDS6100_ADDR, 0x0064, 0x0010);      
+ 154                  i2c_write_word(LDS6100_ADDR, 0x0065, 0x0010);      
+ 155                  i2c_write_word(LDS6100_ADDR, 0x0068, 0x0010);      
+ 156                  i2c_write_word(LDS6100_ADDR, 0x0069, 0x0010);      
+ 157                  i2c_write_word(LDS6100_ADDR, 0x006a, 0x0010);      
+ 158                  i2c_write_word(LDS6100_ADDR, 0x006b, 0x0010);      
+ 159                  i2c_write_word(LDS6100_ADDR, 0x006c, 0x0010);      
+ 160                  i2c_write_word(LDS6100_ADDR, 0x006d, 0x0010);      
+ 161                  i2c_write_word(LDS6100_ADDR, 0x006e, 0x0010);      
+ 162          
+ 163                  // Button Minus Noise Level
+ 164                  i2c_write_word(LDS6100_ADDR, 0x005f, 0x0003);       
+ 165                  i2c_write_word(LDS6100_ADDR, 0x0060, 0x0004);
+ 166                  i2c_write_word(LDS6100_ADDR, 0x0061, 0x0004);      
+ 167                  i2c_write_word(LDS6100_ADDR, 0x0062, 0x0004);      
+ 168                  i2c_write_word(LDS6100_ADDR, 0x0063, 0x0004);      
+ 169                  i2c_write_word(LDS6100_ADDR, 0x0064, 0x0004);      
+ 170                  i2c_write_word(LDS6100_ADDR, 0x0065, 0x0004);      
+ 171                  i2c_write_word(LDS6100_ADDR, 0x0068, 0x0004);      
+ 172                  i2c_write_word(LDS6100_ADDR, 0x0069, 0x0004);      
+ 173                  i2c_write_word(LDS6100_ADDR, 0x006a, 0x0004);      
+ 174                  i2c_write_word(LDS6100_ADDR, 0x006b, 0x0004);      
+C51 COMPILER V7.50   LDS6128                                                               12/09/2013 13:46:47 PAGE 4   
+
+ 175                  i2c_write_word(LDS6100_ADDR, 0x006c, 0x0004);      
+ 176                  i2c_write_word(LDS6100_ADDR, 0x006d, 0x0004);      
+ 177                  i2c_write_word(LDS6100_ADDR, 0x006e, 0x0004);      
+ 178          
+ 179          
+ 180                  // Button Plus Noise Level
+ 181                  i2c_write_word(LDS6100_ADDR, 0x005f, 0x0004);       
+ 182                  i2c_write_word(LDS6100_ADDR, 0x0060, 0x0004);
+ 183                  i2c_write_word(LDS6100_ADDR, 0x0061, 0x0004);      
+ 184                  i2c_write_word(LDS6100_ADDR, 0x0062, 0x0004);      
+ 185                  i2c_write_word(LDS6100_ADDR, 0x0063, 0x0004);      
+ 186                  i2c_write_word(LDS6100_ADDR, 0x0064, 0x0004);      
+ 187                  i2c_write_word(LDS6100_ADDR, 0x0065, 0x0004);      
+ 188                  i2c_write_word(LDS6100_ADDR, 0x0068, 0x0004);      
+ 189                  i2c_write_word(LDS6100_ADDR, 0x0069, 0x0004);      
+ 190                  i2c_write_word(LDS6100_ADDR, 0x006a, 0x0004);      
+ 191                  i2c_write_word(LDS6100_ADDR, 0x006b, 0x0004);      
+ 192                  i2c_write_word(LDS6100_ADDR, 0x006c, 0x0004);      
+ 193                  i2c_write_word(LDS6100_ADDR, 0x006d, 0x0004);      
+ 194                  i2c_write_word(LDS6100_ADDR, 0x006e, 0x0004);      
+ 195          #endif
+ 196                  //Debounce & Hysteresis, if you don't care just follow up below setting
+ 197                  // WR 0x0057 0x1000
+ 198                  // WR 0x0075 0x0002
+ 199                  i2c_write_word(LDS6100_ADDR, 0x0057, 0x3000);      // 0=1000 ;1=2000,2=1000
+ 200                  i2c_write_word(LDS6100_ADDR, 0x0075, 0x0003);      //0=0002 ,1=0008,2= 0003
+ 201                  
+ 202                  // Guard channel setting 
+ 203                  i2c_write_word(LDS6100_ADDR, 0x007c, 0x0000);              
+ 204                  i2c_write_word(LDS6100_ADDR, 0x007d, 0x0000);              
+ 205                  i2c_write_word(LDS6100_ADDR, 0x007e, 0x0000);              
+ 206                  i2c_write_word(LDS6100_ADDR, 0x007f, 0x0000);               
+ 207          
+ 208                  //i2c_write_word(LDS6100_ADDR, 0x0077, 0xFFFF); //NOISE  DISABLE
+ 209                  // TOUCH ENABLE, must be setting enable after config
+ 210                  // WR 0x0040 0x8038
+ 211                  i2c_write_word(LDS6100_ADDR, 0x0040, 0xb038);     //org  8038       
+ 212          
+ 213                  // SOFT RESET, must be the same when finish setting
+ 214                  // WR 0x0001 0x0000
+ 215                  i2c_write_word(LDS6100_ADDR, 0x0001, 0x0000);      
+ 216          
+ 217                  return TRUE;
+ 218          }
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  1 ERROR(S)

@@ -1,0 +1,94 @@
+\t (00:00:01) allegro 15.5 p008 (v15-5-81J) i86
+\t (00:00:01) 
+
+\t (00:00:01) Opening existing drawing...
+\d (00:00:01) Database opened: C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd
+\t (00:00:01) Grids are drawn 4.0000, 4.0000 apart for enhanced viewability.
+\i (00:00:01) trapsize 11867
+\i (00:00:01) trapsize 14042
+\i (00:00:01) trapsize 14042
+\i (00:00:08) create detail 
+   (00:00:08) Loading cmds.cxt 
+   (00:00:08) Loading axlcore.cxt 
+\i (00:00:25) define property 
+\i (00:00:41) viewlog -browse 
+\i (00:00:50) fillin "layout.log"
+\i (00:00:53) setwindow text
+\i (00:00:53) close 
+\i (00:01:10) setwindow pcb
+\i (00:01:10) load stream 
+\i (00:01:14) setwindow form.stream
+\i (00:01:14) FORM stream browsesfile  
+\i (00:01:18) fillin "menu_cancel"
+   (00:01:18) Loading stream.cxt 
+\i (00:01:20) FORM stream cancel  
+\i (00:01:25) setwindow pcb
+\i (00:01:25) open 
+\f (00:01:25) Do you want to save the changes you made to Temp1.brd?
+\i (00:01:28) fillin menu_cancel 
+\i (00:01:42) toolswap 
+\i (00:01:54) fillin "PCB_designer"
+\w (00:01:54) Allegro PCB Designer opening an Allegro Expert design.
+\t (00:01:54) Opening existing drawing...
+\w (00:01:54) Allegro PCB Designer opening an Allegro Expert design.
+\w (00:01:54) DRC set to "out of date", this product supports a different DRC set then last product used on drawing.
+\w (00:01:54) Database was last saved by a higher tier tool, Allegro Expert. There may be constraints, rules and other design data that may be ignored in this tool.
+\i (00:01:59) fillin confirm
+\t (00:01:59) Grids are drawn 16.0000, 16.0000 apart for enhanced viewability.
+\i (00:01:59) trapsize 11867
+\t (00:01:59) Grids are drawn 4.0000, 4.0000 apart for enhanced viewability.
+\i (00:01:59) trapsize 14042
+\i (00:01:59) trapsize 14042
+\i (00:02:20) net_properties 
+\i (00:02:20) setwindow cmgr
+\i (00:02:20) cm newView ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:25) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:32) cm collapse ( row ( System "System" ) )
+\i (00:02:34) cm expand ( row ( System "System" ) )
+\i (00:02:37) cm collapse ( row ( System "System" ) )
+\i (00:02:38) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:43) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:47) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:49) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:52) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:54) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:57) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:03:11) cm close ( frame ( workbook 14:Net "36:General Properties" ) )
+\i (00:03:16) cm exit
+\i (00:03:32) setwindow pcb
+\i (00:03:32) netin 
+\i (00:03:38) setwindow form.niparams
+\i (00:03:38) FORM niparams other  
+\i (00:03:45) FORM niparams browse_filename  
+\i (00:04:06) fillin "menu_cancel"
+\i (00:04:10) FORM niparams supercede YES 
+\i (00:04:11) FORM niparams append_device_log YES 
+\i (00:04:29) FORM niparams import  
+\i (00:04:32) fillin confirm
+\i (00:04:46) setwindow pcb
+\i (00:04:46) pcad in 
+\i (00:04:52) setwindow form.pcad_in
+\i (00:04:52) FORM pcad_in cancel  
+\i (00:05:05) setwindow pcb
+\i (00:05:05) net_properties 
+\i (00:05:05) setwindow cmgr
+\i (00:05:05) cm newView ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:05:07) cm close ( frame ( workbook 14:Net "36:General Properties" ) )
+\i (00:05:10) cm exit
+\i (00:05:18) setwindow pcb
+\i (00:05:18) drawing param 
+\i (00:05:30) setwindow form.drawing
+\i (00:05:30) FORM drawing done  
+\i (00:05:40) setwindow pcb
+\i (00:05:40) identify nets 
+\i (00:05:47) setwindow form.fpsxidnets
+\i (00:05:47) FORM fpsxidnets apply  
+\i (00:05:57) FORM fpsxidnets cancel  
+\i (00:06:19) setwindow pcb
+\i (00:06:19) place insight 
+\e (00:06:19) A placement grid was not found.
+\i (00:06:36) place insight 
+\e (00:06:36) A placement grid was not found.
+\i (00:07:40) exit 
+\f (00:07:40) Do you want to save the changes you made to C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd?
+\i (00:07:43) fillin no 

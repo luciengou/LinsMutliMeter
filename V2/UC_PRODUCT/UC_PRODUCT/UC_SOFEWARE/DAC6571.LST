@@ -1,0 +1,210 @@
+C51 COMPILER V9.02   DAC6571                                                               01/05/2014 08:11:49 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE DAC6571
+OBJECT MODULE PLACED IN DAC6571.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE DAC6571.C OMF2 OPTIMIZE(4,SPEED) BROWSE DEBUG
+
+line level    source
+
+   1          /***********************************************
+   2            PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   3             CPU : MPC82G516
+   4             BEGIN DATE: 2013.11.01
+   5             FINISHED  : 2014.01.25
+   6             WRITEBY   :JOHNSON LIN
+   7             DAC6571  setup   SET 1001 0000 FOR A0 TYPE 
+   8              8CH =  pga =1 ,32767BITS
+   9          **************************************************/
+  10          #include <MPC82G516.h>
+  11          #include <DAC6571.h>
+  12          //#include <COUNTER.H>
+  13          
+  14          
+  15          
+  16          #define   read_com  0x91    //    10010001
+  17          #define   write_com 0x90    //    10010000
+  18          #define   ic_com    0x8C    //    define PGA and counter
+  19          
+  20          sbit mV_SCL   = P2^0;
+  21          sbit mV_SDA   = P2^1;
+  22          sbit mA_SCL   = P2^2;
+  23          sbit mA_SDA   = P2^3;
+  24          
+  25          sbit BEEP_OUT   = P3^4;
+  26          unsigned char  _i2c_ack;      // bit array of error types
+  27          
+  28          extern unsigned char Value_Hi,Value_Lo;
+  29          extern void delay(unsigned int i);
+  30          extern idata unsigned char Soft_Timer[8];
+  31          
+  32          /********************************************************/
+  33          unsigned int Get_DAC6571_Value(void)
+  34          {
+  35   1       idata unsigned int res;
+  36   1        res = 0;
+  37   1        DAC6571_Init();
+  38   1        DAC6571_write_com(write_com,ic_com);
+  39   1        DAC6571_read_com(read_com,ic_com);
+  40   1        return(res);
+  41   1      }
+  42          /*******************************************************************/
+  43          void _i2cBitDly(void)               // wait 4.7uS, or thereabouts
+  44          {                                   // tune to xtal. This works at 11.0592MHz
+  45   1              unsigned char   i;
+  46   1              
+  47   1              for (i=0; i<0x12; i++);
+  48   1      }
+  49          /*****************************************************/
+  50          void DAC6571_Init(void)
+  51          {
+  52   1              unsigned int i;
+  53   1              Value_SCL = 1 ;
+*** ERROR C202 IN LINE 53 OF DAC6571.C: 'Value_SCL': undefined identifier
+  54   1              _i2cBitDly();
+C51 COMPILER V9.02   DAC6571                                                               01/05/2014 08:11:49 PAGE 2   
+
+  55   1              Value_SDA = 1 ;
+*** ERROR C202 IN LINE 55 OF DAC6571.C: 'Value_SDA': undefined identifier
+  56   1              _i2cBitDly();
+  57   1              _i2cBitDly();
+  58   1              _i2cBitDly();
+  59   1              _i2cBitDly();
+  60   1              Value_SDA = 0;
+*** ERROR C202 IN LINE 60 OF DAC6571.C: 'Value_SDA': undefined identifier
+  61   1      
+  62   1              for(i = 0; i < 0x100; i++);    
+  63   1      }
+  64          /*********************************************************************/
+  65          void DAC6571_start(void)
+  66          {
+  67   1              Value_SDA = 1 ;
+*** ERROR C202 IN LINE 67 OF DAC6571.C: 'Value_SDA': undefined identifier
+  68   1              _i2cBitDly();
+  69   1              Value_SCL = 1 ;
+*** ERROR C202 IN LINE 69 OF DAC6571.C: 'Value_SCL': undefined identifier
+  70   1              _i2cBitDly();
+  71   1         Value_SDA = 0 ;
+*** ERROR C202 IN LINE 71 OF DAC6571.C: 'Value_SDA': undefined identifier
+  72   1         _i2cBitDly();
+  73   1         Value_SCL = 0 ;
+*** ERROR C202 IN LINE 73 OF DAC6571.C: 'Value_SCL': undefined identifier
+  74   1      }
+  75          /*************************************/
+  76          void DAC6571_stop(void)
+  77          {
+  78   1              Value_SCL = 1 ;
+*** ERROR C202 IN LINE 78 OF DAC6571.C: 'Value_SCL': undefined identifier
+  79   1              _i2cBitDly();
+  80   1          Value_SDA = 1 ;
+*** ERROR C202 IN LINE 80 OF DAC6571.C: 'Value_SDA': undefined identifier
+  81   1              _i2cBitDly();
+  82   1      }
+  83          /********************************************/
+  84          void DAC6571_write_byte(unsigned char bt)
+  85          {
+  86   1              idata unsigned char i;
+  87   1      
+  88   1              _i2c_ack = TRUE;                                                //default have ack
+  89   1        
+  90   1              for (i=0; i<8; i++)
+  91   1              {
+  92   2                      if (bt & 0x80)
+  93   2                      Value_SDA = 1;                      // send each bit, MSB first
+*** ERROR C202 IN LINE 93 OF DAC6571.C: 'Value_SDA': undefined identifier
+  94   2                      else
+  95   2                              Value_SDA = 0;
+*** ERROR C202 IN LINE 95 OF DAC6571.C: 'Value_SDA': undefined identifier
+  96   2                      Value_SCL = 1;
+*** ERROR C202 IN LINE 96 OF DAC6571.C: 'Value_SCL': undefined identifier
+  97   2                      _i2cBitDly();
+  98   2                      Value_SCL = 0;
+*** ERROR C202 IN LINE 98 OF DAC6571.C: 'Value_SCL': undefined identifier
+  99   2                      _i2cBitDly();
+ 100   2                      bt <<= 1;
+ 101   2              }
+ 102   1      
+ 103   1              Value_SDA = 1;                       // change input and listen for ACK
+*** ERROR C202 IN LINE 103 OF DAC6571.C: 'Value_SDA': undefined identifier
+C51 COMPILER V9.02   DAC6571                                                               01/05/2014 08:11:49 PAGE 3   
+
+ 104   1              Value_SCL = 1;
+*** ERROR C202 IN LINE 104 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 105   1              _i2cBitDly();
+ 106   1              if (Value_SDA)
+*** ERROR C202 IN LINE 106 OF DAC6571.C: 'Value_SDA': undefined identifier
+ 107   1                      _i2c_ack = FALSE;                       // ack didn't happen, may be nothing out there
+ 108   1              Value_SCL = 0;
+*** ERROR C202 IN LINE 108 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 109   1              _i2cBitDly();
+ 110   1      }
+ 111          /********************************************************/
+ 112          unsigned char DAC6571_read_byte(unsigned char lastbyte)         // lastone == 1 for last byte
+ 113          {
+ 114   1              idata unsigned char i, res;
+ 115   1              res = 0;
+ 116   1              Value_SDA = 1;
+*** ERROR C202 IN LINE 116 OF DAC6571.C: 'Value_SDA': undefined identifier
+ 117   1              for (i=0; i<8; i++)                 // each bit at a time, MSB first
+ 118   1              {
+ 119   2                      Value_SCL = 1;
+*** ERROR C202 IN LINE 119 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 120   2                      _i2cBitDly();
+ 121   2                      res <<= 1;
+ 122   2                      if (Value_SDA)          res |= 1;
+*** ERROR C202 IN LINE 122 OF DAC6571.C: 'Value_SDA': undefined identifier
+ 123   2                      Value_SCL = 0;
+*** ERROR C202 IN LINE 123 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 124   2                      _i2cBitDly();
+ 125   2              }
+ 126   1              Value_SDA = lastbyte;                   // send ACK according to 'lastone'
+*** ERROR C202 IN LINE 126 OF DAC6571.C: 'Value_SDA': undefined identifier
+ 127   1              Value_SCL = 1;
+*** ERROR C202 IN LINE 127 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 128   1              _i2cBitDly();
+ 129   1              Value_SCL = 0;
+*** ERROR C202 IN LINE 129 OF DAC6571.C: 'Value_SCL': undefined identifier
+ 130   1              Value_SDA = 1;
+*** ERROR C202 IN LINE 130 OF DAC6571.C: 'Value_SDA': undefined identifier
+ 131   1              _i2cBitDly();
+ 132   1              return(res);
+ 133   1      }
+ 134          /********************************************************/
+ 135          void DAC6571_write_com(unsigned char dev_id, unsigned char reg_addr)
+ 136          {
+ 137   1               DAC6571_start();                                                               //send start bit
+ 138   1               DAC6571_write_byte((dev_id));
+ 139   1               DAC6571_write_byte(reg_addr);               //send high address
+ 140   1               DAC6571_stop();                              //stop
+ 141   1      }
+ 142          /*****************************************************/
+ 143          unsigned int DAC6571_read_com(unsigned char dev_id, unsigned char reg_addr)
+ 144          {
+ 145   1              unsigned int i;
+ 146   1      
+ 147   1               DAC6571_start();                                                                               //send start bit
+ 148   1               DAC6571_write_byte(dev_id);                                    //send address byte
+ 149   1              i = ((unsigned int)  DAC6571_read_byte(0)) << 8;     //get high data
+ 150   1              i |=  DAC6571_read_byte(1);                                               //get low data
+ 151   1              DAC6571_write_byte(reg_addr);
+ 152   1              DAC6571_stop();                              //stop
+ 153   1          
+ 154   1              return i;
+C51 COMPILER V9.02   DAC6571                                                               01/05/2014 08:11:49 PAGE 4   
+
+ 155   1      }
+ 156          /************************************/
+ 157          void S_Delay(unsigned int n)
+ 158          {
+ 159   1              while(n--);
+ 160   1      }
+ 161          /****************************************/
+ 162          void PlaySound(unsigned char n)
+ 163          {
+ 164   1              if(n==1)
+ 165   1                { BEEP_OUT = 1;}
+ 166   1                else 
+ 167   1                 { BEEP_OUT = 0 ;}
+ 168   1      } 
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  25 ERROR(S)

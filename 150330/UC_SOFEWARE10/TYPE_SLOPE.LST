@@ -1,0 +1,1990 @@
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE TYPE_SLOPE
+OBJECT MODULE PLACED IN TYPE_SLOPE.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE TYPE_SLOPE.c OMF2 BROWSE DEBUG LISTINCLUDE SYMBOLS PREPRINT
+
+line level    source
+
+   1          /*******************************************
+   2                    TC SLOPE AND RTD SLOPE
+   3          
+   4            用 K_type 做基礎校正歸零及最高基準校正
+   5            放大倍數採最大輸入電壓 E TYPE 為最大倍數
+   6            使精度為 0.1F/COUNT  G=53
+   7            131072/65536
+   8          K_TYPE  0       //2466F //54.807mV      //24660 COUNT // 2.9431V
+   9          J_TYPE  1       //1368F //42.922mV      //13680 COUNT // 2.3049V
+  10          T_TYPE  2       //360F  //9.286mV       //3600  COUNT // 0.49866V
+  11          E_TYPE  3       //1440F //61.022mV      //14400 COUNT // 3.2768
+  12          R_TYPE  4       //2880F //18.842mV      //28800 COUNT //
+  13          S_TYPE  5       //2880F //16.771mV      //28800 COUNT //
+  14          B_TYPE  6       //3240F //13.585mV      //32400 COUNT //
+  15          
+  16              MCP 3421(18BITS ADC) READ ONLY
+  17              FOR Value_read
+  18              Count = 131071 ( Vin -(-Vin))/2.048V
+  19          ******************************************/
+  20          #include <MG82FE564.H>
+   1      =1  // (System)
+   2      =1  sfr ACC       = 0xE0;
+   3      =1  sfr B         = 0xF0;
+   4      =1  sfr SP        = 0x81;
+   5      =1  sfr DPL       = 0x82;
+   6      =1  sfr DPH       = 0x83;
+   7      =1  sfr PSW       = 0xD0;
+   8      =1  
+   9      =1  // (Interrupt)
+  10      =1  sfr IE        = 0xA8;
+  11      =1  sfr EIE1      = 0xAD;
+  12      =1  sfr AUXIE     = 0xAD;
+  13      =1  sfr XICON     = 0xC0;
+  14      =1  sfr IP0L      = 0xB8;
+  15      =1  sfr IP        = 0xB8;
+  16      =1  sfr IP0H      = 0xB7;
+  17      =1  sfr IPH       = 0xB7;
+  18      =1  sfr EIP1L     = 0xAE;
+  19      =1  sfr AUXIP     = 0xAE;
+  20      =1  sfr EIP1H     = 0xAF;
+  21      =1  sfr AUXIPH    = 0xAF;
+  22      =1  
+  23      =1  // (I/O Port)
+  24      =1  sfr P0        = 0x80;
+  25      =1  sfr P1        = 0x90;
+  26      =1  sfr P2        = 0xA0;
+  27      =1  sfr P3        = 0xB0;
+  28      =1  sfr P4        = 0xE8;
+  29      =1  sfr P5        = 0xF8;
+  30      =1  sfr P6        = 0xC8;                            // Page F
+  31      =1  sfr P0M0      = 0x93;
+  32      =1  sfr P0M1      = 0x94;
+  33      =1  sfr P1M0      = 0x91;
+  34      =1  sfr P1M1      = 0x92;
+  35      =1  sfr P2M0      = 0x95;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 2   
+
+  36      =1  sfr P2M1      = 0x96;
+  37      =1  sfr P3M0      = 0xB1;
+  38      =1  sfr P3M1      = 0xB2;
+  39      =1  sfr P4M0      = 0xB3;
+  40      =1  sfr P4M1      = 0xB4;
+  41      =1  sfr P5M0      = 0xB5;
+  42      =1  sfr P5M1      = 0xB6;
+  43      =1  
+  44      =1  // (Timer)
+  45      =1  sfr TCON      = 0x88;
+  46      =1  sfr TMOD      = 0x89;
+  47      =1  sfr T2CON     = 0xC8;
+  48      =1  sfr T2MOD     = 0xC9;
+  49      =1  sfr RCAP2L    = 0xCA;
+  50      =1  sfr RCAP2H    = 0xCB;
+  51      =1  sfr TL0       = 0x8A;
+  52      =1  sfr TL1       = 0x8B;
+  53      =1  sfr TH0       = 0x8C;
+  54      =1  sfr TH1       = 0x8D;
+  55      =1  sfr TL2       = 0xCC;
+  56      =1  sfr TH2       = 0xCD;
+  57      =1  
+  58      =1  // (Serial Port)
+  59      =1  sfr SCON      = 0x98;
+  60      =1  sfr SCON0     = 0x98;
+  61      =1  sfr SCON1     = 0x98;                            // Page 1
+  62      =1  sfr SBUF      = 0x99;
+  63      =1  sfr SBUF0     = 0x99;
+  64      =1  sfr SBUF1     = 0x99;                            // Page 1
+  65      =1  sfr SADDR     = 0xA9;
+  66      =1  sfr SADEN     = 0xB9;
+  67      =1  sfr SCFG      = 0x9A;
+  68      =1  sfr S1BRT     = 0x9A;
+  69      =1  sfr S2BUF     = 0x9A;                            // Page 1
+  70      =1  
+  71      =1  // (ADC)
+  72      =1  sfr ADCON     = 0xC5;
+  73      =1  sfr ADCTL     = 0xC5;
+  74      =1  sfr ADCV      = 0xC6;
+  75      =1  sfr ADCH      = 0xC6;
+  76      =1  sfr ADCVL     = 0xBE;
+  77      =1  sfr ADCL      = 0xBE;
+  78      =1  
+  79      =1  // (Keypad Interrupt)
+  80      =1  sfr KBCON     = 0xD6;
+  81      =1  sfr KBPATN    = 0xD5;
+  82      =1  sfr KBMASK    = 0xD7;
+  83      =1  
+  84      =1  // (SPI)
+  85      =1  sfr SPSTAT    = 0x84;
+  86      =1  sfr SPCON     = 0x85;
+  87      =1  sfr SPDAT     = 0x86;
+  88      =1  sfr SPISTAT   = 0x84;
+  89      =1  sfr SPICON    = 0x85;
+  90      =1  sfr SPIDAT    = 0x86;
+  91      =1  sfr SPCTL     = 0x85;
+  92      =1  sfr SPICTL    = 0x85;
+  93      =1  
+  94      =1  // (PCA)
+  95      =1  sfr CCON      = 0xD8;
+  96      =1  sfr CMOD      = 0xD9;
+  97      =1  sfr CL        = 0xE9;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 3   
+
+  98      =1  sfr CH        = 0xF9;
+  99      =1  sfr CCAPM0    = 0xDA;
+ 100      =1  sfr CCAPM1    = 0xDB;
+ 101      =1  sfr CCAPM2    = 0xDC;
+ 102      =1  sfr CCAPM3    = 0xDD;
+ 103      =1  sfr CCAPM4    = 0xDE;
+ 104      =1  sfr CCAPM5    = 0xDF;
+ 105      =1  sfr CCAP0H    = 0xFA;
+ 106      =1  sfr CCAP0L    = 0xEA;
+ 107      =1  sfr CCAP1H    = 0xFB;
+ 108      =1  sfr CCAP1L    = 0xEB;
+ 109      =1  sfr CCAP2H    = 0xFC;
+ 110      =1  sfr CCAP2L    = 0xEC;
+ 111      =1  sfr CCAP3H    = 0xFD;
+ 112      =1  sfr CCAP3L    = 0xED;
+ 113      =1  sfr CCAP4H    = 0xFE;
+ 114      =1  sfr CCAP4L    = 0xEE;
+ 115      =1  sfr CCAP5H    = 0xFF;
+ 116      =1  sfr CCAP5L    = 0xEF;
+ 117      =1  sfr PCAPWM0   = 0xF2;
+ 118      =1  sfr PCAPWM1   = 0xF3;
+ 119      =1  sfr PCAPWM2   = 0xF4;
+ 120      =1  sfr PCAPWM3   = 0xF5;
+ 121      =1  sfr PCAPWM4   = 0xF6;
+ 122      =1  sfr PCAPWM5   = 0xF7;
+ 123      =1  
+ 124      =1  // (Others)
+ 125      =1  sfr PCON      = 0x87;
+ 126      =1  sfr PCON0     = 0x87;
+ 127      =1  sfr PCON1     = 0x97;
+ 128      =1  sfr EVRCR     = 0x97;
+ 129      =1  sfr PCON2     = 0xC7;
+ 130      =1  sfr AUXR      = 0x8E;
+ 131      =1  sfr AUXR0     = 0x8E;
+ 132      =1  sfr AUXR1     = 0xA2;
+ 133      =1  sfr AUXR2     = 0xA6;
+ 134      =1  sfr STRETCH   = 0x8F;
+ 135      =1  sfr WDTCR     = 0xE1;
+ 136      =1  sfr TSTWD     = 0x97;
+ 137      =1  sfr SFRPI     = 0xAC;
+ 138      =1  
+ 139      =1  // (ISP)
+ 140      =1  sfr ISPCR     = 0xE7;
+ 141      =1  sfr IFMT      = 0xE5;
+ 142      =1  sfr IFD       = 0xE2;
+ 143      =1  sfr IFADRH    = 0xE3;
+ 144      =1  sfr IFADRL    = 0xE4;
+ 145      =1  sfr SCMD      = 0xE6;
+ 146      =1  
+ 147      =1  // (bits in PSW)
+ 148      =1  sbit CY       = PSW^7;
+ 149      =1  sbit AC       = PSW^6;
+ 150      =1  sbit F0       = PSW^5;
+ 151      =1  sbit RS1      = PSW^4;
+ 152      =1  sbit RS0      = PSW^3;
+ 153      =1  sbit OV       = PSW^2;
+ 154      =1  sbit F1       = PSW^1;
+ 155      =1  sbit P        = PSW^0;
+ 156      =1  
+ 157      =1  // (bits in IE)
+ 158      =1  sbit EA       = IE^7;
+ 159      =1  sbit GF4      = IE^6;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 4   
+
+ 160      =1  sbit ET2      = IE^5;
+ 161      =1  sbit ES       = IE^4;
+ 162      =1  sbit ES0      = IE^4;
+ 163      =1  sbit ET1      = IE^3;
+ 164      =1  sbit EX1      = IE^2;
+ 165      =1  sbit ET0      = IE^1;
+ 166      =1  sbit EX0      = IE^0;
+ 167      =1  
+ 168      =1  // (bits in IP0L)
+ 169      =1  sbit PX3L     = IP0L^7;
+ 170      =1  sbit PX2L     = IP0L^6;
+ 171      =1  sbit PT2L     = IP0L^5;
+ 172      =1  sbit PSL      = IP0L^4;
+ 173      =1  sbit PT1L     = IP0L^3;
+ 174      =1  sbit PX1L     = IP0L^2;
+ 175      =1  sbit PT0L     = IP0L^1;
+ 176      =1  sbit PX0L     = IP0L^0;
+ 177      =1  
+ 178      =1  sbit PT2      = IP^5;
+ 179      =1  sbit PS       = IP^4;
+ 180      =1  sbit PT1      = IP^3;
+ 181      =1  sbit PX1      = IP^2;
+ 182      =1  sbit PT0      = IP^1;
+ 183      =1  sbit PX0      = IP^0;
+ 184      =1  
+ 185      =1  //(bits in SCON0)
+ 186      =1  sbit FE       = SCON0^7;
+ 187      =1  sbit SM00     = SCON0^7;
+ 188      =1  sbit SM10     = SCON0^6;
+ 189      =1  sbit SM20     = SCON0^5;
+ 190      =1  sbit REN0     = SCON0^4;
+ 191      =1  sbit TB80     = SCON0^3;
+ 192      =1  sbit RB80     = SCON0^2;
+ 193      =1  sbit TI0      = SCON0^1;
+ 194      =1  sbit RI0      = SCON0^0;
+ 195      =1  
+ 196      =1  sbit SM0      = SCON^7;
+ 197      =1  sbit SM1      = SCON^6;
+ 198      =1  sbit SM2      = SCON^5;
+ 199      =1  sbit REN      = SCON^4;
+ 200      =1  sbit TB8      = SCON^3;
+ 201      =1  sbit RB8      = SCON^2;
+ 202      =1  sbit TI       = SCON^1;
+ 203      =1  sbit RI       = SCON^0;
+ 204      =1  
+ 205      =1  //(bits in SCON1)
+ 206      =1  sbit SM01     = SCON1^7;
+ 207      =1  sbit SM11     = SCON1^6;
+ 208      =1  sbit SM21     = SCON1^5;
+ 209      =1  sbit REN1     = SCON1^4;
+ 210      =1  sbit TB81     = SCON1^3;
+ 211      =1  sbit RB81     = SCON1^2;
+ 212      =1  sbit TI1      = SCON1^1;
+ 213      =1  sbit RI1      = SCON1^0;
+ 214      =1  
+ 215      =1  // (bits in TCON)
+ 216      =1  sbit TF1      = TCON^7;
+ 217      =1  sbit TR1      = TCON^6;
+ 218      =1  sbit TF0      = TCON^5;
+ 219      =1  sbit TR0      = TCON^4;
+ 220      =1  sbit IE1      = TCON^3;
+ 221      =1  sbit IT1      = TCON^2;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 5   
+
+ 222      =1  sbit IE0      = TCON^1;
+ 223      =1  sbit IT0      = TCON^0;
+ 224      =1  
+ 225      =1  // (bits in T2CON)
+ 226      =1  sbit TF2      = T2CON^7;
+ 227      =1  sbit EXF2     = T2CON^6;
+ 228      =1  sbit RCLK     = T2CON^5;
+ 229      =1  sbit TCLK     = T2CON^4;
+ 230      =1  sbit EXEN2    = T2CON^3;
+ 231      =1  sbit TR2      = T2CON^2;
+ 232      =1  sbit C_T2     = T2CON^1;
+ 233      =1  sbit CP_RL2   = T2CON^0;
+ 234      =1  
+ 235      =1  // (bits in CCON)
+ 236      =1  sbit CF       = CCON^7;
+ 237      =1  sbit CR       = CCON^6;
+ 238      =1  sbit CCF5     = CCON^5;
+ 239      =1  sbit CCF4     = CCON^4;
+ 240      =1  sbit CCF3     = CCON^3;
+ 241      =1  sbit CCF2     = CCON^2;
+ 242      =1  sbit CCF1     = CCON^1;
+ 243      =1  sbit CCF0     = CCON^0;
+ 244      =1  
+ 245      =1  // (bits in XICON)
+ 246      =1  sbit PX3      = XICON^7;
+ 247      =1  sbit IT3H     = XICON^7;
+ 248      =1  sbit EX3      = XICON^6;
+ 249      =1  sbit IE3      = XICON^5;
+ 250      =1  sbit IT3      = XICON^4;
+ 251      =1  sbit PX2      = XICON^3;
+ 252      =1  sbit IT2H     = XICON^3;
+ 253      =1  sbit EX2      = XICON^2;
+ 254      =1  sbit IE2      = XICON^1;
+ 255      =1  sbit IT2      = XICON^0;
+ 256      =1  
+ 257      =1  // (bits in P0)
+ 258      =1  sbit P07      = P0^7;
+ 259      =1  sbit P06      = P0^6;
+ 260      =1  sbit P05      = P0^5;
+ 261      =1  sbit P04      = P0^4;
+ 262      =1  sbit P03      = P0^3;
+ 263      =1  sbit P02      = P0^2;
+ 264      =1  sbit P01      = P0^1;
+ 265      =1  sbit P00      = P0^0;
+ 266      =1  
+ 267      =1  // (bits in P1)
+ 268      =1  sbit P17      = P1^7;
+ 269      =1  sbit P16      = P1^6;
+ 270      =1  sbit P15      = P1^5;
+ 271      =1  sbit P14      = P1^4;
+ 272      =1  sbit P13      = P1^3;
+ 273      =1  sbit P12      = P1^2;
+ 274      =1  sbit P11      = P1^1;
+ 275      =1  sbit P10      = P1^0;
+ 276      =1  
+ 277      =1  // (bits in P2)
+ 278      =1  sbit P27      = P2^7;
+ 279      =1  sbit P26      = P2^6;
+ 280      =1  sbit P25      = P2^5;
+ 281      =1  sbit P24      = P2^4;
+ 282      =1  sbit P23      = P2^3;
+ 283      =1  sbit P22      = P2^2;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 6   
+
+ 284      =1  sbit P21      = P2^1;
+ 285      =1  sbit P20      = P2^0;
+ 286      =1  
+ 287      =1  // (bits in P3)
+ 288      =1  sbit P37      = P3^7;
+ 289      =1  sbit P36      = P3^6;
+ 290      =1  sbit P35      = P3^5;
+ 291      =1  sbit P34      = P3^4;
+ 292      =1  sbit P33      = P3^3;
+ 293      =1  sbit P32      = P3^2;
+ 294      =1  sbit P31      = P3^1;
+ 295      =1  sbit P30      = P3^0;
+ 296      =1  
+ 297      =1  // (bits in P4)
+ 298      =1  sbit P47      = P4^7;
+ 299      =1  sbit P46      = P4^6;
+ 300      =1  sbit P45      = P4^5;
+ 301      =1  sbit P44      = P4^4;
+ 302      =1  sbit P43      = P4^3;
+ 303      =1  sbit P42      = P4^2;
+ 304      =1  sbit P41      = P4^1;
+ 305      =1  sbit P40      = P4^0;
+ 306      =1  
+ 307      =1  // (bits in P5)
+ 308      =1  sbit P53      = P5^3;
+ 309      =1  sbit P52      = P5^2;
+ 310      =1  sbit P51      = P5^1;
+ 311      =1  sbit P50      = P5^0;
+ 312      =1  
+ 313      =1  // (bits in P6)
+ 314      =1  sbit P61      = P6^1;
+ 315      =1  sbit P60      = P6^0;
+ 316      =1  
+ 317      =1  // (bits in P1, alternate)
+ 318      =1  sbit T2EX     = P1^1;
+ 319      =1  sbit T2       = P1^0;
+ 320      =1  sbit S2TXD    = P1^3;
+ 321      =1  sbit S2RXD    = P1^2;
+ 322      =1  
+ 323      =1  sbit SPI_CLK  = P1^7;
+ 324      =1  sbit SPI_MISO = P1^6;
+ 325      =1  sbit SPI_MOSI = P1^5;
+ 326      =1  sbit SPI_SS   = P1^4;
+ 327      =1  
+ 328      =1  sbit CEX5     = P1^7;
+ 329      =1  sbit CEX4     = P1^6;
+ 330      =1  sbit CEX3     = P1^5;
+ 331      =1  sbit CEX2     = P1^4;
+ 332      =1  sbit CEX1     = P1^3;
+ 333      =1  sbit CEX0     = P1^2;
+ 334      =1  sbit ECI      = P1^1;
+ 335      =1  
+ 336      =1  sbit AIN7     = P1^7;
+ 337      =1  sbit AIN6     = P1^6;
+ 338      =1  sbit AIN5     = P1^5;
+ 339      =1  sbit AIN4     = P1^4;
+ 340      =1  sbit AIN3     = P1^3;
+ 341      =1  sbit AIN2     = P1^2;
+ 342      =1  sbit AIN1     = P1^1;
+ 343      =1  sbit AIN0     = P1^0;
+ 344      =1  
+ 345      =1  //(bits in P2, alternate)
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 7   
+
+ 346      =1  sbit KBI7     = P2^7;
+ 347      =1  sbit KBI6     = P2^6;
+ 348      =1  sbit KBI5     = P2^5;
+ 349      =1  sbit KBI4     = P2^4;
+ 350      =1  sbit KBI3     = P2^3;
+ 351      =1  sbit KBI2     = P2^2;
+ 352      =1  sbit KBI1     = P2^1;
+ 353      =1  sbit KBI0     = P2^0;
+ 354      =1  
+ 355      =1  // (bits in P3, alternate)
+ 356      =1  sbit RD       = P3^7;
+ 357      =1  sbit WR       = P3^6;
+ 358      =1  sbit T1       = P3^5;
+ 359      =1  sbit T0       = P3^4;
+ 360      =1  sbit INT1     = P3^3;
+ 361      =1  sbit INT0     = P3^2;
+ 362      =1  sbit TXD      = P3^1;
+ 363      =1  sbit RXD      = P3^0;
+ 364      =1  sbit T1CKO    = P3^5;
+ 365      =1  sbit T0CKO    = P3^4;
+ 366      =1  
+ 367      =1  // (bits in P4, alternate)
+ 368      =1  sbit INT2     = P4^3;
+ 369      =1  sbit INT3     = P4^2;
+ 370      =1  
+ 371      =1  sbit ALE      = P4^6;
+ 372      =1  
+ 373      =1  // (bits in P6, alternate)
+ 374      =1  sbit CKO      = P6^0;
+ 375      =1  sbit XOUT     = P6^0;
+ 376      =1  sbit XIN      = P6^1;
+  21          #include<TYPE_SLOPE.h>
+   1      =1  /*************************************
+   2      =1   SLOPE FOR PER TYPE AND GAIN 
+   3      =1  
+   4      =1  **************************************/
+   5      =1  #ifndef SLOPE_h_ 
+   6      =1  #define SLOPE_h_ 
+   7      =1  
+   8      =1  unsigned int Get_K_Slope(unsigned  int kt);
+   9      =1  unsigned int Get_J_Slope(unsigned  int jt);
+  10      =1  unsigned int Get_T_Slope(unsigned  int ts);
+  11      =1  unsigned int Get_E_Slope(unsigned  int et);
+  12      =1  unsigned int Get_R_Slope(unsigned  int rt);
+  13      =1  unsigned int Get_S_Slope(unsigned  int st);
+  14      =1  unsigned int Get_B_Slope(unsigned  int bt);
+  15      =1  unsigned int Get_N_Slope(unsigned  int nt); 
+  16      =1  unsigned int Get_RTD_Slope(unsigned int rtd);
+  17      =1  unsigned int DO_RTD_TYPE(void);
+  18      =1  unsigned int Read_AD3421_Value(void);
+  19      =1  unsigned int Check_Type_Offset(unsigned int ss);
+  20      =1  #endif
+  22          
+  23          /**********************************/
+  24          #define K_TYPE          0               //2466F   54.807mV      P0=0x00
+  25          #define J_TYPE          1               //1368F   42.922mV
+  26          #define T_TYPE          2               //360F    9.286mV
+  27          #define E_TYPE          3               //1440F   61.022mV
+  28          #define R_TYPE          4               //2880F   18.842mV
+  29          #define S_TYPE          5               //2880F   16.771mV
+  30          #define B_TYPE          6               //3240F   13.585mV
+  31          #define N_TYPE      7           //?       ? 
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 8   
+
+  32          
+  33          unsigned char AV_COD = 0;
+  34          unsigned char NP_COD = 0;
+  35          //unsigned char NG_COD ;
+  36          unsigned char ng_flog = 0;
+  37          xdata unsigned char K_Slope[11] = {0,36,48,56,64,76,88,104,120,200,250};
+  38          xdata unsigned char J_Slope[9] = {0,32,40,48,52,112,160,200,255};//32//40//48//52//256//112
+  39          xdata unsigned char T_Slope[10] = {7,8,10,16,24,32,48,56,64,72}; //8/10/16/24/48/56/64/72
+  40          xdata unsigned char E_Slope[12] = {0,16,32,40,48,56,64,96,108,128,180,225}; //16 32     40      48      56      64 96 104 256
+             - 148
+  41          xdata unsigned char R_Slope[16] = {0,10,14,19,20,22,27,35,38,42,52,60,64,70,80,106};
+  42          
+  43          xdata unsigned char S_Slope[16] = {10,13,16,18,28,32,40,52,55,57,59,64,66,90,132,250};
+  44          //xdata unsigned char B_Slope[11] = {0,16,32,40,48,56,64,96,108,128,255};
+  45          //xdata unsigned char N_Slope[11] = {0,16,32,40,48,56,64,96,108,128,255};
+  46          xdata unsigned char RTD_Slope[8] = {0,44,46,50,54,58,62,77};
+  47          /***********************************************
+  48               K_TYPE 2466F   54.807mV    P0=0x00
+  49          ************************************************/
+  50          unsigned int Get_K_Slope(unsigned int Code_Value) 
+  51          {
+  52   1         unsigned int out_Value;
+  53   1      
+  54   1                 NP_COD = 0;
+  55   1           if ( AV_COD == 1 )
+  56   1                {
+  57   2                        if(Code_Value <= 736)   //791
+  58   2                          {
+  59   3                            out_Value = 320 - (Code_Value *10)/23;
+  60   3                                ng_flog = 1 ;
+  61   3                          AV_COD = 0;
+  62   3                              }
+  63   2                    else
+  64   2                          {
+  65   3                           out_Value = (Code_Value*10)/23-320;
+  66   3                               ng_flog = 0 ;
+  67   3                      }
+  68   2                   if((Code_Value > 760)&&(ng_flog == 0))     //1203   760
+  69   2                    {
+  70   3                       out_Value = out_Value + (Code_Value-730)/K_Slope[6] ;  
+  71   3                    }
+  72   2                   if((Code_Value > 2000)&&(ng_flog == 0))            //860 2436
+  73   2                    {
+  74   3                      out_Value = out_Value+(Code_Value-1950)/K_Slope[8] ;
+  75   3                        }
+  76   2                 }
+  77   1              else
+  78   1                {
+  79   2                              out_Value = 320 + Code_Value/2.32;      //2.21
+  80   2      
+  81   2               if(Code_Value > 760)   //1203   760
+  82   2                 {
+  83   3                  out_Value = out_Value-(Code_Value-730)/K_Slope[6] ;  
+  84   3                 }
+  85   2                if(Code_Value > 2000)         //860 2436
+  86   2                 {
+  87   3                  out_Value = out_Value-(Code_Value-1950)/K_Slope[8] ;
+  88   3                 }
+  89   2               if(Code_Value > 3168)   //2480
+  90   2                 {
+  91   3                 out_Value =out_Value+(Code_Value-3150)/K_Slope[8];
+  92   3                 }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 9   
+
+  93   2               if(Code_Value > 3550)   //4460
+  94   2                 {
+  95   3                 out_Value =out_Value-(Code_Value-3500)/K_Slope[8]; 
+  96   3                 }
+  97   2               if(Code_Value > 4850)   //5360 
+  98   2                 {
+  99   3                 out_Value =out_Value+(Code_Value-4800)/K_Slope[7];  //
+ 100   3                 }
+ 101   2               if(Code_Value > 6980)  //6260 
+ 102   2                 {
+ 103   3                 out_Value =out_Value+(Code_Value-6900)/K_Slope[8];
+ 104   3                 }
+ 105   2               if(Code_Value > 9343)  //7520  
+ 106   2                 {
+ 107   3                 out_Value =out_Value-(Code_Value-9220)/K_Slope[9];
+ 108   3                 }
+ 109   2               if(Code_Value > 10420) //9140 
+ 110   2                 {
+ 111   3                 out_Value =out_Value-(Code_Value-10360)/K_Slope[8];
+ 112   3                 }
+ 113   2               if(Code_Value > 12540) //9140 
+ 114   2                 {
+ 115   3                 out_Value =out_Value-(Code_Value-12500)/K_Slope[9];
+ 116   3                 }
+ 117   2           if(Code_Value >14250)
+ 118   2                 {
+ 119   3                 out_Value = out_Value-(Code_Value-14200)/K_Slope[10];                                                                                                                                                                                                                                                                                                        
+ 120   3                 }
+ 121   2      
+ 122   2               if(Code_Value > 16800)    //14900
+ 123   2                 {
+ 124   3                 out_Value =out_Value-(Code_Value-16750)/K_Slope[10];
+ 125   3                 }
+ 126   2               if(Code_Value > 18250) //18140
+ 127   2                 {
+ 128   3                 out_Value =out_Value+(Code_Value-18200)/K_Slope[10];
+ 129   3                 }
+ 130   2               if(Code_Value > 19450)  //19220
+ 131   2                 {
+ 132   3                 out_Value =out_Value-(Code_Value-19400)/K_Slope[9];
+ 133   3                 }
+ 134   2               if(Code_Value > 21450) //20300
+ 135   2                 {
+ 136   3                 out_Value =out_Value-(Code_Value-21400)/K_Slope[10]; 
+ 137   3                 }
+ 138   2               if(Code_Value > 22920)   //22100
+ 139   2                 {
+ 140   3                 out_Value =out_Value+(Code_Value-22840)/K_Slope[9];
+ 141   3                 }
+ 142   2               if(Code_Value > 25350)    //23360
+ 143   2                 {
+ 144   3                 out_Value =out_Value-(Code_Value-25300)/K_Slope[10];
+ 145   3                 }
+ 146   2               if(Code_Value > 26860)    //24080
+ 147   2                 {
+ 148   3                 out_Value =out_Value+(Code_Value-26800)/K_Slope[9];
+ 149   3                 }
+ 150   2               if(Code_Value > 28760)    //24080
+ 151   2                 {
+ 152   3                 out_Value =out_Value+(Code_Value-28500)/K_Slope[10];
+ 153   3                 }
+ 154   2                 if(Code_Value > 30300)          //24080
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 10  
+
+ 155   2                 {
+ 156   3                 out_Value =out_Value-(Code_Value-30200)/K_Slope[10];
+ 157   3                 }
+ 158   2                 if(Code_Value > 31350)          //24080
+ 159   2                 {
+ 160   3                 out_Value =out_Value+(Code_Value-31250)/K_Slope[8];
+ 161   3                 }
+ 162   2                 if(Code_Value > 33950)          //24080
+ 163   2                 {
+ 164   3                 out_Value =out_Value+(Code_Value-33900)/K_Slope[10];
+ 165   3                 }
+ 166   2                 if(Code_Value > 35950)          //24080
+ 167   2                 {
+ 168   3                 out_Value =out_Value+(Code_Value-35900)/K_Slope[9];
+ 169   3                 }
+ 170   2                 if(Code_Value > 37050)          //24080
+ 171   2                 {
+ 172   3                 out_Value =out_Value+(Code_Value-37000)/K_Slope[10];
+ 173   3                 }
+ 174   2                 if(Code_Value > 39150)          //24080
+ 175   2                 {
+ 176   3                 out_Value =out_Value+(Code_Value-39100)/K_Slope[10];
+ 177   3                 }
+ 178   2                 if(Code_Value > 40550)          //24080
+ 179   2                 {
+ 180   3                 out_Value =out_Value+(Code_Value-40500)/K_Slope[10];
+ 181   3                 } 
+ 182   2                 if(Code_Value > 42150)          //24080
+ 183   2                 {
+ 184   3                 out_Value =out_Value+(Code_Value-42000)/K_Slope[10];
+ 185   3                 }
+ 186   2                 if(Code_Value > 43450)          //24080
+ 187   2                 {
+ 188   3                 out_Value =out_Value+(Code_Value-43400)/K_Slope[10];
+ 189   3                 }
+ 190   2                 if(Code_Value > 44950)          //24080
+ 191   2                 {
+ 192   3                 out_Value =out_Value+(Code_Value-44800)/K_Slope[9];
+ 193   3                 }
+ 194   2                 if(Code_Value > 46650)          //24080
+ 195   2                 {
+ 196   3                 out_Value =out_Value+(Code_Value-46600)/K_Slope[9];
+ 197   3                 }
+ 198   2                 if(Code_Value > 48250)          //24080
+ 199   2                 {
+ 200   3                 out_Value =out_Value+(Code_Value-48200)/K_Slope[8];
+ 201   3                 }
+ 202   2                 if(Code_Value > 50650)          //24080
+ 203   2                 {
+ 204   3                 out_Value =out_Value+(Code_Value-50600)/K_Slope[7];
+ 205   3                 }
+ 206   2                 if(Code_Value > 52550)          //24080
+ 207   2                 {
+ 208   3                 out_Value =out_Value+(Code_Value-52500)/K_Slope[7];
+ 209   3                 }
+ 210   2                 if(Code_Value > 53550)          //24080
+ 211   2                 {
+ 212   3             out_Value =out_Value+(Code_Value-53500)/K_Slope[9];
+ 213   3                 }
+ 214   2                 if(Code_Value > 55050)          //24080
+ 215   2                 {
+ 216   3             out_Value =out_Value+(Code_Value-55000)/K_Slope[7];
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 11  
+
+ 217   3                 }
+ 218   2                 if(Code_Value > 56350)          //24080
+ 219   2                 {
+ 220   3             out_Value =out_Value+(Code_Value-56300)/K_Slope[8];
+ 221   3                 }
+ 222   2                 if(Code_Value > 61000)          //24080
+ 223   2                 {
+ 224   3             out_Value = 65535;
+ 225   3                 }                                                                                        
+ 226   2         }
+ 227   1            
+ 228   1                    return out_Value;                                   // 20240 2530   920 176
+ 229   1      }
+ 230          /**********************************************
+ 231               J_TYPE     1368F 42.922mV P0=0X01
+ 232          ***********************************************/
+ 233          unsigned int Get_J_Slope(unsigned int Code_Value)  
+ 234          {
+ 235   1         unsigned int out_Value;
+ 236   1      
+ 237   1                NP_COD = 0;
+ 238   1           if ( AV_COD == 1 )
+ 239   1                 {
+ 240   2                        if(Code_Value <= 949)  
+ 241   2                          {
+ 242   3                            out_Value =320-(Code_Value/2.96);
+ 243   3                                ng_flog = 1 ;
+ 244   3                                 AV_COD = 0;
+ 245   3                              }                
+ 246   2                        else
+ 247   2                          {
+ 248   3                           out_Value =(Code_Value/2.96)-320;
+ 249   3                          ng_flog = 0 ;
+ 250   3      
+ 251   3                      }
+ 252   2                      }
+ 253   1                else
+ 254   1                 {    
+ 255   2                         out_Value = 320 + Code_Value/2.96;
+ 256   2              
+ 257   2                       if(Code_Value > 1050)  //864
+ 258   2                        {
+ 259   3                          out_Value =out_Value-(Code_Value-1000)/J_Slope[5] ;
+ 260   3                        }
+ 261   2                       if(Code_Value > 2545)
+ 262   2                        {
+ 263   3                          out_Value =out_Value-(Code_Value-2530)/J_Slope[5] ;
+ 264   3                        }
+ 265   2                   if(Code_Value > 4358)
+ 266   2                        {
+ 267   3                          out_Value = out_Value-(Code_Value-4350)/J_Slope[6] ; 
+ 268   3                        }
+ 269   2                      if(Code_Value > 7750) 
+ 270   2                        {
+ 271   3                          out_Value =out_Value -(Code_Value-7680)/J_Slope[7] ;
+ 272   3                        }
+ 273   2                      if(Code_Value > 10650)
+ 274   2                       {
+ 275   3                         out_Value =out_Value-(Code_Value-10670)/J_Slope[7];
+ 276   3                       }
+ 277   2                      if(Code_Value > 11250)
+ 278   2                       {
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 12  
+
+ 279   3                         out_Value =out_Value+(Code_Value-11200)/J_Slope[7] ; 
+ 280   3                       }
+ 281   2                      if(Code_Value > 14920) 
+ 282   2                       {
+ 283   3                         out_Value =out_Value-(Code_Value-14750)/J_Slope[7] ;  
+ 284   3                       }
+ 285   2                      if(Code_Value > 15420) 
+ 286   2                       {
+ 287   3                         out_Value =out_Value+(Code_Value-15400)/J_Slope[6] ;  
+ 288   3                       }
+ 289   2                      if(Code_Value > 17620) 
+ 290   2                       {
+ 291   3                         out_Value =out_Value-(Code_Value-17600)/J_Slope[8] ;  
+ 292   3                       }
+ 293   2                      if(Code_Value > 18620) 
+ 294   2                       {
+ 295   3                         out_Value =out_Value+(Code_Value-18600)/J_Slope[6] ;  
+ 296   3                       }
+ 297   2                      if(Code_Value > 20620) 
+ 298   2                       {
+ 299   3                         out_Value =out_Value-(Code_Value-20600)/J_Slope[7] ;  
+ 300   3                       }
+ 301   2                      if(Code_Value > 22620) 
+ 302   2                       {
+ 303   3                         out_Value =out_Value+(Code_Value-22600)/J_Slope[6] ;  
+ 304   3                       }
+ 305   2                      if(Code_Value > 24120) 
+ 306   2                       {
+ 307   3                         out_Value =out_Value-(Code_Value-24100)/J_Slope[6] ;  
+ 308   3                       }
+ 309   2                      if(Code_Value > 26320) 
+ 310   2                       {
+ 311   3                         out_Value =out_Value+(Code_Value-26300)/J_Slope[8] ;  
+ 312   3                       }
+ 313   2                      if(Code_Value > 27220) 
+ 314   2                       {
+ 315   3                         out_Value =out_Value-(Code_Value-27100)/J_Slope[7] ;  
+ 316   3                       }
+ 317   2                      if(Code_Value > 29620) 
+ 318   2                       {
+ 319   3                         out_Value =out_Value-(Code_Value-29600)/J_Slope[7] ;  
+ 320   3                       }
+ 321   2                      if(Code_Value > 32220) 
+ 322   2                       {
+ 323   3                         out_Value =out_Value-(Code_Value-32200)/J_Slope[7] ;  
+ 324   3                       }
+ 325   2                      if(Code_Value > 34720) 
+ 326   2                       {
+ 327   3                   out_Value =out_Value-(Code_Value-34700)/J_Slope[6] ;        
+ 328   3                       }
+ 329   2                      if(Code_Value > 36020) 
+ 330   2                       {
+ 331   3                         out_Value =out_Value-(Code_Value-36000)/J_Slope[7] ;  
+ 332   3                       }
+ 333   2                      if(Code_Value > 38620) 
+ 334   2                       {
+ 335   3                         out_Value =out_Value-(Code_Value-38600)/J_Slope[7] ;  
+ 336   3                       }
+ 337   2                      if(Code_Value > 39820) 
+ 338   2                       {
+ 339   3                         out_Value =out_Value-(Code_Value-39800)/J_Slope[6] ;  
+ 340   3                       }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 13  
+
+ 341   2                      if(Code_Value > 43820) 
+ 342   2                       {
+ 343   3                         out_Value =out_Value-(Code_Value-43800)/J_Slope[5] ;  
+ 344   3                       }
+ 345   2                      }
+ 346   1      
+ 347   1         return out_Value;
+ 348   1      
+ 349   1      }
+ 350          /**********************************************
+ 351               T_TYPE     2               //360F    9.286mV
+ 352          ***********************************************/
+ 353          unsigned int Get_T_Slope(unsigned int Code_Value) 
+ 354          {
+ 355   1         unsigned int outlo_Value;
+ 356   1         unsigned int out_Value;
+ 357   1      
+ 358   1                              out_Value = Code_Value;
+ 359   1                              NP_COD = 0;
+ 360   1      
+ 361   1           if ( AV_COD == 1 )
+ 362   1               {
+ 363   2                        if(Code_Value <= 706)  
+ 364   2                          {
+ 365   3                            outlo_Value =320-(Code_Value/2.22);
+ 366   3                                ng_flog = 1 ;
+ 367   3                                 AV_COD = 0;
+ 368   3                              }                
+ 369   2                        else
+ 370   2                          {
+ 371   3                           outlo_Value =(Code_Value/2.2)-320;
+ 372   3                               ng_flog = 0;
+ 373   3                               AV_COD = 1;
+ 374   3                      }
+ 375   2                      
+ 376   2                 if((outlo_Value > 110)&&(ng_flog == 0)) 
+ 377   2              {
+ 378   3                       outlo_Value =outlo_Value+(outlo_Value-100)/T_Slope[3];
+ 379   3                  }
+ 380   2                 if((outlo_Value > 437)&&(ng_flog == 0))
+ 381   2                  {
+ 382   3                       outlo_Value =outlo_Value+(outlo_Value-420)/T_Slope[6];
+ 383   3                  }
+ 384   2                 if((outlo_Value > 600)&&(ng_flog == 0))
+ 385   2                  {
+ 386   3                      outlo_Value =outlo_Value+(outlo_Value-550)/T_Slope[5];
+ 387   3                  }
+ 388   2                      if((outlo_Value > 734)&&(ng_flog == 0))
+ 389   2                  {
+ 390   3                      outlo_Value =outlo_Value+(outlo_Value-710)/T_Slope[4];
+ 391   3                  }
+ 392   2                 if((outlo_Value > 960)&&(ng_flog == 0)) 
+ 393   2                  {
+ 394   3                      outlo_Value =outlo_Value+(outlo_Value-950)/T_Slope[5];
+ 395   3                  }
+ 396   2                 if((outlo_Value > 1150)&&(ng_flog == 0))
+ 397   2                  {
+ 398   3                      outlo_Value =outlo_Value+(outlo_Value-1100)/T_Slope[4];
+ 399   3                  }
+ 400   2                 if((outlo_Value > 1350)&&(ng_flog == 0))
+ 401   2                  {
+ 402   3                      outlo_Value =outlo_Value+(outlo_Value-1300)/T_Slope[4];
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 14  
+
+ 403   3                  }                                                                    
+ 404   2                      if((outlo_Value > 1540)&&(ng_flog == 0))
+ 405   2                  {
+ 406   3                      outlo_Value =outlo_Value+(outlo_Value-1520)/T_Slope[3]; 
+ 407   3                  }
+ 408   2                 if((outlo_Value> 1780)&&(ng_flog == 0)) 
+ 409   2                  {
+ 410   3                      outlo_Value =outlo_Value+(outlo_Value-1750)/T_Slope[4];
+ 411   3                  }
+ 412   2                      if((outlo_Value > 1910)&&(ng_flog == 0)) 
+ 413   2                  {
+ 414   3                      outlo_Value =outlo_Value+(outlo_Value-1900)/T_Slope[4];
+ 415   3                  }
+ 416   2                 if((outlo_Value > 2120)&&(ng_flog == 0))
+ 417   2                  {
+ 418   3                   outlo_Value =outlo_Value+(outlo_Value-2110)/T_Slope[3];
+ 419   3                  }
+ 420   2                if((outlo_Value > 2270)&&(ng_flog == 0))
+ 421   2                  {
+ 422   3                   outlo_Value =outlo_Value+(outlo_Value-2260)/T_Slope[3];
+ 423   3                  }
+ 424   2                if((outlo_Value > 2550)&&(ng_flog == 0))
+ 425   2                  {
+ 426   3                   outlo_Value =outlo_Value+(outlo_Value-2520)/T_Slope[3];
+ 427   3                  }
+ 428   2                if((outlo_Value > 2720)&&(ng_flog == 0))
+ 429   2                  {
+ 430   3                   outlo_Value =outlo_Value+(outlo_Value-2680)/T_Slope[3];
+ 431   3                  }
+ 432   2                if((outlo_Value > 2890)&&(ng_flog == 0))
+ 433   2                  {
+ 434   3                   outlo_Value =outlo_Value+(outlo_Value-2850)/T_Slope[3]; 
+ 435   3                  }
+ 436   2                if((outlo_Value > 2970)&&(ng_flog == 0))
+ 437   2                  {
+ 438   3                   outlo_Value =outlo_Value+(outlo_Value-2940)/T_Slope[3]; 
+ 439   3                  }
+ 440   2                if((outlo_Value > 3110)&&(ng_flog == 0))
+ 441   2                  {
+ 442   3                   outlo_Value =outlo_Value+(outlo_Value-3100)/T_Slope[3];
+ 443   3                  }
+ 444   2                if(outlo_Value > 4000) outlo_Value = 4990;
+ 445   2              }       
+ 446   1         else
+ 447   1          {
+ 448   2                        outlo_Value = out_Value ;
+ 449   2      
+ 450   2                   outlo_Value = 320 + out_Value/2.2;
+ 451   2      
+ 452   2                   if(outlo_Value > 340)
+ 453   2                    {
+ 454   3                     outlo_Value =outlo_Value-(outlo_Value-330)/T_Slope[5] ;
+ 455   3                    }
+ 456   2                   if(outlo_Value > 570)
+ 457   2                    {
+ 458   3                     outlo_Value =outlo_Value-(outlo_Value-560)/T_Slope[4] ;
+ 459   3                    }
+ 460   2                   if(outlo_Value > 940)
+ 461   2                    {
+ 462   3                     outlo_Value =outlo_Value-(outlo_Value-910)/T_Slope[4] ;
+ 463   3                    }
+ 464   2                   if(outlo_Value > 1300) 
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 15  
+
+ 465   2                    {
+ 466   3                     outlo_Value =outlo_Value-(outlo_Value-1270)/T_Slope[4] ;
+ 467   3                    }
+ 468   2                   if(outlo_Value > 1720)
+ 469   2                    {
+ 470   3                     outlo_Value =outlo_Value-(outlo_Value-1700)/T_Slope[4] ;
+ 471   3                    }
+ 472   2                   if(outlo_Value > 2170)
+ 473   2                    {
+ 474   3                     outlo_Value =outlo_Value-(outlo_Value-2150)/28 ;
+ 475   3                    }
+ 476   2                       if(outlo_Value > 2610)
+ 477   2                    {
+ 478   3                     outlo_Value =outlo_Value-(outlo_Value-2580)/T_Slope[5] ; 
+ 479   3                    }
+ 480   2                   if(outlo_Value > 2980)
+ 481   2                    {
+ 482   3                     outlo_Value =outlo_Value-(outlo_Value-2960)/T_Slope[5] ; 
+ 483   3                    }
+ 484   2                   if(outlo_Value > 3511) 
+ 485   2                    {
+ 486   3                     outlo_Value =outlo_Value-(outlo_Value-3410)/T_Slope[5] ;
+ 487   3                    }
+ 488   2                   if(outlo_Value > 3984) 
+ 489   2                    {
+ 490   3                     outlo_Value =outlo_Value-(outlo_Value-3870)/T_Slope[6] ;
+ 491   3                    }
+ 492   2                       if(outlo_Value > 5000) outlo_Value = 5999;
+ 493   2         }
+ 494   1                    return outlo_Value;
+ 495   1      }
+ 496          /***********************************************
+ 497                       E_Slope
+ 498          ************************************************/
+ 499          unsigned int Get_E_Slope(unsigned int Code_Value)
+ 500          {
+ 501   1         unsigned int out_Value;
+ 502   1        
+ 503   1             out_Value = Code_Value;
+ 504   1                 NP_COD = 0;
+ 505   1            if ( AV_COD == 1 )
+ 506   1               {
+ 507   2                        if(out_Value <= 1109)  
+ 508   2                          {
+ 509   3                            out_Value =320-(Code_Value/3.46);
+ 510   3                                ng_flog = 1 ;
+ 511   3                         AV_COD = 0;
+ 512   3                              }                
+ 513   2                        else
+ 514   2                          {
+ 515   3                           out_Value =(Code_Value/3.46)-320;
+ 516   3                         ng_flog = 0 ;
+ 517   3                      }
+ 518   2               }
+ 519   1              else
+ 520   1               {
+ 521   2                      out_Value = 320 + Code_Value/3.46;
+ 522   2      
+ 523   2               if(Code_Value  > 1158)
+ 524   2                 { 
+ 525   3                 out_Value = out_Value-(Code_Value-1100)/E_Slope[7] ; 
+ 526   3                 }    
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 16  
+
+ 527   2               if(Code_Value  > 2500)
+ 528   2                 {
+ 529   3                 out_Value = out_Value-(Code_Value-2450)/E_Slope[8];
+ 530   3                 }
+ 531   2               if(Code_Value > 4740)
+ 532   2                 {
+ 533   3                 out_Value = out_Value-(Code_Value-4700)/E_Slope[7];
+ 534   3                 }
+ 535   2               if(Code_Value > 5890)
+ 536   2                {
+ 537   3                out_Value = out_Value-(Code_Value-5860)/E_Slope[9];
+ 538   3                 }
+ 539   2               if(Code_Value > 8050)
+ 540   2                 {
+ 541   3                 out_Value = out_Value-(Code_Value-8020)/E_Slope[9];
+ 542   3                 }
+ 543   2               if(Code_Value > 10800)
+ 544   2                 {
+ 545   3                 out_Value = out_Value-(Code_Value-10750)/E_Slope[9];
+ 546   3                 }
+ 547   2               if(Code_Value > 13350)
+ 548   2                 {
+ 549   3                 out_Value = out_Value-(Code_Value-13300)/E_Slope[10];                                   
+ 550   3                 }
+ 551   2               if(Code_Value > 15500)
+ 552   2                 {
+ 553   3                 out_Value = out_Value-(Code_Value-15490)/E_Slope[10];
+ 554   3                 }
+ 555   2               if(Code_Value > 16300)
+ 556   2                 {
+ 557   3                 out_Value = out_Value+(Code_Value-16250)/E_Slope[10];
+ 558   3                 }
+ 559   2               if(Code_Value > 17200)
+ 560   2                 {
+ 561   3                  out_Value =out_Value-(Code_Value-17150)/E_Slope[9] ;
+ 562   3                 }
+ 563   2               if(Code_Value > 19280)
+ 564   2                 {
+ 565   3                  out_Value =out_Value+(Code_Value-19270)/E_Slope[10] ;
+ 566   3                 }
+ 567   2               if(Code_Value > 20200)
+ 568   2                 {
+ 569   3                  out_Value =out_Value-(Code_Value-20150)/E_Slope[9] ;
+ 570   3                 }
+ 571   2               if(Code_Value > 23180)
+ 572   2                 {
+ 573   3                  out_Value =out_Value-(Code_Value-23120)/E_Slope[10] ;
+ 574   3                 }
+ 575   2               if(Code_Value > 24580)
+ 576   2                 {
+ 577   3                  out_Value =out_Value+(Code_Value-24540)/E_Slope[11] ;
+ 578   3                 }
+ 579   2               if(Code_Value > 26480)
+ 580   2                 {
+ 581   3                  out_Value =out_Value-(Code_Value-26440)/E_Slope[10] ;  //
+ 582   3                 }
+ 583   2               if(Code_Value > 28280)
+ 584   2                 {
+ 585   3                  out_Value =out_Value+(Code_Value-28240)/E_Slope[11] ;  //
+ 586   3                 }
+ 587   2               if(Code_Value > 29750)
+ 588   2                 {
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 17  
+
+ 589   3                  out_Value =out_Value-(Code_Value-29700)/E_Slope[10] ;  //
+ 590   3                 }
+ 591   2               if(Code_Value > 33680)
+ 592   2                 {
+ 593   3                  out_Value =out_Value+(Code_Value-33640)/E_Slope[10] ;  //
+ 594   3                 }
+ 595   2               if(Code_Value > 34480)
+ 596   2                 {
+ 597   3                  out_Value =out_Value-(Code_Value-34440)/E_Slope[9];  //
+ 598   3                 }
+ 599   2               if(Code_Value > 36480)
+ 600   2                 {
+ 601   3                  out_Value =out_Value+(Code_Value-36440)/E_Slope[11] ;  //
+ 602   3                 }
+ 603   2               if(Code_Value > 37700)
+ 604   2                 {
+ 605   3                  out_Value =out_Value-(Code_Value-37650)/E_Slope[11] ;  //
+ 606   3                 }
+ 607   2               if(Code_Value > 40600)
+ 608   2                 {
+ 609   3                  out_Value =out_Value+(Code_Value-40550)/E_Slope[11] ;  //
+ 610   3                 }
+ 611   2               if(Code_Value > 41200)
+ 612   2                 {
+ 613   3                  out_Value =out_Value-(Code_Value-41150)/E_Slope[11] ;  //
+ 614   3                 }
+ 615   2               if(Code_Value > 42500)
+ 616   2                 {
+ 617   3                  out_Value =out_Value+(Code_Value-42450)/E_Slope[11] ;  //
+ 618   3                 }
+ 619   2               if(Code_Value > 44500)
+ 620   2                 {
+ 621   3                  out_Value =out_Value-(Code_Value-44450)/E_Slope[11] ;  //
+ 622   3                 }
+ 623   2               if(Code_Value > 47700)
+ 624   2                 {
+ 625   3                  out_Value =out_Value+(Code_Value-47650)/E_Slope[10] ;  //
+ 626   3                 }
+ 627   2               if(Code_Value > 49270)
+ 628   2                 {
+ 629   3              out_Value =out_Value-(Code_Value-49250)/E_Slope[7] ;  //
+ 630   3                 }
+ 631   2               if(Code_Value > 50000)
+ 632   2                 {
+ 633   3              out_Value =out_Value+(Code_Value-49980)/E_Slope[7] ;  //
+ 634   3                 }
+ 635   2               if(Code_Value > 51860)
+ 636   2                 {
+ 637   3              out_Value =out_Value-(Code_Value-51820)/E_Slope[11] ;  //
+ 638   3                 }
+ 639   2               if(Code_Value > 52560)
+ 640   2                 {
+ 641   3              out_Value =out_Value+(Code_Value-52520)/E_Slope[11] ;  //
+ 642   3                 }
+ 643   2               if(Code_Value > 53560)
+ 644   2                 {
+ 645   3              out_Value =out_Value-(Code_Value-53520)/E_Slope[11] ;  //
+ 646   3                 }
+ 647   2               if(Code_Value > 54960)
+ 648   2                 {
+ 649   3              out_Value =out_Value+(Code_Value-54920)/E_Slope[11] ;  //
+ 650   3                 }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 18  
+
+ 651   2               if(Code_Value > 58160)
+ 652   2                 {
+ 653   3              out_Value =out_Value+(Code_Value-58120)/E_Slope[11] ;  //
+ 654   3                 }
+ 655   2               if(Code_Value > 59020)
+ 656   2                 {
+ 657   3              out_Value =out_Value-(Code_Value-59000)/E_Slope[9] ;  //
+ 658   3                 }
+ 659   2               if(Code_Value > 60060)
+ 660   2                 {
+ 661   3              out_Value =out_Value+(Code_Value-60020)/E_Slope[11] ;  //
+ 662   3                 }
+ 663   2               if(Code_Value > 62260)
+ 664   2                 {
+ 665   3              out_Value =out_Value-(Code_Value-62220)/E_Slope[11] ;  //
+ 666   3                 }
+ 667   2               if(Code_Value > 62460)
+ 668   2                 {
+ 669   3              out_Value =out_Value+(Code_Value-62420)/E_Slope[10] ;  //
+ 670   3                 }
+ 671   2      
+ 672   2               if(Code_Value > 654000)
+ 673   2                 {
+ 674   3              out_Value = 65536 ;  //
+ 675   3                 }
+ 676   2              }
+ 677   1         return out_Value;
+ 678   1      
+ 679   1      }
+ 680          /**********************************************
+ 681                 R_Slope
+ 682          ***********************************************/
+ 683          unsigned int Get_R_Slope(unsigned int Code_Value)
+ 684          {
+ 685   1         unsigned int out_Value;
+ 686   1         unsigned int B_code;
+ 687   1            if ( AV_COD == 1 )
+ 688   1               {
+ 689   2                        if(out_Value <= 103)  
+ 690   2                          {
+ 691   3                            out_Value =32-(Code_Value/2.17);
+ 692   3                                ng_flog = 1 ;
+ 693   3                                 AV_COD = 0;
+ 694   3                              }                
+ 695   2                        else
+ 696   2                          {
+ 697   3                              ng_flog = 0 ;
+ 698   3                           out_Value = 0;
+ 699   3                      }
+ 700   2                }
+ 701   1              else
+ 702   1                {
+ 703   2                  B_code = 32 + Code_Value/3.16;
+ 704   2                      out_Value =      B_code ;
+ 705   2      
+ 706   2               if(B_code >= 69)
+ 707   2                 {
+ 708   3                 out_Value = out_Value-(B_code-59)/R_Slope[1] ; 
+ 709   3                 }  
+ 710   2           if(B_code >= 109)
+ 711   2                 {
+ 712   3                 out_Value = out_Value-(B_code-109)/R_Slope[2] ;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 19  
+
+ 713   3                 }
+ 714   2               if(B_code >= 153)
+ 715   2                 {
+ 716   3                 out_Value = out_Value-(B_code-153)/R_Slope[3] ;
+ 717   3                 }
+ 718   2               if(B_code >= 199)
+ 719   2                 {
+ 720   3                 out_Value = out_Value-(B_code-199)/R_Slope[4] ;
+ 721   3                 }
+ 722   2               if(B_code >= 273)
+ 723   2                 {
+ 724   3                 out_Value = out_Value-(B_code-272)/R_Slope[5] ;
+ 725   3                 }
+ 726   2               if(B_code >= 379)
+ 727   2                 {
+ 728   3                      out_Value = out_Value-(B_code-378)/R_Slope[3] ;
+ 729   3                 }
+ 730   2               if(B_code >= 512)
+ 731   2                 {
+ 732   3                 out_Value = out_Value-(B_code-511)/R_Slope[6] ;
+ 733   3                 }
+ 734   2               if(B_code >= 673)
+ 735   2                 {
+ 736   3                 out_Value = out_Value-(B_code-672)/R_Slope[7] ;
+ 737   3                 }
+ 738   2               if(B_code >= 864)
+ 739   2                 {
+ 740   3                 out_Value = out_Value-(B_code-863)/R_Slope[8] ;
+ 741   3                 }
+ 742   2             if(B_code >= 1098)
+ 743   2                 {
+ 744   3                      out_Value = out_Value-(B_code-1097)/R_Slope[9] ;
+ 745   3                 }
+ 746   2             if(B_code >= 1378)
+ 747   2                 {
+ 748   3                      out_Value = out_Value-(B_code-1377)/R_Slope[10] ;
+ 749   3                 }
+ 750   2               if(B_code >= 1705)
+ 751   2                 {
+ 752   3                 out_Value = out_Value-(B_code-1704)/R_Slope[11] ;
+ 753   3                 }
+ 754   2               if(B_code >= 1968)
+ 755   2                 {
+ 756   3                 out_Value = out_Value-(B_code-1967)/R_Slope[13] ;
+ 757   3                 }
+ 758   2               if(B_code >= 2278)
+ 759   2                 {
+ 760   3                 out_Value = out_Value-(B_code-2277)/R_Slope[12] ;
+ 761   3                 }
+ 762   2               if(B_code >= 2598)
+ 763   2                 {
+ 764   3                 out_Value = out_Value-(B_code-2597)/R_Slope[13] ;
+ 765   3                 }
+ 766   2               if(B_code >= 2971)
+ 767   2                 {
+ 768   3                 out_Value = out_Value-(B_code-2970)/R_Slope[14] ;
+ 769   3                 }
+ 770   2               if(B_code >= 3400)
+ 771   2                 {
+ 772   3                 out_Value = out_Value-(B_code-3299)/R_Slope[14] ;
+ 773   3                 }
+ 774   2               if(B_code >= 3843)
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 20  
+
+ 775   2                 {
+ 776   3                out_Value = out_Value-(B_code-3842)/R_Slope[14] ;
+ 777   3                 }
+ 778   2               if(B_code >= 4438)
+ 779   2                 {
+ 780   3                 out_Value =out_Value-(B_code-4437)/R_Slope[15] ;
+ 781   3                 }
+ 782   2               }
+ 783   1         return out_Value;
+ 784   1      
+ 785   1      }
+ 786          /***********************************************
+ 787                         S_Slope
+ 788          *************************************************/
+ 789          unsigned int Get_S_Slope(unsigned  int Code_Value)
+ 790          {
+ 791   1         unsigned int out_Value;
+ 792   1         unsigned int B_code;
+ 793   1           if ( AV_COD == 1 )
+ 794   1                {
+ 795   2                         if(Code_Value <= 104)  
+ 796   2                          {
+ 797   3                            out_Value =32-(Code_Value/2.17);
+ 798   3                                ng_flog = 1 ;
+ 799   3                                 AV_COD = 0;
+ 800   3                              }                
+ 801   2                        else
+ 802   2                          {
+ 803   3                              ng_flog = 0 ;
+ 804   3                           out_Value = 0 ;
+ 805   3                      }
+ 806   2               }
+ 807   1              else
+ 808   1               {
+ 809   2                      B_code = 32 + Code_Value/3.2;
+ 810   2      
+ 811   2                      out_Value = B_code ;
+ 812   2      
+ 813   2               if(B_code >= 50)
+ 814   2                 {
+ 815   3                 out_Value =out_Value-(B_code-50)/S_Slope[1] ;
+ 816   3                 }
+ 817   2               if(B_code >= 109)
+ 818   2                 {
+ 819   3                 out_Value =out_Value-(B_code-109)/S_Slope[0] ;
+ 820   3                 }
+ 821   2               if(B_code >= 174)
+ 822   2                 {
+ 823   3                 out_Value =out_Value-(B_code-174)/S_Slope[2] ;
+ 824   3                 }
+ 825   2           if(B_code >= 248)  
+ 826   2                 {
+ 827   3                 out_Value =out_Value-(B_code-248)/S_Slope[3] ;
+ 828   3                 }
+ 829   2               if(B_code >= 369)      
+ 830   2                 {
+ 831   3                 out_Value =out_Value-(B_code-369)/S_Slope[4] ;
+ 832   3                 }
+ 833   2               if(B_code >= 456)
+ 834   2                 {
+ 835   3                 out_Value =out_Value-(B_code-456)/S_Slope[5] ;
+ 836   3                 }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 21  
+
+ 837   2               if(B_code >= 591)
+ 838   2                 {
+ 839   3                 out_Value =out_Value-(B_code-591)/S_Slope[6] ;
+ 840   3                 }
+ 841   2               if(B_code >= 796) 
+ 842   2                 {
+ 843   3                 out_Value =out_Value-(B_code-796)/S_Slope[6] ;
+ 844   3                 }
+ 845   2               if(B_code >= 1010) 
+ 846   2                 {
+ 847   3                 out_Value =out_Value-(B_code-1010)/S_Slope[8] ;
+ 848   3                 }
+ 849   2               if(B_code >= 1318)
+ 850   2                 {
+ 851   3                 out_Value =out_Value-(B_code-1318)/S_Slope[6] ;
+ 852   3                 }
+ 853   2               if(B_code >= 1668)
+ 854   2                 {
+ 855   3                 out_Value =out_Value-(B_code-1668)/S_Slope[10] ;
+ 856   3                 }
+ 857   2               if(B_code >= 2157) 
+ 858   2                 {
+ 859   3                 out_Value =out_Value-(B_code-2157)/S_Slope[8] ;
+ 860   3                 }
+ 861   2               if(B_code >= 2413) 
+ 862   2                 {
+ 863   3                 out_Value =out_Value-(B_code-2413)/S_Slope[10] ;
+ 864   3                 }
+ 865   2               if(B_code >= 2881) 
+ 866   2                 {
+ 867   3                 out_Value =out_Value-(B_code-2881)/S_Slope[9] ;
+ 868   3                 }                                                    
+ 869   2               if(B_code >= 3273)
+ 870   2                 {
+ 871   3                 out_Value =out_Value-(B_code-3273)/S_Slope[13] ;     
+ 872   3                 }
+ 873   2               if(B_code >= 3717)
+ 874   2                 {
+ 875   3                 out_Value =out_Value-(B_code-3717)/S_Slope[14] ;
+ 876   3                 }
+ 877   2               if(B_code >= 4380)
+ 878   2                 {
+ 879   3                 out_Value =out_Value-(B_code-4380)/S_Slope[14] ;
+ 880   3                 }
+ 881   2               if(B_code >= 5078)
+ 882   2                 {
+ 883   3                 out_Value =out_Value+(B_code-5078)/S_Slope[14] ;
+ 884   3                 }
+ 885   2               if(B_code >= 5298)
+ 886   2                 {
+ 887   3                 out_Value =out_Value+(B_code-5298)/S_Slope[14] ;
+ 888   3                 }
+ 889   2              }
+ 890   1         return out_Value;
+ 891   1      
+ 892   1      }
+ 893          /***********************************************
+ 894          
+ 895          ************************************************
+ 896          unsigned int Get_B_Slope(unsigned  int Code_Value)
+ 897          {
+ 898             unsigned int out_Value;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 22  
+
+ 899          
+ 900                          Code_Value = 320 + Code_Value/2.82;
+ 901                  
+ 902                     out_Value = Code_Value;
+ 903                     NP_COD = 1;
+ 904          
+ 905                   if((Code_Value > 1000) && (Code_Value < 2000))
+ 906                     {
+ 907                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 908                     }
+ 909                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 910                     {
+ 911                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 912                     }    
+ 913                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 914                     {
+ 915                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 916                     }
+ 917                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 918                     {
+ 919                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 920                     }
+ 921                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 922                     {
+ 923                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 924                     }
+ 925                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 926                     {
+ 927                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 928                     }
+ 929                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 930                     {
+ 931                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 932                     }
+ 933                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 934                     {
+ 935                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 936                     }
+ 937                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 938                     {
+ 939                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 940                     }
+ 941          
+ 942                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 943                     {
+ 944                     out_Value =out_Value-(Code_Value-3870)/B_Slope[6] ;
+ 945                     }
+ 946          
+ 947             return out_Value;
+ 948          
+ 949          }
+ 950          /***********************************************
+ 951                   N_Slope
+ 952          ************************************************
+ 953          unsigned int Get_N_Slope(unsigned int Code_Value)
+ 954          {
+ 955             unsigned int out_Value;
+ 956          
+ 957                          Code_Value = 320 + Code_Value/2.82;
+ 958                  
+ 959                     out_Value = Code_Value;
+ 960                           NP_COD = 1;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 23  
+
+ 961                   if((Code_Value > 1000) && (Code_Value < 2000))
+ 962                     {
+ 963                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 964                     }
+ 965                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 966                     {
+ 967                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 968                     }    
+ 969                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 970                     {
+ 971                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 972                     }
+ 973                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 974                     {
+ 975                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 976                     }
+ 977                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 978                     {
+ 979                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 980                     }
+ 981                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 982                     {
+ 983                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 984                     }
+ 985                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 986                     {
+ 987                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 988                     }
+ 989                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 990                     {
+ 991                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 992                     }
+ 993                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 994                     {
+ 995                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+ 996                     }
+ 997                   if((Code_Value > 2000) && (Code_Value < 3000))
+ 998                     {
+ 999                     out_Value =out_Value-(Code_Value-3870)/N_Slope[6] ;
+1000                     }
+1001          
+1002             return out_Value;
+1003          
+1004          }
+1005          
+1006          /*****************************************************
+1007                 RTD_SLOPE
+1008          ******************************************************/
+1009          unsigned int Get_RTD_Slope(unsigned  int Code_Value) 
+1010          {
+1011   1         unsigned int RTD_Value;
+1012   1         unsigned int out_Value;
+1013   1      
+1014   1                      NP_COD = 0;
+1015   1      
+1016   1           if ( AV_COD == 1 )
+1017   1               {
+1018   2                        if(Code_Value <= 394)         //394      432
+1019   2                          {
+1020   3                            RTD_Value =320-(Code_Value/1.38);
+1021   3                                ng_flog = 1 ;
+1022   3                                 AV_COD = 0;
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 24  
+
+1023   3                              }                
+1024   2                        else
+1025   2                          {
+1026   3                           RTD_Value =(Code_Value/1.38)-320;
+1027   3                               ng_flog = 0;
+1028   3                               AV_COD = 1;
+1029   3                      }
+1030   2      
+1031   2                          out_Value = RTD_Value ;
+1032   2      
+1033   2                 if((RTD_Value > 40)&&(ng_flog == 0)) 
+1034   2              {
+1035   3                       out_Value =out_Value-(RTD_Value+40)/RTD_Slope[3];
+1036   3                  }
+1037   2                 if((RTD_Value > 950)&&(ng_flog == 0))
+1038   2                  {
+1039   3                       out_Value =out_Value-(RTD_Value-950)/RTD_Slope[2];
+1040   3                  }
+1041   2                 if((RTD_Value > 1950)&&(ng_flog == 0))
+1042   2                  {
+1043   3                      out_Value =out_Value-(RTD_Value-1950)/RTD_Slope[2];
+1044   3                  }
+1045   2                      if((RTD_Value > 2600)&&(ng_flog == 0))
+1046   2                  {
+1047   3                      out_Value =out_Value-(RTD_Value-2600)/RTD_Slope[2];
+1048   3                  }
+1049   2                 if((RTD_Value > 3200)&&(ng_flog == 0)) 
+1050   2                  {
+1051   3                      out_Value =out_Value-(RTD_Value-3200)/RTD_Slope[2];
+1052   3                  }
+1053   2               }
+1054   1          else
+1055   1           {
+1056   2                      RTD_Value = 320 + Code_Value/1.38;
+1057   2      
+1058   2                    out_Value = RTD_Value;    
+1059   2                      
+1060   2               if(RTD_Value >= 1300) 
+1061   2                 {
+1062   3                 out_Value =out_Value+(RTD_Value-1280)/RTD_Slope[4];
+1063   3                 }
+1064   2               if(RTD_Value >= 2200)
+1065   2                 {
+1066   3                 out_Value =out_Value+(RTD_Value-2200)/RTD_Slope[6];
+1067   3                 }    
+1068   2               if(RTD_Value >= 3250)
+1069   2                 {
+1070   3                 out_Value =out_Value+(RTD_Value-3250)/RTD_Slope[4];
+1071   3                 }                                                                                      
+1072   2                       if(RTD_Value >= 4100)
+1073   2                 {
+1074   3                 out_Value =out_Value+(RTD_Value-4100)/RTD_Slope[4];
+1075   3                 } 
+1076   2               if(RTD_Value >= 5000) 
+1077   2                 {
+1078   3                 out_Value =out_Value+(RTD_Value-5000)/RTD_Slope[6];
+1079   3                 } 
+1080   2           if(RTD_Value >=5800) 
+1081   2                 {
+1082   3                 out_Value =out_Value+(RTD_Value-5800)/RTD_Slope[6]; 
+1083   3                 } 
+1084   2               if(RTD_Value >= 6400) 
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 25  
+
+1085   2                 {
+1086   3                 out_Value =out_Value+(RTD_Value-6400)/RTD_Slope[5];
+1087   3                 }
+1088   2               if(RTD_Value >= 7330) 
+1089   2                 {
+1090   3                 out_Value =out_Value + (RTD_Value-7330)/RTD_Slope[4];
+1091   3                 }
+1092   2               if(RTD_Value >= 7950) 
+1093   2                 {
+1094   3                 out_Value =out_Value+(RTD_Value-7950)/RTD_Slope[4];
+1095   3                 } 
+1096   2               if(RTD_Value >= 8700) 
+1097   2                 {
+1098   3                 out_Value =out_Value+(RTD_Value-8700)/RTD_Slope[4];
+1099   3                 } 
+1100   2               if(RTD_Value >= 9450) 
+1101   2                 {
+1102   3                 out_Value =out_Value+(RTD_Value-9450)/RTD_Slope[5];  
+1103   3                 } 
+1104   2               if(RTD_Value >= 9900) 
+1105   2                 {
+1106   3                 out_Value =out_Value+(RTD_Value-9900)/RTD_Slope[7];
+1107   3                 } 
+1108   2               if(RTD_Value >= 10500) 
+1109   2                 {
+1110   3                 out_Value =out_Value+(RTD_Value-10500)/RTD_Slope[6];
+1111   3                 } 
+1112   2               if(RTD_Value >= 10740) 
+1113   2                 {
+1114   3                 out_Value =out_Value+(RTD_Value-10740)/RTD_Slope[7]; 
+1115   3                 }
+1116   2               if(RTD_Value >= 11400) 
+1117   2                 {
+1118   3             out_Value =out_Value+(RTD_Value-11400)/RTD_Slope[5];     
+1119   3                 }        
+1120   2               if(RTD_Value >= 11800)
+1121   2                 {
+1122   3                 out_Value =out_Value+(RTD_Value-11800)/RTD_Slope[7];
+1123   3                 } 
+1124   2               if(RTD_Value >= 12250) 
+1125   2                 {
+1126   3                 out_Value =out_Value+(RTD_Value-12250)/RTD_Slope[7];
+1127   3                 } 
+1128   2               if(RTD_Value >= 12750) 
+1129   2                 {
+1130   3                 out_Value =out_Value+(RTD_Value-12750)/RTD_Slope[2];
+1131   3                 } 
+1132   2               if(RTD_Value >= 13400) 
+1133   2                 {
+1134   3                 out_Value =out_Value+(RTD_Value-13400)/RTD_Slope[2];
+1135   3                 } 
+1136   2              }
+1137   1        return out_Value ;
+1138   1      }
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 26  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+CCF2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DAH  1
+TB80 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+PCAPWM4. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F6H  1
+P1M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0091H  1
+P0M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0094H  1
+CCF3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DBH  1
+TB81 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+PCAPWM5. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F7H  1
+P2M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0095H  1
+P1M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0092H  1
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+CCF4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DCH  1
+SM00 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+P3M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B1H  1
+P2M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0096H  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+CCF5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DDH  1
+SM01 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+SM10 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+P4M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B3H  1
+P3M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B2H  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+SM11 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+SM20 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+ISPCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E7H  1
+P5M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B5H  1
+P4M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B4H  1
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+XICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+T0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+SM21 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+AC . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D6H  1
+EVRCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+P5M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B6H  1
+P4 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+T1 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+SPCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+P5 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+EIE1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ADH  1
+T2 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+EA . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AFH  1
+SFRPI. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ACH  1
+WDTCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E1H  1
+P6 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+KBI0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+SPI_MOSI . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+SPI_MISO . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+KBI1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+SPCTL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+KBI2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+AIN0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+CF . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DFH  1
+AUXIP. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AEH  1
+KBI3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+AIN1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+KBI4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+AIN2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 27  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+FE . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+CH . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F9H  1
+KBI5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A5H  1
+AIN3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+KBI6 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A6H  1
+AIN4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+KBI7 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A7H  1
+AIN5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+AIN6 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+CL . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E9H  1
+AIN7 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+CEX0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+CCAP0H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FAH  1
+ADCH . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C6H  1
+CEX1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+CCAP1H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FBH  1
+IP0H . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B7H  1
+CEX2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+CCAP2H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FCH  1
+CEX3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+CCAP3H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FDH  1
+CEX4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+CR . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DEH  1
+CCAP4H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FEH  1
+CCAP0L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EAH  1
+ADCL . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00BEH  1
+RD . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+CEX5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+EXF2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CEH  1
+REN0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+CCAP5H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FFH  1
+CCAP1L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EBH  1
+CCAPM0 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DAH  1
+IP0L . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+REN1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+CCAP2L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ECH  1
+CCAPM1 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DBH  1
+IT2H . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C3H  1
+ES . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
+TSTWD. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+CCAP3L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EDH  1
+CCAPM2 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DCH  1
+IT3H . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C7H  1
+CCAP4L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EEH  1
+CCAPM3 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DDH  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+CCAP5L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EFH  1
+CCAPM4 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DEH  1
+RI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+CCAPM5 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DFH  1
+INT0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+CY . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D7H  1
+INT1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+TI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+INT2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EBH  1
+INT3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EAH  1
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 28  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+ADCV . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C6H  1
+STRETCH. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008FH  1
+PT0L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B9H  1
+PT1L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BBH  1
+RCAP2H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CBH  1
+PS . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BCH  1
+PT2L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BDH  1
+SP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0081H  1
+T2EX . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+CMOD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D9H  1
+CCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCFG . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+PX0L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B8H  1
+OV . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D2H  1
+PX1L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BAH  1
+RCAP2L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CAH  1
+PX2L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BEH  1
+SPI_CLK. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+PX3L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BFH  1
+SCMD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E6H  1
+WR . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+C_T2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+E_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0000H  12
+SPISTAT. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0084H  1
+_Get_E_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+RCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CDH  1
+TCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CCH  1
+J_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    000CH  9
+P00. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0080H  1
+IFADRH . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E3H  1
+K_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0015H  11
+P10. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+P01. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0081H  1
+IFMT . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E5H  1
+PCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0087H  1
+SBUF . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+_Get_J_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+P20. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+P11. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+P02. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0082H  1
+_Get_K_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+P30. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+P21. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+P12. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+P03. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0083H  1
+P40. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00E8H  1
+P31. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+P22. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+P13. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+P04. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0084H  1
+IFADRL . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E4H  1
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 29  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+P50. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00F8H  1
+P41. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00E9H  1
+P32. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+P23. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+P14. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+P05. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0085H  1
+TMOD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0089H  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+P60. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+P51. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00F9H  1
+P42. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EAH  1
+P33. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+P24. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+P15. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+P06. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0086H  1
+P61. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+P52. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00FAH  1
+P43. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EBH  1
+P34. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+P25. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A5H  1
+P16. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+P07. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0087H  1
+R_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0020H  16
+P53. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00FBH  1
+P44. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ECH  1
+P35. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+P26. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A6H  1
+P17. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+S_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0030H  16
+P45. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EDH  1
+P36. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+P27. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A7H  1
+T_Slope. . . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    0040H  10
+_Get_R_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+  B_code . . . . . . . . . . . . . . .  * REG *  DATA   U_INT    0002H  2
+P46. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EEH  1
+P37. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+_Get_S_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+  B_code . . . . . . . . . . . . . . .  * REG *  DATA   U_INT    0002H  2
+P47. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EFH  1
+KBMASK . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D7H  1
+_Get_T_Slope . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  outlo_Value. . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0004H  2
+IE0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0089H  1
+IE1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008BH  1
+IE2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C1H  1
+IE3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C5H  1
+GF4. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AEH  1
+AUXR . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008EH  1
+B. . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F0H  1
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 30  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+KBPATN . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D5H  1
+CP_RL2 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+SPIDAT . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0086H  1
+ACC. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E0H  1
+ES0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
+ET0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A9H  1
+TF0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008DH  1
+ET1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ABH  1
+TF1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008FH  1
+RI0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+ET2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ADH  1
+TF2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CFH  1
+RI1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+RB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+TH0. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008CH  1
+IT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0088H  1
+TI0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+EX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A8H  1
+TH1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008DH  1
+AV_COD . . . . . . . . . . . . . . . .  PUBLIC   DATA   U_CHAR   0000H  1
+IT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008AH  1
+TI1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+TB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+EX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AAH  1
+SPICON . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+TH2. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CDH  1
+IT2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C0H  1
+EX2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C2H  1
+P. . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D0H  1
+IT3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C4H  1
+EX3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C6H  1
+SM0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+TL0. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008AH  1
+RTD_Slope. . . . . . . . . . . . . . .  PUBLIC   XDATA  ARRAY    004AH  8
+XOUT . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+ECI. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+SM1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+SPICTL . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+TL1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008BH  1
+AUXIPH . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AFH  1
+ALE. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EEH  1
+SM2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+TL2. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CCH  1
+_Get_RTD_Slope . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  Code_Value . . . . . . . . . . . . .  AUTO     DATA   U_INT    0000H  2
+  RTD_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0002H  2
+  out_Value. . . . . . . . . . . . . .  AUTO     DATA   U_INT    0004H  2
+IFD. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E2H  1
+PT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B9H  1
+NP_COD . . . . . . . . . . . . . . . .  PUBLIC   DATA   U_CHAR   0001H  1
+PT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BBH  1
+RS0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D3H  1
+TR0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008CH  1
+PT2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BDH  1
+RS1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D4H  1
+TR1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008EH  1
+TR2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CAH  1
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 31  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+PX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B8H  1
+EIP1H. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AFH  1
+PX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BAH  1
+PX2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C3H  1
+PX3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C7H  1
+EIP1L. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AEH  1
+DPH. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0083H  1
+CKO. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+ng_flog. . . . . . . . . . . . . . . .  PUBLIC   DATA   U_CHAR   0002H  1
+DPL. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0082H  1
+PCON0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0087H  1
+SPSTAT . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0084H  1
+SBUF0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+IPH. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B7H  1
+T0CKO. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+PCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+SBUF1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+T1CKO. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+EXEN2. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CBH  1
+PCON2. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C7H  1
+S2BUF. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+SCON0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+REN. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+ADCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C5H  1
+T2MOD. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C9H  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+ADCTL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C5H  1
+ADCVL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00BEH  1
+SADEN. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B9H  1
+S1BRT. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+RXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+KBCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D6H  1
+XIN. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+PSL. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BCH  1
+SADDR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A9H  1
+TXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+AUXR0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008EH  1
+AUXR1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A2H  1
+SPI_SS . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+AUXR2. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A6H  1
+S2RXD. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+F0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D5H  1
+S2TXD. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+F1 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D1H  1
+PCAPWM0. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F2H  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+PCAPWM1. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F3H  1
+CCF0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D8H  1
+RB80 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+PCAPWM2. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F4H  1
+CCF1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D9H  1
+RB81 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+PCAPWM3. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F5H  1
+SPDAT. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0086H  1
+P0M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0093H  1
+AUXIE. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ADH  1
+
+C51 COMPILER V9.02   TYPE_SLOPE                                                            03/30/2015 14:00:36 PAGE 32  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   9604    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     82    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3      32
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

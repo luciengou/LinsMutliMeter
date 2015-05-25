@@ -1,0 +1,209 @@
+C51 COMPILER V7.50   COUNTER                                                               12/19/2013 16:33:13 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE COUNTER
+OBJECT MODULE PLACED IN Counter.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE Counter.C LARGE OMF2
+
+line level    source
+
+   1          #include <MPC82G516.h>
+   2          #include <COUNTER.H>
+   3          
+   4          
+   5          extern unsigned char Soft_Timer_Enable;
+   6          extern idata unsigned char Soft_Timer[8];
+   7          /*====================================================
+   8            Sleep Counter function  
+   9            Soft_Timer[0] for sleep counter, unit:sec
+  10          =====================================================*/ 
+  11          void Start_SleepCounter(unsigned char sec)
+  12          {
+  13   1              Soft_Timer[0] = sec;                              // sec seconds        
+  14   1      
+  15   1              Soft_Timer_Enable = (Soft_Timer_Enable | 0x01);                   // enable Soft_Timer[0]
+  16   1      
+  17   1      }
+  18          //=====================================
+  19          void Stop_SleepCounter(void)            
+  20          {
+  21   1              Soft_Timer_Enable &= ~0x01;        // set to  0
+  22   1              Soft_Timer[0] = 0;
+  23   1      }
+  24          
+  25          unsigned char Is_SleepCounter_CountDown_Finish(void)
+  26          {
+  27   1              unsigned k;
+  28   1      
+  29   1                 if( Soft_Timer[0] > 0)
+  30   1                   { k = 1;}
+  31   1                 else
+  32   1                   { k =0; }
+  33   1       //     c = (Soft_Timer[0])? 1 : 0;
+  34   1      
+  35   1              return k;
+  36   1      }
+  37          
+  38          unsigned char Check_SleepCounter_Start(void)            // if sleep counter is started return 1
+  39          {
+  40   1              unsigned c;
+  41   1      
+  42   1                 if((Soft_Timer_Enable & 0x01) == 1)
+  43   1                    {c=1;} else{ c=0 ;}
+  44   1      
+  45   1              return c;
+  46   1      }
+  47          /*=======================================================
+  48            Keyhold Counter function  
+  49            Soft_Timer[1] for key hold counter, unit:sec
+  50          =========================================================*/     
+  51          void Start_KeyholdCounter(unsigned char sec)
+  52          {                                                                                                                                                          
+  53   1              Soft_Timer[1] = sec;            // sec seconds  
+  54   1              Soft_Timer_Enable |= 0x02;      // enable Soft_Timer[1]
+  55   1      } 
+C51 COMPILER V7.50   COUNTER                                                               12/19/2013 16:33:13 PAGE 2   
+
+  56          
+  57          void Stop_KeyholdCounter(void)
+  58          {
+  59   1              Soft_Timer_Enable &= ~0x02;
+  60   1              Soft_Timer[1] = 0;
+  61   1      } 
+  62          unsigned char Check_KeyholdCounter_Start(void)          // if key hold counter is started return 1
+  63          {
+  64   1              unsigned c;
+  65   1      
+  66   1              c = (Soft_Timer_Enable & 0x02)? 1 : 0;
+  67   1      
+  68   1              return c;
+  69   1      }
+  70          unsigned char Is_KeyholdCounter_CountDown_Finish(void)
+  71          {
+  72   1              unsigned c;
+  73   1              
+  74   1              c = (Soft_Timer[1]==0)? 1 : 0;
+  75   1      
+  76   1              return c;
+  77   1      }
+  78          /*=============================================
+  79            VoiceWait Counter function  
+  80            Soft_Timer[2] for water lack counter, unit:sec
+  81          ================================================*/
+  82          
+  83          void Start_VoiceWaitCounter(unsigned char sec)
+  84          {
+  85   1              Soft_Timer[2] = sec;            // sec seconds  
+  86   1              Soft_Timer_Enable |= 0x04;      // enable Soft_Timer[0]
+  87   1      } 
+  88          void Stop_VoiceWaitCounter(void)
+  89          {
+  90   1              Soft_Timer_Enable &= ~0x04;                                                                              
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                                                        
+             -                                                                                                             
+  91   1              Soft_Timer[2] = 0;
+  92   1      } 
+  93          unsigned char Check_VoiceWaitCounter_Start(void)                // if water lack counter is started return 1
+  94          {
+  95   1              unsigned c;
+  96   1      
+  97   1              c = (Soft_Timer_Enable & 0x04)? 1 : 0;
+  98   1      
+  99   1              return c;
+ 100   1      }
+ 101          unsigned char Is_VoiceWaitCounter_CountDown_Finish(void)
+ 102          {
+ 103   1              unsigned c;
+ 104   1              
+ 105   1              c = (Soft_Timer[2]==0)? 1 : 0;
+ 106   1      
+ 107   1              return c;
+ 108   1      }
+ 109          /*====================================================
+ 110            WaterLack Counter function  
+ 111            Soft_Timer[3] for water lack counter, unit:sec
+ 112          =====================================================*/
+C51 COMPILER V7.50   COUNTER                                                               12/19/2013 16:33:13 PAGE 3   
+
+ 113          void Start_WaterLackCounter(unsigned char sec)
+ 114          {
+ 115   1              Soft_Timer[3] = sec;            // sec seconds  
+ 116   1              Soft_Timer_Enable |= 0x08;      // enable Soft_Timer[0]
+ 117   1      } 
+ 118          void Stop_WaterLackCounter(void)
+ 119          {
+ 120   1              Soft_Timer_Enable &= ~0x08;
+ 121   1              Soft_Timer[3] = 0;
+ 122   1      } 
+ 123          unsigned char Check_WaterLackCounter_Start(void)                // if water lack counter is started return 1
+ 124          {
+ 125   1              unsigned c;
+ 126   1      
+ 127   1              c = (Soft_Timer_Enable & 0x08)? 1 : 0;
+ 128   1      
+ 129   1              return c;
+ 130   1      }
+ 131          
+ 132          unsigned char Is_WaterLackCounter_CountDown_Finish(void)
+ 133          {
+ 134   1              unsigned c;
+ 135   1              
+ 136   1              c = (Soft_Timer[3]==0)? 1 : 0;
+ 137   1      
+ 138   1              return c;
+ 139   1      }  
+ 140          /*=========================================================
+ 141            LCM_RETURN PH95 Counter function  
+ 142            Soft_Timer[4] for LCM_RETURN PH95 counter, unit:sec
+ 143          =========================================================*/
+ 144          void Start_Ph_reflashCounter(unsigned char sec)
+ 145          {                                                                                                                                                          
+ 146   1              Soft_Timer[4] = sec;               // sec seconds       
+ 147   1              Soft_Timer_Enable |= 0x10;         // enable Soft_Timer[4]
+ 148   1      } 
+ 149          
+ 150          void Stop_Ph_reflashCounter(void)
+ 151          {
+ 152   1              Soft_Timer_Enable &= ~0x10;
+ 153   1              Soft_Timer[4] = 0;
+ 154   1      } 
+ 155          unsigned char Check_Ph_reflashCounter_Start(void)               
+ 156          {
+ 157   1              unsigned c;
+ 158   1      
+ 159   1              c = (Soft_Timer_Enable & 0x10)? 1 : 0;
+ 160   1      
+ 161   1              return c;
+ 162   1      }
+ 163          unsigned char Is_Ph_reflashCounter_CountDown_Finish(void)
+ 164          {
+ 165   1              unsigned c;
+ 166   1              
+ 167   1              c = (Soft_Timer[4]==0)? 1 : 0;
+ 168   1      
+ 169   1              return c;
+ 170   1      }
+ 171          //==============================================================
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V7.50   COUNTER                                                               12/19/2013 16:33:13 PAGE 4   
+
+   CODE SIZE        =    257    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

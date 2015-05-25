@@ -1,0 +1,15 @@
+
+--------------------------------------------------
+Checking Schematic: SCHEMATIC1
+--------------------------------------------------
+Checking Electrical Rules 
+ERROR:  [DRC0004]  Possible pin type conflict U28,G Output Connected to Power
+                    SCHEMATIC1, POWER_CPU  (25.40, 226.06) 
+WARNING:  [DRC0007]  Net has no driving source N19230251
+                    SCHEMATIC1, POWER_CPU  (68.58, 215.90) 
+
+Checking For Single Node Nets
+
+Checking For Unconnected Bus Nets
+ERROR:  [DRC0029]  Bus has no name and therefore defines no signals. N19226896
+                    SCHEMATIC1, POWER_CPU  (63.50, 279.40) 

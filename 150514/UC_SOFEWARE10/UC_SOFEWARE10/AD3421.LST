@@ -1,0 +1,1081 @@
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE AD3421
+OBJECT MODULE PLACED IN AD3421.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE AD3421.C OMF2 BROWSE DEBUG LISTINCLUDE SYMBOLS
+
+line level    source
+
+   1          /***********************************************
+   2            PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   3             CPU : MPC82G516
+   4             BEGIN DATE: 2013.11.01
+   5             FINISHED  : 2014.01.25
+   6             WRITEBY   :JOHNSON LIN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+             -                                                                                                                                          ttccc77bbbbb
+   7             AD3421  setup   SET 1001 0000 FOR A0 TYPE 
+   8              8CH =  pga =1 ,32767BITS
+   9          **************************************************/
+  10          #include <MG82FE564.H>
+   1      =1  // (System)
+   2      =1  sfr ACC       = 0xE0;
+   3      =1  sfr B         = 0xF0;
+   4      =1  sfr SP        = 0x81;
+   5      =1  sfr DPL       = 0x82;
+   6      =1  sfr DPH       = 0x83;
+   7      =1  sfr PSW       = 0xD0;
+   8      =1  
+   9      =1  // (Interrupt)
+  10      =1  sfr IE        = 0xA8;
+  11      =1  sfr EIE1      = 0xAD;
+  12      =1  sfr AUXIE     = 0xAD;
+  13      =1  sfr XICON     = 0xC0;
+  14      =1  sfr IP0L      = 0xB8;
+  15      =1  sfr IP        = 0xB8;
+  16      =1  sfr IP0H      = 0xB7;
+  17      =1  sfr IPH       = 0xB7;
+  18      =1  sfr EIP1L     = 0xAE;
+  19      =1  sfr AUXIP     = 0xAE;
+  20      =1  sfr EIP1H     = 0xAF;
+  21      =1  sfr AUXIPH    = 0xAF;
+  22      =1  
+  23      =1  // (I/O Port)
+  24      =1  sfr P0        = 0x80;
+  25      =1  sfr P1        = 0x90;
+  26      =1  sfr P2        = 0xA0;
+  27      =1  sfr P3        = 0xB0;
+  28      =1  sfr P4        = 0xE8;
+  29      =1  sfr P5        = 0xF8;
+  30      =1  sfr P6        = 0xC8;                            // Page F
+  31      =1  sfr P0M0      = 0x93;
+  32      =1  sfr P0M1      = 0x94;
+  33      =1  sfr P1M0      = 0x91;
+  34      =1  sfr P1M1      = 0x92;
+  35      =1  sfr P2M0      = 0x95;
+  36      =1  sfr P2M1      = 0x96;
+  37      =1  sfr P3M0      = 0xB1;
+  38      =1  sfr P3M1      = 0xB2;
+  39      =1  sfr P4M0      = 0xB3;
+  40      =1  sfr P4M1      = 0xB4;
+  41      =1  sfr P5M0      = 0xB5;
+  42      =1  sfr P5M1      = 0xB6;
+  43      =1  
+  44      =1  // (Timer)
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 2   
+
+  45      =1  sfr TCON      = 0x88;
+  46      =1  sfr TMOD      = 0x89;
+  47      =1  sfr T2CON     = 0xC8;
+  48      =1  sfr T2MOD     = 0xC9;
+  49      =1  sfr RCAP2L    = 0xCA;
+  50      =1  sfr RCAP2H    = 0xCB;
+  51      =1  sfr TL0       = 0x8A;
+  52      =1  sfr TL1       = 0x8B;
+  53      =1  sfr TH0       = 0x8C;
+  54      =1  sfr TH1       = 0x8D;
+  55      =1  sfr TL2       = 0xCC;
+  56      =1  sfr TH2       = 0xCD;
+  57      =1  
+  58      =1  // (Serial Port)
+  59      =1  sfr SCON      = 0x98;
+  60      =1  sfr SCON0     = 0x98;
+  61      =1  sfr SCON1     = 0x98;                            // Page 1
+  62      =1  sfr SBUF      = 0x99;
+  63      =1  sfr SBUF0     = 0x99;
+  64      =1  sfr SBUF1     = 0x99;                            // Page 1
+  65      =1  sfr SADDR     = 0xA9;
+  66      =1  sfr SADEN     = 0xB9;
+  67      =1  sfr SCFG      = 0x9A;
+  68      =1  sfr S1BRT     = 0x9A;
+  69      =1  sfr S2BUF     = 0x9A;                            // Page 1
+  70      =1  
+  71      =1  // (ADC)
+  72      =1  sfr ADCON     = 0xC5;
+  73      =1  sfr ADCTL     = 0xC5;
+  74      =1  sfr ADCV      = 0xC6;
+  75      =1  sfr ADCH      = 0xC6;
+  76      =1  sfr ADCVL     = 0xBE;
+  77      =1  sfr ADCL      = 0xBE;
+  78      =1  
+  79      =1  // (Keypad Interrupt)
+  80      =1  sfr KBCON     = 0xD6;
+  81      =1  sfr KBPATN    = 0xD5;
+  82      =1  sfr KBMASK    = 0xD7;
+  83      =1  
+  84      =1  // (SPI)
+  85      =1  sfr SPSTAT    = 0x84;
+  86      =1  sfr SPCON     = 0x85;
+  87      =1  sfr SPDAT     = 0x86;
+  88      =1  sfr SPISTAT   = 0x84;
+  89      =1  sfr SPICON    = 0x85;
+  90      =1  sfr SPIDAT    = 0x86;
+  91      =1  sfr SPCTL     = 0x85;
+  92      =1  sfr SPICTL    = 0x85;
+  93      =1  
+  94      =1  // (PCA)
+  95      =1  sfr CCON      = 0xD8;
+  96      =1  sfr CMOD      = 0xD9;
+  97      =1  sfr CL        = 0xE9;
+  98      =1  sfr CH        = 0xF9;
+  99      =1  sfr CCAPM0    = 0xDA;
+ 100      =1  sfr CCAPM1    = 0xDB;
+ 101      =1  sfr CCAPM2    = 0xDC;
+ 102      =1  sfr CCAPM3    = 0xDD;
+ 103      =1  sfr CCAPM4    = 0xDE;
+ 104      =1  sfr CCAPM5    = 0xDF;
+ 105      =1  sfr CCAP0H    = 0xFA;
+ 106      =1  sfr CCAP0L    = 0xEA;
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 3   
+
+ 107      =1  sfr CCAP1H    = 0xFB;
+ 108      =1  sfr CCAP1L    = 0xEB;
+ 109      =1  sfr CCAP2H    = 0xFC;
+ 110      =1  sfr CCAP2L    = 0xEC;
+ 111      =1  sfr CCAP3H    = 0xFD;
+ 112      =1  sfr CCAP3L    = 0xED;
+ 113      =1  sfr CCAP4H    = 0xFE;
+ 114      =1  sfr CCAP4L    = 0xEE;
+ 115      =1  sfr CCAP5H    = 0xFF;
+ 116      =1  sfr CCAP5L    = 0xEF;
+ 117      =1  sfr PCAPWM0   = 0xF2;
+ 118      =1  sfr PCAPWM1   = 0xF3;
+ 119      =1  sfr PCAPWM2   = 0xF4;
+ 120      =1  sfr PCAPWM3   = 0xF5;
+ 121      =1  sfr PCAPWM4   = 0xF6;
+ 122      =1  sfr PCAPWM5   = 0xF7;
+ 123      =1  
+ 124      =1  // (Others)
+ 125      =1  sfr PCON      = 0x87;
+ 126      =1  sfr PCON0     = 0x87;
+ 127      =1  sfr PCON1     = 0x97;
+ 128      =1  sfr EVRCR     = 0x97;
+ 129      =1  sfr PCON2     = 0xC7;
+ 130      =1  sfr AUXR      = 0x8E;
+ 131      =1  sfr AUXR0     = 0x8E;
+ 132      =1  sfr AUXR1     = 0xA2;
+ 133      =1  sfr AUXR2     = 0xA6;
+ 134      =1  sfr STRETCH   = 0x8F;
+ 135      =1  sfr WDTCR     = 0xE1;
+ 136      =1  sfr TSTWD     = 0x97;
+ 137      =1  sfr SFRPI     = 0xAC;
+ 138      =1  
+ 139      =1  // (ISP)
+ 140      =1  sfr ISPCR     = 0xE7;
+ 141      =1  sfr IFMT      = 0xE5;
+ 142      =1  sfr IFD       = 0xE2;
+ 143      =1  sfr IFADRH    = 0xE3;
+ 144      =1  sfr IFADRL    = 0xE4;
+ 145      =1  sfr SCMD      = 0xE6;
+ 146      =1  
+ 147      =1  // (bits in PSW)
+ 148      =1  sbit CY       = PSW^7;
+ 149      =1  sbit AC       = PSW^6;
+ 150      =1  sbit F0       = PSW^5;
+ 151      =1  sbit RS1      = PSW^4;
+ 152      =1  sbit RS0      = PSW^3;
+ 153      =1  sbit OV       = PSW^2;
+ 154      =1  sbit F1       = PSW^1;
+ 155      =1  sbit P        = PSW^0;
+ 156      =1  
+ 157      =1  // (bits in IE)
+ 158      =1  sbit EA       = IE^7;
+ 159      =1  sbit GF4      = IE^6;
+ 160      =1  sbit ET2      = IE^5;
+ 161      =1  sbit ES       = IE^4;
+ 162      =1  sbit ES0      = IE^4;
+ 163      =1  sbit ET1      = IE^3;
+ 164      =1  sbit EX1      = IE^2;
+ 165      =1  sbit ET0      = IE^1;
+ 166      =1  sbit EX0      = IE^0;
+ 167      =1  
+ 168      =1  // (bits in IP0L)
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 4   
+
+ 169      =1  sbit PX3L     = IP0L^7;
+ 170      =1  sbit PX2L     = IP0L^6;
+ 171      =1  sbit PT2L     = IP0L^5;
+ 172      =1  sbit PSL      = IP0L^4;
+ 173      =1  sbit PT1L     = IP0L^3;
+ 174      =1  sbit PX1L     = IP0L^2;
+ 175      =1  sbit PT0L     = IP0L^1;
+ 176      =1  sbit PX0L     = IP0L^0;
+ 177      =1  
+ 178      =1  sbit PT2      = IP^5;
+ 179      =1  sbit PS       = IP^4;
+ 180      =1  sbit PT1      = IP^3;
+ 181      =1  sbit PX1      = IP^2;
+ 182      =1  sbit PT0      = IP^1;
+ 183      =1  sbit PX0      = IP^0;
+ 184      =1  
+ 185      =1  //(bits in SCON0)
+ 186      =1  sbit FE       = SCON0^7;
+ 187      =1  sbit SM00     = SCON0^7;
+ 188      =1  sbit SM10     = SCON0^6;
+ 189      =1  sbit SM20     = SCON0^5;
+ 190      =1  sbit REN0     = SCON0^4;
+ 191      =1  sbit TB80     = SCON0^3;
+ 192      =1  sbit RB80     = SCON0^2;
+ 193      =1  sbit TI0      = SCON0^1;
+ 194      =1  sbit RI0      = SCON0^0;
+ 195      =1  
+ 196      =1  sbit SM0      = SCON^7;
+ 197      =1  sbit SM1      = SCON^6;
+ 198      =1  sbit SM2      = SCON^5;
+ 199      =1  sbit REN      = SCON^4;
+ 200      =1  sbit TB8      = SCON^3;
+ 201      =1  sbit RB8      = SCON^2;
+ 202      =1  sbit TI       = SCON^1;
+ 203      =1  sbit RI       = SCON^0;
+ 204      =1  
+ 205      =1  //(bits in SCON1)
+ 206      =1  sbit SM01     = SCON1^7;
+ 207      =1  sbit SM11     = SCON1^6;
+ 208      =1  sbit SM21     = SCON1^5;
+ 209      =1  sbit REN1     = SCON1^4;
+ 210      =1  sbit TB81     = SCON1^3;
+ 211      =1  sbit RB81     = SCON1^2;
+ 212      =1  sbit TI1      = SCON1^1;
+ 213      =1  sbit RI1      = SCON1^0;
+ 214      =1  
+ 215      =1  // (bits in TCON)
+ 216      =1  sbit TF1      = TCON^7;
+ 217      =1  sbit TR1      = TCON^6;
+ 218      =1  sbit TF0      = TCON^5;
+ 219      =1  sbit TR0      = TCON^4;
+ 220      =1  sbit IE1      = TCON^3;
+ 221      =1  sbit IT1      = TCON^2;
+ 222      =1  sbit IE0      = TCON^1;
+ 223      =1  sbit IT0      = TCON^0;
+ 224      =1  
+ 225      =1  // (bits in T2CON)
+ 226      =1  sbit TF2      = T2CON^7;
+ 227      =1  sbit EXF2     = T2CON^6;
+ 228      =1  sbit RCLK     = T2CON^5;
+ 229      =1  sbit TCLK     = T2CON^4;
+ 230      =1  sbit EXEN2    = T2CON^3;
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 5   
+
+ 231      =1  sbit TR2      = T2CON^2;
+ 232      =1  sbit C_T2     = T2CON^1;
+ 233      =1  sbit CP_RL2   = T2CON^0;
+ 234      =1  
+ 235      =1  // (bits in CCON)
+ 236      =1  sbit CF       = CCON^7;
+ 237      =1  sbit CR       = CCON^6;
+ 238      =1  sbit CCF5     = CCON^5;
+ 239      =1  sbit CCF4     = CCON^4;
+ 240      =1  sbit CCF3     = CCON^3;
+ 241      =1  sbit CCF2     = CCON^2;
+ 242      =1  sbit CCF1     = CCON^1;
+ 243      =1  sbit CCF0     = CCON^0;
+ 244      =1  
+ 245      =1  // (bits in XICON)
+ 246      =1  sbit PX3      = XICON^7;
+ 247      =1  sbit IT3H     = XICON^7;
+ 248      =1  sbit EX3      = XICON^6;
+ 249      =1  sbit IE3      = XICON^5;
+ 250      =1  sbit IT3      = XICON^4;
+ 251      =1  sbit PX2      = XICON^3;
+ 252      =1  sbit IT2H     = XICON^3;
+ 253      =1  sbit EX2      = XICON^2;
+ 254      =1  sbit IE2      = XICON^1;
+ 255      =1  sbit IT2      = XICON^0;
+ 256      =1  
+ 257      =1  // (bits in P0)
+ 258      =1  sbit P07      = P0^7;
+ 259      =1  sbit P06      = P0^6;
+ 260      =1  sbit P05      = P0^5;
+ 261      =1  sbit P04      = P0^4;
+ 262      =1  sbit P03      = P0^3;
+ 263      =1  sbit P02      = P0^2;
+ 264      =1  sbit P01      = P0^1;
+ 265      =1  sbit P00      = P0^0;
+ 266      =1  
+ 267      =1  // (bits in P1)
+ 268      =1  sbit P17      = P1^7;
+ 269      =1  sbit P16      = P1^6;
+ 270      =1  sbit P15      = P1^5;
+ 271      =1  sbit P14      = P1^4;
+ 272      =1  sbit P13      = P1^3;
+ 273      =1  sbit P12      = P1^2;
+ 274      =1  sbit P11      = P1^1;
+ 275      =1  sbit P10      = P1^0;
+ 276      =1  
+ 277      =1  // (bits in P2)
+ 278      =1  sbit P27      = P2^7;
+ 279      =1  sbit P26      = P2^6;
+ 280      =1  sbit P25      = P2^5;
+ 281      =1  sbit P24      = P2^4;
+ 282      =1  sbit P23      = P2^3;
+ 283      =1  sbit P22      = P2^2;
+ 284      =1  sbit P21      = P2^1;
+ 285      =1  sbit P20      = P2^0;
+ 286      =1  
+ 287      =1  // (bits in P3)
+ 288      =1  sbit P37      = P3^7;
+ 289      =1  sbit P36      = P3^6;
+ 290      =1  sbit P35      = P3^5;
+ 291      =1  sbit P34      = P3^4;
+ 292      =1  sbit P33      = P3^3;
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 6   
+
+ 293      =1  sbit P32      = P3^2;
+ 294      =1  sbit P31      = P3^1;
+ 295      =1  sbit P30      = P3^0;
+ 296      =1  
+ 297      =1  // (bits in P4)
+ 298      =1  sbit P47      = P4^7;
+ 299      =1  sbit P46      = P4^6;
+ 300      =1  sbit P45      = P4^5;
+ 301      =1  sbit P44      = P4^4;
+ 302      =1  sbit P43      = P4^3;
+ 303      =1  sbit P42      = P4^2;
+ 304      =1  sbit P41      = P4^1;
+ 305      =1  sbit P40      = P4^0;
+ 306      =1  
+ 307      =1  // (bits in P5)
+ 308      =1  sbit P53      = P5^3;
+ 309      =1  sbit P52      = P5^2;
+ 310      =1  sbit P51      = P5^1;
+ 311      =1  sbit P50      = P5^0;
+ 312      =1  
+ 313      =1  // (bits in P6)
+ 314      =1  sbit P61      = P6^1;
+ 315      =1  sbit P60      = P6^0;
+ 316      =1  
+ 317      =1  // (bits in P1, alternate)
+ 318      =1  sbit T2EX     = P1^1;
+ 319      =1  sbit T2       = P1^0;
+ 320      =1  sbit S2TXD    = P1^3;
+ 321      =1  sbit S2RXD    = P1^2;
+ 322      =1  
+ 323      =1  sbit SPI_CLK  = P1^7;
+ 324      =1  sbit SPI_MISO = P1^6;
+ 325      =1  sbit SPI_MOSI = P1^5;
+ 326      =1  sbit SPI_SS   = P1^4;
+ 327      =1  
+ 328      =1  sbit CEX5     = P1^7;
+ 329      =1  sbit CEX4     = P1^6;
+ 330      =1  sbit CEX3     = P1^5;
+ 331      =1  sbit CEX2     = P1^4;
+ 332      =1  sbit CEX1     = P1^3;
+ 333      =1  sbit CEX0     = P1^2;
+ 334      =1  sbit ECI      = P1^1;
+ 335      =1  
+ 336      =1  sbit AIN7     = P1^7;
+ 337      =1  sbit AIN6     = P1^6;
+ 338      =1  sbit AIN5     = P1^5;
+ 339      =1  sbit AIN4     = P1^4;
+ 340      =1  sbit AIN3     = P1^3;
+ 341      =1  sbit AIN2     = P1^2;
+ 342      =1  sbit AIN1     = P1^1;
+ 343      =1  sbit AIN0     = P1^0;
+ 344      =1  
+ 345      =1  //(bits in P2, alternate)
+ 346      =1  sbit KBI7     = P2^7;
+ 347      =1  sbit KBI6     = P2^6;
+ 348      =1  sbit KBI5     = P2^5;
+ 349      =1  sbit KBI4     = P2^4;
+ 350      =1  sbit KBI3     = P2^3;
+ 351      =1  sbit KBI2     = P2^2;
+ 352      =1  sbit KBI1     = P2^1;
+ 353      =1  sbit KBI0     = P2^0;
+ 354      =1  
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 7   
+
+ 355      =1  // (bits in P3, alternate)
+ 356      =1  sbit RD       = P3^7;
+ 357      =1  sbit WR       = P3^6;
+ 358      =1  sbit T1       = P3^5;
+ 359      =1  sbit T0       = P3^4;
+ 360      =1  sbit INT1     = P3^3;
+ 361      =1  sbit INT0     = P3^2;
+ 362      =1  sbit TXD      = P3^1;
+ 363      =1  sbit RXD      = P3^0;
+ 364      =1  sbit T1CKO    = P3^5;
+ 365      =1  sbit T0CKO    = P3^4;
+ 366      =1  
+ 367      =1  // (bits in P4, alternate)
+ 368      =1  sbit INT2     = P4^3;
+ 369      =1  sbit INT3     = P4^2;
+ 370      =1  
+ 371      =1  sbit ALE      = P4^6;
+ 372      =1  
+ 373      =1  // (bits in P6, alternate)
+ 374      =1  sbit CKO      = P6^0;
+ 375      =1  sbit XOUT     = P6^0;
+ 376      =1  sbit XIN      = P6^1;
+  11          #include <AD3421.h>
+   1      =1  /************************************************************************
+   2      =1  * FileName     : i2c.h
+   3      =1  * Description  : Default MPC82G516 to ctrl AD111A0 IC function.
+   4      =1  *
+   5      =1  *
+   6      =1  * Version control:
+   7      =1  ***************************************************************************/
+   8      =1  #ifndef __AD3421_H__
+   9      =1  #define __AD3421_H__
+  10      =1  
+  11      =1  
+  12      =1  void AD3421_Init(void);
+  13      =1  void AD3421_start(void);
+  14      =1  void AD3421_stop(void);
+  15      =1  void AD3421_write_byte(unsigned char bt);
+  16      =1  unsigned char AD3421_read_byte(unsigned char lastbyte);         
+  17      =1  void AD3421_write_com(unsigned char dev_id, unsigned char reg_addr);
+  18      =1  unsigned char AD3421_read_com(unsigned char dev_id);
+  19      =1  void S_Delay(unsigned int n);
+  20      =1  unsigned char Get_AD3421_Value(void);
+  21      =1  
+  22      =1  unsigned int  SetmA(unsigned int mA_Value);
+  23      =1  unsigned int  SetmV(unsigned int mV_Value);       
+  24      =1  
+  25      =1  
+  26      =1  void DAC_write(unsigned char ch_id, unsigned int ma);
+  27      =1  void Clear_key_delay(void);
+  28      =1  unsigned char EEPROM_write(unsigned char reg_addr, unsigned int reg_data);
+  29      =1  unsigned char   EEPROM_read_byte(unsigned char reg_addr);
+  30      =1  unsigned char KeyScan(void);
+  31      =1  unsigned char voicePlay(unsigned char id, unsigned char vol);
+  32      =1  unsigned char Get_Key(void);
+  33      =1  
+  34      =1  #define         TRUE    1
+  35      =1  #define         FALSE   0
+  36      =1  
+  37      =1  #endif 
+  12          #include <IO_DEFINE.h>
+   1      =1  #ifndef IO_DEFINE_h_ 
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 8   
+
+   2      =1  #define IO_DEFINE_h_
+   3      =1  
+   4      =1  sbit TC_C    = P0^0;    //k=0x00;j=0x01;t=0x02;e=0x03; 
+   5      =1  sbit RTD_C   = P0^1;    //r=0x04;s=0x05;b=0x06;n=0x07;
+   6      =1  sbit mV_C    = P0^2;
+   7      =1  sbit mA_C    = P0^3;     //tc= 000 00xxx;  rtd=000 01xxx;    mV=000 10xxx
+   8      =1  sbit mV_OUT  = P0^4;     //mA= 000 11xxx;
+   9      =1  sbit mA_OUT  = P0^5;
+  10      =1  sbit UP_KEY   = P0^6;
+  11      =1  sbit DOWN_KEY = P0^7;
+  12      =1  
+  13      =1  sbit LED1_SDA = P1^0;
+  14      =1  sbit LED1_SCL = P1^2;
+  15      =1  sbit LED1_LE  = P1^1;
+  16      =1  sbit LED2_SDA  = P1^3;
+  17      =1  sbit LED2_SCL  = P1^4;
+  18      =1  sbit LED2_LE   = P1^5;
+  19      =1  sbit RTC_SCL   = P1^6;
+  20      =1  sbit non3      = P1^7;
+  21      =1  
+  22      =1  sbit AD_SDA   = P2^0;
+  23      =1  sbit AD_SCL   = P2^1;
+  24      =1  sbit ALL_SDA  = P2^2;
+  25      =1  sbit EEP_SCL  = P2^3;
+  26      =1  sbit OUT_SCL  = P2^4;
+  27      =1  sbit TEMP    = P2^5;
+  28      =1  sbit NONE_4   = P2^6;
+  29      =1  sbit NONE_5   = P2^7;
+  30      =1  sbit RTC_SDA  = P2^2;
+  31      =1  
+  32      =1  sbit R485_RX           = P3^0;
+  33      =1  sbit R485_TX           = P3^1;
+  34      =1  sbit FUNCTION_KEY      = P3^2;
+  35      =1  sbit OFFSET_KEY        = P3^3;
+  36      =1  sbit BEEP_OUT          = P3^4;   //for relay
+  37      =1  sbit R485_DE_RE        = P3^5;
+  38      =1  sbit NONE_6            = P3^6;
+  39      =1  sbit NONE_7            = P3^7;
+  40      =1  //------------------------
+  41      =1  sbit EEPROM_SDA = P2^2;
+  42      =1  sbit EEPROM_SCL = P2^3;
+  43      =1  
+  44      =1  sbit Value_SDA  = P2^0;
+  45      =1  sbit Value_SCL  = P2^1;
+  46      =1  sbit BEEP       = P3^4;  //for relay
+  47      =1  
+  48      =1  sbit mV_SDA   = P2^2;
+  49      =1  sbit mV_SCL   = P2^4;
+  50      =1  sbit mA_SDA   = P2^2;
+  51      =1  sbit mA_SCL   = P2^4;
+  52      =1  
+  53      =1  #endif
+  13          #define   read_com  0xd1    //    11010001
+  14          #define   write_com 0xd0    //    10010000
+  15          #define   ic_com    0x9C    //    define PGA and counter
+  16          
+  17          unsigned char  ad_ack;      // bit array of error types
+  18          
+  19          extern unsigned char AD_Hi,AD_Mid,AD_Lo;
+  20          extern unsigned char AD_Status;
+  21          extern void delay(unsigned int i);
+  22          extern idata unsigned char Soft_Timer[8];
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 9   
+
+  23          
+  24          /********************************************************/
+  25          unsigned char Get_AD3421_Value(void)
+  26          {
+  27   1       idata unsigned char res;
+  28   1        res = 0;
+  29   1        AD3421_Init();
+  30   1        AD3421_write_com(write_com,ic_com);
+  31   1        AD3421_read_com(read_com);
+  32   1        return(res);
+  33   1      }
+  34          /*******************************************************************/
+  35          void AD_BitDly(void)               // wait 4.7uS, or thereabouts
+  36          {                                   // tune to xtal. This works at 11.0592MHz
+  37   1              unsigned char   i;
+  38   1              
+  39   1              for (i=0; i<0x12; i++);
+  40   1      }
+  41          /*****************************************************/
+  42          void AD3421_Init(void)
+  43          {
+  44   1              unsigned char i;
+  45   1              Value_SCL = 1 ;
+  46   1              AD_BitDly();
+  47   1              Value_SDA = 1 ;
+  48   1              AD_BitDly();
+  49   1              AD_BitDly();
+  50   1              AD_BitDly();
+  51   1              AD_BitDly();
+  52   1              Value_SDA = 0;
+  53   1      
+  54   1              for(i = 0; i < 0xfe; i++);    
+  55   1      }
+  56          /*********************************************************************/
+  57          void AD3421_start(void)
+  58          {
+  59   1              Value_SDA = 1 ;
+  60   1              AD_BitDly();
+  61   1              Value_SCL = 1 ;
+  62   1              AD_BitDly();
+  63   1         Value_SDA = 0 ;
+  64   1         AD_BitDly();
+  65   1         Value_SCL = 0 ;
+  66   1      }
+  67          /*************************************/
+  68          void AD3421_stop(void)
+  69          {
+  70   1              Value_SCL = 1 ;
+  71   1              AD_BitDly();
+  72   1          Value_SDA = 1 ;
+  73   1              AD_BitDly();
+  74   1      }
+  75          /********************************************/
+  76          void AD3421_write_byte(unsigned char bt)
+  77          {
+  78   1              idata unsigned char i;
+  79   1      
+  80   1              ad_ack = TRUE;                                          //default have ack
+  81   1        
+  82   1              for (i=0; i<8; i++)
+  83   1              {
+  84   2                      if (bt & 0x80)
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 10  
+
+  85   2                        {Value_SDA = 1;}                      // send each bit, MSB first
+  86   2                      else
+  87   2                       {Value_SDA = 0;}
+  88   2      
+  89   2                      Value_SCL = 1;
+  90   2                      AD_BitDly();
+  91   2                      Value_SCL = 0;
+  92   2                      AD_BitDly();
+  93   2                      bt = bt << 1;
+  94   2              }
+  95   1      
+  96   1              Value_SDA = 1;                       // change input and listen for ACK
+  97   1      
+  98   1              Value_SCL = 1;
+  99   1              AD_BitDly();
+ 100   1              if (Value_SDA)
+ 101   1                      ad_ack = FALSE;                         // ack didn't happen, may be nothing out there
+ 102   1              Value_SCL = 0;
+ 103   1              AD_BitDly();
+ 104   1      }
+ 105          /********************************************************/
+ 106          unsigned char AD3421_read_byte(unsigned char lastbyte)  // lastone == 1 for last byte
+ 107          {
+ 108   1              idata unsigned char i, res;
+ 109   1              res = 0;
+ 110   1              Value_SDA = 1;
+ 111   1              for (i=0; i<8; i++)                 // each bit at a time, MSB first
+ 112   1              {
+ 113   2                      Value_SCL = 1;
+ 114   2                      AD_BitDly();
+ 115   2                      res = res << 1;
+ 116   2                      if (Value_SDA)          res |= 1;
+ 117   2                      Value_SCL = 0;
+ 118   2                      AD_BitDly();
+ 119   2              }
+ 120   1              Value_SDA = lastbyte;                   // send ACK according to 'lastone'
+ 121   1              Value_SCL = 1;
+ 122   1              AD_BitDly();
+ 123   1              Value_SCL = 0;
+ 124   1              Value_SDA = 1;
+ 125   1              AD_BitDly();
+ 126   1              return(res);
+ 127   1      }
+ 128          /********************************************************/
+ 129          void AD3421_write_com(unsigned char dev_id, unsigned char reg_addr)
+ 130          {
+ 131   1               AD3421_start();                                                                //send start bit
+ 132   1               AD3421_write_byte((dev_id));
+ 133   1               AD3421_write_byte(reg_addr);               //send high address
+ 134   1               AD3421_stop();                              //stop
+ 135   1      }
+ 136          /*****************************************************/
+ 137          unsigned char AD3421_read_com(unsigned char dev_id)
+ 138          {
+ 139   1        unsigned char i; 
+ 140   1               AD3421_start();                                  //send start bit
+ 141   1               AD3421_write_byte(dev_id);               //send address byte
+ 142   1               AD_Hi = AD3421_read_byte(0);      //get high data
+ 143   1               AD_Mid = AD3421_read_byte(0);    //get high data
+ 144   1               AD_Lo =  AD3421_read_byte(0);    //get low data
+ 145   1               AD_Status =  AD3421_read_byte(1);
+ 146   1               AD3421_stop(); 
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 11  
+
+ 147   1               i = AD_Status & 0x80 ;
+ 148   1              return i; 
+ 149   1      }
+ 150          /************************************/
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 12  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+R485_RX. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+CCF2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DAH  1
+TB80 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+PCAPWM4. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F6H  1
+P1M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0091H  1
+P0M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0094H  1
+non3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+CCF3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DBH  1
+TB81 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+PCAPWM5. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F7H  1
+P2M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0095H  1
+P1M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0092H  1
+P0 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0080H  1
+AD_Mid . . . . . . . . . . . . . . . .  EXTERN   DATA   U_CHAR   -----  1
+R485_TX. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+_AD3421_write_com. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  dev_id . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0006H  1
+  reg_addr . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0005H  1
+CCF4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DCH  1
+SM00 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+P3M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B1H  1
+P2M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0096H  1
+P1 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0090H  1
+CCF5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DDH  1
+SM01 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+SM10 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+P4M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B3H  1
+P3M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B2H  1
+P2 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A0H  1
+SM11 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+SM20 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+ISPCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E7H  1
+P5M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B5H  1
+P4M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B4H  1
+P3 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B0H  1
+XICON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C0H  1
+EEPROM_SDA . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+DOWN_KEY . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0087H  1
+T0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+SM21 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+AC . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D6H  1
+EVRCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+P5M1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B6H  1
+P4 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E8H  1
+T1 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+SPCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+P5 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F8H  1
+EIE1 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ADH  1
+T2 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+EA . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AFH  1
+SFRPI. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ACH  1
+WDTCR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E1H  1
+P6 . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+mV_SCL . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+KBI0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+SPI_MOSI . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+SPI_MISO . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 13  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+mA_OUT . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0085H  1
+KBI1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+SPCTL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+KBI2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+AIN0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+CF . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DFH  1
+AUXIP. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AEH  1
+KBI3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+AIN1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+KBI4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+AIN2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+FE . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+CH . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F9H  1
+KBI5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A5H  1
+AIN3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+KBI6 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A6H  1
+AIN4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+EEPROM_SCL . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+RTD_C. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0081H  1
+KBI7 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A7H  1
+AIN5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+IE . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A8H  1
+AIN6 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+CL . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E9H  1
+AIN7 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+CEX0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+CCAP0H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FAH  1
+ADCH . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C6H  1
+CEX1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+CCAP1H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FBH  1
+IP0H . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B7H  1
+ALL_SDA. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+CEX2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+CCAP2H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FCH  1
+OFFSET_KEY . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+CEX3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+CCAP3H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FDH  1
+CEX4 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+CR . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00DEH  1
+CCAP4H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FEH  1
+CCAP0L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EAH  1
+ADCL . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00BEH  1
+RD . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+CEX5 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+EXF2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CEH  1
+REN0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+CCAP5H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00FFH  1
+CCAP1L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EBH  1
+CCAPM0 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DAH  1
+IP0L . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+AD_Hi. . . . . . . . . . . . . . . . .  EXTERN   DATA   U_CHAR   -----  1
+REN1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+CCAP2L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ECH  1
+CCAPM1 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DBH  1
+IT2H . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C3H  1
+ES . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
+TSTWD. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 14  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+CCAP3L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EDH  1
+CCAPM2 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DCH  1
+IT3H . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C7H  1
+CCAP4L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EEH  1
+CCAPM3 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DDH  1
+IP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B8H  1
+CCAP5L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00EFH  1
+CCAPM4 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DEH  1
+RI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+CCAPM5 . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00DFH  1
+INT0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+CY . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D7H  1
+BEEP . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+mV_OUT . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0084H  1
+INT1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+TI . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+EEP_SCL. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+INT2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EBH  1
+INT3 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EAH  1
+ADCV . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C6H  1
+STRETCH. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008FH  1
+AD_Lo. . . . . . . . . . . . . . . . .  EXTERN   DATA   U_CHAR   -----  1
+PT0L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B9H  1
+PT1L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BBH  1
+RCAP2H . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CBH  1
+RTC_SDA. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+PS . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BCH  1
+PT2L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BDH  1
+SP . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0081H  1
+T2EX . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+CMOD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D9H  1
+CCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D8H  1
+SCFG . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+PX0L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B8H  1
+OV . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D2H  1
+PX1L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BAH  1
+RCAP2L . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CAH  1
+PX2L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BEH  1
+SPI_CLK. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+PX3L . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BFH  1
+SCMD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E6H  1
+WR . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+C_T2 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+SPISTAT. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0084H  1
+RTC_SCL. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+RCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CDH  1
+TCLK . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CCH  1
+P00. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0080H  1
+IFADRH . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E3H  1
+AD_BitDly. . . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  i. . . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+P10. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+P01. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0081H  1
+IFMT . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E5H  1
+PCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0087H  1
+SBUF . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+P20. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 15  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+P11. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+P02. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0082H  1
+Get_AD3421_Value . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  res. . . . . . . . . . . . . . . . .  AUTO     IDATA  U_CHAR   0000H  1
+P30. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+P21. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+P12. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+P03. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0083H  1
+FUNCTION_KEY . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+P40. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00E8H  1
+P31. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+P22. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+P13. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+P04. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0084H  1
+IFADRL . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E4H  1
+SCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+P50. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00F8H  1
+P41. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00E9H  1
+P32. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B2H  1
+P23. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A3H  1
+P14. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+P05. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0085H  1
+TMOD . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0089H  1
+TCON . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0088H  1
+P60. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+P51. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00F9H  1
+P42. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EAH  1
+P33. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B3H  1
+P24. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+P15. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+P06. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0086H  1
+TEMP . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A5H  1
+P61. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+P52. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00FAH  1
+P43. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EBH  1
+P34. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+P25. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A5H  1
+P16. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0096H  1
+P07. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0087H  1
+P53. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00FBH  1
+P44. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ECH  1
+P35. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+P26. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A6H  1
+P17. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0097H  1
+Value_SDA. . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+P45. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EDH  1
+P36. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+P27. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A7H  1
+TC_C . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0080H  1
+P46. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EEH  1
+P37. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+P47. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EFH  1
+KBMASK . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D7H  1
+OUT_SCL. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+AD_SDA . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A0H  1
+IE0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0089H  1
+IE1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008BH  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 16  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+LED1_SDA . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0090H  1
+IE2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C1H  1
+LED2_SDA . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+IE3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C5H  1
+GF4. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AEH  1
+AUXR . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008EH  1
+B. . . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F0H  1
+KBPATN . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D5H  1
+Value_SCL. . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+CP_RL2 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+NONE_4 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A6H  1
+NONE_5 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A7H  1
+NONE_6 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B6H  1
+AD3421_Init. . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  i. . . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+SPIDAT . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0086H  1
+ACC. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E0H  1
+NONE_7 . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B7H  1
+AD_SCL . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A1H  1
+ES0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ACH  1
+ET0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A9H  1
+LED1_SCL . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+TF0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008DH  1
+ET1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ABH  1
+LED2_SCL . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+TF1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008FH  1
+RI0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+ET2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00ADH  1
+TF2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CFH  1
+RI1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0098H  1
+RB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+TH0. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008CH  1
+IT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0088H  1
+TI0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+EX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A8H  1
+TH1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008DH  1
+IT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008AH  1
+TI1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0099H  1
+TB8. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009BH  1
+EX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00AAH  1
+SPICON . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+TH2. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CDH  1
+IT2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C0H  1
+EX2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C2H  1
+P. . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D0H  1
+IT3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C4H  1
+EX3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C6H  1
+SM0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009FH  1
+TL0. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008AH  1
+mA_C . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0083H  1
+XOUT . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+ECI. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+SM1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009EH  1
+SPICTL . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0085H  1
+TL1. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008BH  1
+AUXIPH . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AFH  1
+ALE. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00EEH  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 17  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+SM2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009DH  1
+TL2. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00CCH  1
+IFD. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00E2H  1
+PT0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B9H  1
+R485_DE_RE . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+PT1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BBH  1
+RS0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D3H  1
+ad_ack . . . . . . . . . . . . . . . .  PUBLIC   DATA   U_CHAR   0000H  1
+TR0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008CH  1
+PT2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BDH  1
+RS1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D4H  1
+TR1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      008EH  1
+TR2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CAH  1
+PX0. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B8H  1
+EIP1H. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AFH  1
+PX1. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BAH  1
+PX2. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C3H  1
+PX3. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C7H  1
+EIP1L. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00AEH  1
+DPH. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0083H  1
+CKO. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C8H  1
+DPL. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0082H  1
+PCON0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0087H  1
+SPSTAT . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0084H  1
+SBUF0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+IPH. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B7H  1
+AD3421_start . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+T0CKO. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+PCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0097H  1
+SBUF1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0099H  1
+T1CKO. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B5H  1
+EXEN2. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00CBH  1
+PCON2. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C7H  1
+S2BUF. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+SCON0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+REN. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009CH  1
+SCON1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0098H  1
+mV_C . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0082H  1
+_AD3421_read_byte. . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  lastbyte . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0006H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     IDATA  U_CHAR   0000H  1
+  res. . . . . . . . . . . . . . . . .  AUTO     IDATA  U_CHAR   0001H  1
+ADCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C5H  1
+mA_SDA . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+T2MOD. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C9H  1
+T2CON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C8H  1
+ADCTL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00C5H  1
+ADCVL. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00BEH  1
+SADEN. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00B9H  1
+AD_Status. . . . . . . . . . . . . . .  EXTERN   DATA   U_CHAR   -----  1
+S1BRT. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   009AH  1
+RXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B0H  1
+KBCON. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D6H  1
+UP_KEY . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0086H  1
+XIN. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00C9H  1
+PSL. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00BCH  1
+SADDR. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A9H  1
+C51 COMPILER V9.02   AD3421                                                                04/22/2015 22:54:20 PAGE 18  
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+
+_AD3421_read_com . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+  dev_id . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0006H  1
+  i. . . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0007H  1
+TXD. . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B1H  1
+mA_SCL . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A4H  1
+AUXR0. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   008EH  1
+AUXR1. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A2H  1
+SPI_SS . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0094H  1
+AUXR2. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00A6H  1
+S2RXD. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0092H  1
+F0 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D5H  1
+BEEP_OUT . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00B4H  1
+_AD3421_write_byte . . . . . . . . . .  PUBLIC   CODE   PROC     0007H  -----
+  bt . . . . . . . . . . . . . . . . .  * REG *  DATA   U_CHAR   0006H  1
+  i. . . . . . . . . . . . . . . . . .  AUTO     IDATA  U_CHAR   0000H  1
+S2TXD. . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0093H  1
+F1 . . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D1H  1
+LED1_LE. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0091H  1
+LED2_LE. . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      0095H  1
+AD3421_stop. . . . . . . . . . . . . .  PUBLIC   CODE   PROC     0000H  -----
+PCAPWM0. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F2H  1
+PSW. . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00D0H  1
+PCAPWM1. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F3H  1
+mV_SDA . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00A2H  1
+CCF0 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D8H  1
+RB80 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+PCAPWM2. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F4H  1
+CCF1 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      00D9H  1
+RB81 . . . . . . . . . . . . . . . . .  ABSBIT   -----  BIT      009AH  1
+PCAPWM3. . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00F5H  1
+SPDAT. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0086H  1
+P0M0 . . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   0093H  1
+AUXIE. . . . . . . . . . . . . . . . .  SFR      DATA   U_CHAR   00ADH  1
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    270    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----       4
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

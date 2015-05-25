@@ -1,0 +1,559 @@
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN LED.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LED.C OMF2 OPTIMIZE(4,SPEED) BROWSE DEBUG
+
+line level    source
+
+   1          #include <MPC82G516.h>
+   2          #include <intrins.h>
+   3          #include <LED.h>
+   4          
+   5          sbit LED1_SCL = P1^0;
+   6          sbit LED1_LE  = P1^1;
+   7          sbit LED2_SCL = P1^2;
+   8          sbit LED2_LE  = P1^3;
+   9          sbit LED1_SDA = P2^2;
+  10          sbit LED2_SDA = P2^2;
+  11          
+  12          //const unsigned char code tab_LED[23] = {
+  13          //      0xAF,0xA0,0x6D,0xE9,0xE2,0xCB,0xCF,0xA1,0xEF,0xEB,0xE7,0xEF,0x0F,0xAF,0x4F,0x47,0xE6,0x67,0x00, 0xA7, 0
+             -x0E, 0x40, 0xAE  };
+  14          //     0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F    H    P BLANK    n  
+             -  L     -            U
+  15          const unsigned char code tab_LED[23] = {
+  16                  0xFC,0x60,0xDA,0xF2,0x66,0xB6,0xBE,0xE4,0xFE,0xF6,0xEE,0x3E,0x9C,0x7A,0x9E,0x8E,0x6E,0xCE,0x00, 0xEC, 0x1
+             -C, 0x02, 0x7C  };
+  17          //     0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F    H    P BLANK    N  
+             -  L     -            U
+  18          const unsigned char code Point_tab_LED[23] = {
+  19                  0xFD,0x61,0xDB,0xF3,0x67,0xB7,0xBF,0xE5,0xFF,0xF7,0xEF,0x3F,0x9D,0x7B,0x9F,0x8F,0x6F,0xCF,0x01, 0xED, 0x1
+             -D, 0x03, 0x7D  };
+  20          //     0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F    H    P BLANK    N  
+             -  L     -            U
+  21          /**************************************************************************************/
+  22          void LED_Disp(unsigned char LEDs, unsigned long int disp_value)
+  23          {
+  24   1              unsigned char c  = 0;
+  25   1              unsigned char D0 = 0;
+  26   1              unsigned char D1 = 0;
+  27   1              unsigned char D2 = 0;
+  28   1              unsigned char D3 = 0;
+  29   1              unsigned char D4 = 0;
+  30   1              unsigned char D5 = 0;
+  31   1              unsigned long int D_value;
+  32   1              
+  33   1                D_value = disp_value;
+  34   1                c = LEDs;
+  35   1      
+  36   1         if (D_value < 0)
+  37   1               { 
+  38   2                       D0 = tab_LED[22];   //negtive
+  39   2      
+  40   2                       if (D_value > -10 )
+  41   2                        {
+  42   3                          D1 = tab_LED[18];
+  43   3                              D2 = tab_LED[18];
+  44   3                          D3 = tab_LED[18];
+  45   3                              D4 =  Point_tab_LED[0];
+  46   3                              D5 = tab_LED[D_value];
+  47   3                        }
+  48   2                      else if (D_value <= -10 && D_value > -100)        
+  49   2                        {
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 2   
+
+  50   3                          D1 = tab_LED[18];
+  51   3                              D2 = tab_LED[18];
+  52   3                              D3 = tab_LED[18];
+  53   3                              D4 = Point_tab_LED[D_value/10];
+  54   3                              D5 = tab_LED[D_value%10];
+  55   3                        }
+  56   2                      else if (D_value <= -100 && D_value > -1000)
+  57   2                        { 
+  58   3                          D1 = tab_LED[18];
+  59   3                              D2 = tab_LED[18];         //987
+  60   3                              D3 = tab_LED[D_value/100];
+  61   3                              D4 = Point_tab_LED[(D_value%100)/10];
+  62   3                              D5 = tab_LED[D_value%10];
+  63   3                        }
+  64   2                      else if(D_value <= -1000 && D_value > -10000)           
+  65   2                        {
+  66   3                          D1 = tab_LED[18];
+  67   3                              D2 = tab_LED[D_value/1000];
+  68   3                              D3 = tab_LED[(D_value%1000)/100];
+  69   3                              D4 = Point_tab_LED[(D_value%100)/10];
+  70   3                              D5 = tab_LED[D_value%10];
+  71   3                        }
+  72   2                }
+  73   1               else
+  74   1                {
+  75   2                       if( D_value < 10 )        //99999
+  76   2                         {
+  77   3                          D0 = tab_LED[18];
+  78   3                              D1 = tab_LED[18];
+  79   3                              D2 = tab_LED[18];
+  80   3                          D3 = tab_LED[18];
+  81   3                              D4 = Point_tab_LED[0];
+  82   3                              D5 = tab_LED[D_value];
+  83   3                        }
+  84   2                      else if (D_value >= 10 && D_value < 100)
+  85   2                        { 
+  86   3                          D0 = tab_LED[18];
+  87   3                              D1 = tab_LED[18];
+  88   3                              D2 = tab_LED[18];
+  89   3                          D3 = tab_LED[18];
+  90   3                              D4 = Point_tab_LED[D_value/10];
+  91   3                              D5 = tab_LED[D_value%10];
+  92   3                        }
+  93   2                  else if (D_value >= 100 && D_value < 1000)
+  94   2                        {
+  95   3                          D0 = tab_LED[18];
+  96   3                          D1 = tab_LED[18];
+  97   3                              D2 = tab_LED[18];
+  98   3                              D3 = tab_LED[D_value/100]; //987 
+  99   3                              D4 = Point_tab_LED[(D_value%100)/10];
+ 100   3                              D5 = tab_LED[D_value%10];
+ 101   3                        }
+ 102   2                  else if(D_value >= 1000 && D_value < 10000)
+ 103   2                        {
+ 104   3                          D0 = tab_LED[18];
+ 105   3                          D1 = tab_LED[18];
+ 106   3                              D2 = tab_LED[D_value/1000];     //9876
+ 107   3                          D3 = tab_LED[(D_value%1000)/100];
+ 108   3                              D4 = Point_tab_LED[(D_value%100)/10];
+ 109   3                              D5 = tab_LED[D_value%10];
+ 110   3                        }
+ 111   2                      else if(D_value >= 10000 && D_value < 100000)
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 3   
+
+ 112   2                        {
+ 113   3                          D0 = tab_LED[18];              
+ 114   3                              D1 = tab_LED[D_value/10000];   
+ 115   3                              D2 = tab_LED[(D_value%10000)/1000];     
+ 116   3                          D3 = tab_LED[(D_value%1000)/100];   
+ 117   3                              D4 = Point_tab_LED[(D_value%100)/10];           
+ 118   3                              D5 = tab_LED[D_value%10];               
+ 119   3                        }
+ 120   2               }
+ 121   1                      LED_DATA_Write(c,D5,D4,D3,D2,D1,D0);
+ 122   1      }
+ 123          /***********************************************************************/
+ 124          void SETUP_LED_Disp(unsigned char SETUP_SELECT, unsigned int disp_value)
+ 125          {
+ 126   1              unsigned char setup_status, D0, D1, D2, D3, D4, D5;
+ 127   1              unsigned int D_Value;
+ 128   1              
+ 129   1                setup_status = SETUP_SELECT;
+ 130   1                D_Value = disp_value;
+ 131   1      
+ 132   1                if (setup_status == 0)                //PxxSET
+ 133   1                  { 
+ 134   2                     D0 =     tab_LED[17];
+ 135   2                         D1 = tab_LED[1] ;
+ 136   2                         D2 = tab_LED[18];
+ 137   2                         D3 = tab_LED[18];
+ 138   2                         D4 = tab_LED[12];
+ 139   2                         D5 = tab_LED[18];
+ 140   2                      }
+ 141   1            else if (setup_status == 1)               //Mode_TYPE     
+ 142   1                 { 
+ 143   2                 if(D_Value == 0)
+ 144   2                   { D0 =     tab_LED[17]; // TC
+ 145   3                         D1 = tab_LED[1] ;
+ 146   3                         D2 = tab_LED[18];
+ 147   3                         D3 = tab_LED[18];
+ 148   3                         D4 = tab_LED[12];
+ 149   3                         D5 = tab_LED[18];
+ 150   3                       }
+ 151   2                      if(D_Value == 1)
+ 152   2                   { D0 =     tab_LED[17];  //RTD
+ 153   3                         D1 = tab_LED[1] ;
+ 154   3                         D2 = tab_LED[18];
+ 155   3                         D3 = tab_LED[18];
+ 156   3                         D4 = tab_LED[15];
+ 157   3                         D5 = tab_LED[18];
+ 158   3                       }
+ 159   2                       if(D_Value == 2)
+ 160   2                   { D0 =     tab_LED[17]; // mV
+ 161   3                         D1 = tab_LED[1] ;
+ 162   3                         D2 = tab_LED[18];
+ 163   3                         D3 = tab_LED[18];
+ 164   3                         D4 = tab_LED[12];
+ 165   3                         D5 = tab_LED[18];
+ 166   3                        }
+ 167   2                      if(D_Value == 3)
+ 168   2                   { D0 =     tab_LED[17]; // mA
+ 169   3                         D1 = tab_LED[1] ;
+ 170   3                         D2 = tab_LED[18];
+ 171   3                         D3 = tab_LED[18];
+ 172   3                         D4 = tab_LED[12];
+ 173   3                         D5 = tab_LED[18];
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 4   
+
+ 174   3                        }
+ 175   2                 }
+ 176   1          else if(setup_status == 2)
+ 177   1                 {
+ 178   2                      if(D_Value == 0)
+ 179   2                   { D0 =     tab_LED[17]; // DISP_C
+ 180   3                         D1 = tab_LED[1] ;
+ 181   3                         D2 = tab_LED[18];
+ 182   3                         D3 = tab_LED[18];
+ 183   3                         D4 = tab_LED[12];
+ 184   3                         D5 = tab_LED[18];
+ 185   3                       }
+ 186   2                      else if(D_Value == 1)
+ 187   2                   { D0 =     tab_LED[17];  //DISP_F
+ 188   3                         D1 = tab_LED[1] ;
+ 189   3                         D2 = tab_LED[18];
+ 190   3                         D3 = tab_LED[18];
+ 191   3                         D4 = tab_LED[15];
+ 192   3                         D5 = tab_LED[18];
+ 193   3                       }
+ 194   2                }
+ 195   1         else if (setup_status ==  3)         //TC_SELECT 
+ 196   1                {
+ 197   2                 if(D_Value == 0)
+ 198   2                   { D0 =     tab_LED[17]; // K
+ 199   3                         D1 = tab_LED[1] ;
+ 200   3                         D2 = tab_LED[18];
+ 201   3                         D3 = tab_LED[18];
+ 202   3                         D4 = tab_LED[12];
+ 203   3                         D5 = tab_LED[18];
+ 204   3                       }
+ 205   2                      if(D_Value == 1)
+ 206   2                   { D0 =     tab_LED[17];  //J
+ 207   3                         D1 = tab_LED[1] ;
+ 208   3                         D2 = tab_LED[18];
+ 209   3                         D3 = tab_LED[18];
+ 210   3                         D4 = tab_LED[15];
+ 211   3                         D5 = tab_LED[18];
+ 212   3                       }
+ 213   2                       if(D_Value == 2)
+ 214   2                   { D0 =     tab_LED[17]; // T
+ 215   3                         D1 = tab_LED[1] ;
+ 216   3                         D2 = tab_LED[18];
+ 217   3                         D3 = tab_LED[18];
+ 218   3                         D4 = tab_LED[12];
+ 219   3                         D5 = tab_LED[18];
+ 220   3                        }
+ 221   2                      if(D_Value == 3)
+ 222   2                   { D0 =     tab_LED[17]; // E
+ 223   3                         D1 = tab_LED[1] ;
+ 224   3                         D2 = tab_LED[18];
+ 225   3                         D3 = tab_LED[18];
+ 226   3                         D4 = tab_LED[12];
+ 227   3                         D5 = tab_LED[18];
+ 228   3                        }
+ 229   2                      if(D_Value == 4)
+ 230   2                   { D0 =     tab_LED[17]; // TC_R
+ 231   3                         D1 = tab_LED[1] ;
+ 232   3                         D2 = tab_LED[18];
+ 233   3                         D3 = tab_LED[18];
+ 234   3                         D4 = tab_LED[12];
+ 235   3                         D5 = tab_LED[18];
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 5   
+
+ 236   3                        }
+ 237   2                       if(D_Value == 5)
+ 238   2                   { D0 =     tab_LED[17]; // TC_S
+ 239   3                         D1 = tab_LED[1] ;
+ 240   3                         D2 = tab_LED[18];
+ 241   3                         D3 = tab_LED[18];
+ 242   3                         D4 = tab_LED[12];
+ 243   3                         D5 = tab_LED[18];
+ 244   3                        }
+ 245   2                        if(D_Value == 6)
+ 246   2                   { D0 =     tab_LED[17]; // TC_B
+ 247   3                         D1 = tab_LED[1] ;
+ 248   3                         D2 = tab_LED[18];
+ 249   3                         D3 = tab_LED[18];
+ 250   3                         D4 = tab_LED[12];
+ 251   3                         D5 = tab_LED[18];
+ 252   3                       }
+ 253   2                       if(D_Value == 7)
+ 254   2                   { D0 =     tab_LED[17]; // TC_N
+ 255   3                         D1 = tab_LED[1] ;
+ 256   3                         D2 = tab_LED[18];
+ 257   3                         D3 = tab_LED[18];
+ 258   3                         D4 = tab_LED[12];
+ 259   3                         D5 = tab_LED[18];
+ 260   3                       }
+ 261   2                 }
+ 262   1          else if (setup_status ==  4)                //TC_Zero_offset
+ 263   1              {
+ 264   2                     D0 = tab_LED[17];
+ 265   2                         D1 = tab_LED[2];
+ 266   2                      }
+ 267   1              else if (setup_status ==  5)            //TC_Span_offset
+ 268   1              {
+ 269   2                     D0 = tab_LED[17];
+ 270   2                         D1 = tab_LED[2];
+ 271   2                      }
+ 272   1              else if (setup_status ==  6)            //RTD_Zero_offset
+ 273   1              {
+ 274   2                     D0 = tab_LED[17];
+ 275   2                         D1 = tab_LED[2];
+ 276   2                      }
+ 277   1          else if (setup_status ==  7)                //RTD_Span_offset
+ 278   1              {
+ 279   2                     D0 = tab_LED[17];
+ 280   2                         D1 = tab_LED[2];
+ 281   2                      }
+ 282   1              else if (setup_status ==  8)            //mV_Zero_offset
+ 283   1              {
+ 284   2                     D0 = tab_LED[17];
+ 285   2                         D1 = tab_LED[2];
+ 286   2                      }
+ 287   1              else if (setup_status ==  9)            //mV_Span_offset
+ 288   1              {
+ 289   2                     D0 = tab_LED[17];
+ 290   2                         D1 = tab_LED[2];
+ 291   2                      }
+ 292   1              else if (setup_status ==  10)           //mA_Zero_OFFSET
+ 293   1              {
+ 294   2                     D0 = tab_LED[17];
+ 295   2                         D1 = tab_LED[2];
+ 296   2                      }
+ 297   1              else if (setup_status ==  11)           //mA_Span_OFFSET
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 6   
+
+ 298   1              {
+ 299   2                     D0 = tab_LED[17];
+ 300   2                         D1 = tab_LED[2];
+ 301   2                      }
+ 302   1              else if (setup_status ==  12)           //Alarm_ Lo_Set
+ 303   1              {
+ 304   2                     D0 = tab_LED[17];
+ 305   2                         D1 = tab_LED[2];
+ 306   2                      }
+ 307   1              else if (setup_status ==  13)           //Alarm_HI_set
+ 308   1              {
+ 309   2                     D0 = tab_LED[17];
+ 310   2                         D1 = tab_LED[2];
+ 311   2                      }
+ 312   1              else if (setup_status ==  14)           //Year_set
+ 313   1              {
+ 314   2                     D0 = tab_LED[17];
+ 315   2                         D1 = tab_LED[2];
+ 316   2                      }
+ 317   1              else if (setup_status ==  15)           //Mon_set
+ 318   1              {
+ 319   2                     D0 = tab_LED[17];
+ 320   2                         D1 = tab_LED[2];
+ 321   2                      }
+ 322   1               else if (setup_status ==  16)          //Day_set
+ 323   1              {
+ 324   2                     D0 = tab_LED[17];
+ 325   2                         D1 = tab_LED[2];
+ 326   2                      }
+ 327   1               else if (setup_status ==  17)          //Hour_set
+ 328   1              {
+ 329   2                     D0 = tab_LED[17];
+ 330   2                         D1 = tab_LED[2];
+ 331   2                      }
+ 332   1               
+ 333   1               else if (setup_status ==  19)          //RESET_ ALL
+ 334   1              {
+ 335   2                     D0 = tab_LED[17];
+ 336   2                         D1 = tab_LED[2];
+ 337   2                  }
+ 338   1           if (D_Value >= 0  && D_Value < 10)         //   Show Value 99999
+ 339   1                 {
+ 340   2                              D2 = tab_LED[18];
+ 341   2                          D3 = tab_LED[18];
+ 342   2                              D4 = Point_tab_LED[0];
+ 343   2                              D5 = tab_LED[D_Value%10];
+ 344   2                      }
+ 345   1                      if (D_Value >= 10 && D_Value < 100)
+ 346   1                        { 
+ 347   2                              D2 = tab_LED[18];
+ 348   2                          D3 = tab_LED[18];
+ 349   2                              D4 = Point_tab_LED[D_Value/10];
+ 350   2                              D5 = tab_LED[D_Value%10];
+ 351   2                        }
+ 352   1                  if (D_Value >=100 && D_Value < 1000)
+ 353   1                        {
+ 354   2                              D2 = tab_LED[18];
+ 355   2                              D3 = tab_LED[D_Value/100]; //987 
+ 356   2                              D4 = Point_tab_LED[(D_Value%100)/10];
+ 357   2                              D5 = tab_LED[D_Value%10];
+ 358   2                        }
+ 359   1                  if (D_Value >=1000 && D_Value < 10000)
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 7   
+
+ 360   1                        {
+ 361   2                              D2 = tab_LED[D_Value/1000];     //9876
+ 362   2                          D3 = tab_LED[(D_Value%1000)/100];
+ 363   2                              D4 = Point_tab_LED[(D_Value%100)/10];
+ 364   2                              D5 = tab_LED[D_Value%10];
+ 365   2                        }
+ 366   1                      if (D_Value >= 10000 && D_Value < 100000)
+ 367   1                        {
+ 368   2                          D1 = tab_LED[D_Value/10000];   //98765
+ 369   2                              D2 = tab_LED[(D_Value%10000)/1000];     
+ 370   2                          D3 = tab_LED[(D_Value%1000)/100];   
+ 371   2                              D4 = Point_tab_LED[(D_Value%100)/10];           
+ 372   2                              D5 = tab_LED[D_Value%10];               
+ 373   2                        }
+ 374   1               LED_DATA_Write(1,D5,D4,D3,D2,D1,D0);
+ 375   1               LED_DATA_Write(2,D5,D4,D3,D2,D1,D0);
+ 376   1      }
+ 377          // ITEM              0
+ 378          // MODE_CAL          1
+ 379          // C_F_CAL           2
+ 380          // TYPE_CAL          3
+ 381          // TC_ZERO_CAL       4
+ 382          // TC_SPAN_CAL       5
+ 383          // RTD_ZERO_CAL      6
+ 384          // RTD_SPAN_CAL      7
+ 385          // mV_ZERO_CAL       8
+ 386          // mV_SPAN_CAL       9
+ 387          // mA_ZERO_CAL       10
+ 388          // mA_SPAN_CAL       11
+ 389          // ALARM_LO_CAL      12
+ 390          // ALARM_HI_CAL      13
+ 391          // YEAR_DATE_CAL     14
+ 392          // MON_DATE_CAL      15
+ 393          // DAY_DATE_CAL      16
+ 394          // HOUR_DATE_CAL     17
+ 395          // MIN_DATE_CAL      18
+ 396          // PRODUCT_RESET     19
+ 397          // NOMAL_FUNCTION    0
+ 398          /************************************************/
+ 399          void LED_Fill(void)
+ 400          {
+ 401   1         unsigned char D0,D1,D2,D3,D4,D5;
+ 402   1      
+ 403   1                  D0 = Point_tab_LED[8];
+ 404   1                          D1 = Point_tab_LED[8];
+ 405   1                              D2 = Point_tab_LED[8];  
+ 406   1                          D3 = Point_tab_LED[8];   
+ 407   1                              D4 = Point_tab_LED[8];          
+ 408   1                              D5 = Point_tab_LED[8];          
+ 409   1      
+ 410   1                  LED_DATA_Write(1,D5,D4,D3,D2,D1,D0);
+ 411   1                  LED_DATA_Write(2,D5,D4,D3,D2,D1,D0);
+ 412   1      
+ 413   1      }
+ 414          /*********************************************************/
+ 415          void _BitDly(void)               // wait 4.7uS, or thereabouts
+ 416          {                                   // tune to xtal. This works at 11.0592MHz
+ 417   1              unsigned char   i;
+ 418   1              
+ 419   1              for (i=0; i<0x12; i++);
+ 420   1      }
+ 421          /*********************************/
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 8   
+
+ 422          void LED_Init(void)
+ 423          {
+ 424   1              unsigned int i;
+ 425   1       
+ 426   1              LED1_LE  = 0;
+ 427   1              LED2_LE  = 0;
+ 428   1              LED2_SCL = 0;
+ 429   1              LED1_SDA = 0;
+ 430   1              LED1_SCL = 0;
+ 431   1              LED2_SDA = 0;
+ 432   1      
+ 433   1              _BitDly();
+ 434   1              _BitDly();
+ 435   1              _BitDly();
+ 436   1              _BitDly();
+ 437   1      
+ 438   1              for(i = 0; i < 0x100; i++);   
+ 439   1      }
+ 440          /***********************************/
+ 441          void LED_Cls(void)
+ 442          {
+ 443   1              LED_Disp(1,0);
+ 444   1              LED_Disp(2,0);
+ 445   1      }
+ 446          /**********************************/
+ 447          void  LED_DATA_Write(unsigned char prt,unsigned char D5,unsigned char D4,unsigned char D3,unsigned char D2
+             -,unsigned char D1,unsigned char D0)
+ 448          {
+ 449   1          unsigned char c, DISP_CODE, D_count, D_time = 6;
+ 450   1                                  c = prt;  DISP_CODE = D0 ;
+ 451   1                if (c == 1)
+ 452   1                  {
+ 453   2                         LED1_LE = 0 ;                // off led
+ 454   2                         if(D_time != 0)
+ 455   2                           {
+ 456   3                                  D_count =  8;
+ 457   3                              LED1_SCL = 0;
+ 458   3                                      
+ 459   3                                 if(D_count != 0)
+ 460   3                                   {
+ 461   4                                 if(DISP_CODE & 0x80) {LED1_SDA = 1;}           //d7 - d0
+ 462   4                                   _BitDly();
+ 463   4                                   LED1_SCL = 1 ;
+ 464   4                                       _BitDly();
+ 465   4                                           LED1_SCL = 0;
+ 466   4                                               LED1_SDA = 0;
+ 467   4                                           DISP_CODE = DISP_CODE << 1;
+ 468   4                                           D_count--;
+ 469   4                                   }
+ 470   3                               D_time--;
+ 471   3                                       if (D_time  == 5)  DISP_CODE = D1;
+ 472   3                                       if (D_time  == 4)  DISP_CODE = D2;
+ 473   3                                       if (D_time  == 3)  DISP_CODE = D3;
+ 474   3                                       if (D_time  == 2)  DISP_CODE = D4;
+ 475   3                                       if (D_time  == 1)  DISP_CODE = D5;
+ 476   3                                 }
+ 477   2                                 LED1_LE  = 1 ;          //on led
+ 478   2               }
+ 479   1                  if(c == 2)
+ 480   1                   {
+ 481   2                            LED2_LE = 0;
+ 482   2      
+C51 COMPILER V9.02   LED                                                                   01/15/2014 14:31:01 PAGE 9   
+
+ 483   2                         if(D_time != 0)
+ 484   2                           {
+ 485   3                                  D_count =  8;
+ 486   3                              LED2_SCL = 0;
+ 487   3      
+ 488   3                                 if(D_count != 0)
+ 489   3                                   {
+ 490   4                                 if(DISP_CODE & 0x80) {LED2_SDA = 1;}
+ 491   4                                   _BitDly();
+ 492   4                                   LED2_SCL = 1 ;
+ 493   4                                       _BitDly();
+ 494   4                                           LED2_SCL = 0;
+ 495   4                                               LED2_SDA = 0;
+ 496   4                                           DISP_CODE = DISP_CODE << 1;
+ 497   4                                           D_count--;
+ 498   4                                   }
+ 499   3                               D_time--;
+ 500   3                                       if (D_time  == 5)  DISP_CODE = D1;
+ 501   3                                       if (D_time  == 4)  DISP_CODE = D2;
+ 502   3                                       if (D_time  == 3)  DISP_CODE = D3;
+ 503   3                                       if (D_time  == 2)  DISP_CODE = D4;
+ 504   3                                       if (D_time  == 1)  DISP_CODE = D5;
+ 505   3                                 }
+ 506   2                              LED2_LE = 1;
+ 507   2              }
+ 508   1              
+ 509   1       }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3426    ----
+   CONSTANT SIZE    =     46    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      37
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

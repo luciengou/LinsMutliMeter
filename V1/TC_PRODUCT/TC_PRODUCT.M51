@@ -1,0 +1,564 @@
+BL51 BANKED LINKER/LOCATER V5.12                                                        12/10/2013  12:05:56  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.12, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE AD.obj, AD111.obj, Counter.obj, EEPROM.obj, LCM.obj, LED.obj, main.obj, MCP4011.obj, Sound.obj,
+>>  TYPE_SLOPE.obj TO TC_PRODUCT RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  AD.obj (AD)
+  AD111.obj (AD111)
+  Counter.obj (COUNTER)
+  EEPROM.obj (EEPROM)
+  LCM.obj (LCM)
+  LED.obj (LED)
+  main.obj (MAIN)
+  MCP4011.obj (MCP4011)
+  Sound.obj (SOUND)
+  TYPE_SLOPE.obj (TYPE_SLOPE)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?SLCMP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  TC_PRODUCT (AD)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0017H     UNIT         _DATA_GROUP_
+            DATA    001FH     0001H     UNIT         ?DT?AD111
+            BIT     0020H.0   0001H.3   UNIT         ?BI?MAIN
+            BIT     0021H.3   0000H.1   UNIT         ?BI?DO_ELECTROLYZE?MAIN
+                    0021H.4   0000H.4                *** GAP ***
+            DATA    0022H     0037H     UNIT         ?DT?MAIN
+            DATA    0059H     0007H     UNIT         ?DT?DO_ELECTROLYZE?MAIN
+            DATA    0060H     0006H     UNIT         ?DT?LCM
+            DATA    0066H     0004H     UNIT         ?DT?_LCM_DISP_KL?LCM
+            DATA    006AH     0003H     UNIT         ?DT?AD
+            DATA    006DH     0002H     UNIT         ?DT?SETUP_TIME_IS_UP?MAIN
+            DATA    006FH     0001H     UNIT         ?DT?EEPROM
+            DATA    0070H     0001H     UNIT         ?DT?LCM_DISP_S41?LCM
+            IDATA   0071H     000AH     UNIT         ?ID?MAIN
+            IDATA   007BH     0004H     UNIT         _IDATA_GROUP_
+            IDATA   007FH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+            CODE    0006H     0005H     UNIT         ?PR?GET_KEY?MAIN
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     000CH     UNIT         ?PR?CHECK_KEYHOLDCOUNTER_START?COUNTER
+            CODE    001AH     0001H     UNIT         ?PR?EX_INT0?MAIN
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 2
+
+
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     0003H     UNIT         ?PR?_SENDCHAR?MAIN
+            CODE    0021H     0001H     UNIT         ?PR?_SETCURRENT?MAIN
+            CODE    0022H     0001H     UNIT         ?PR?DO_RESET?MAIN
+            CODE    0023H     0003H     ABSOLUTE     
+            CODE    0026H     039FH     UNIT         ?PR?_SETUP_LED_DISP?LED
+            CODE    03C5H     037DH     UNIT         ?PR?_LED_DISP?LED
+            CODE    0742H     0177H     UNIT         ?PR?MAIN?MAIN
+            CODE    08B9H     0139H     UNIT         ?PR?_LCM_DISP_KL?LCM
+            CODE    09F2H     00F0H     UNIT         ?PR?_LCM_DISP_PH_AND_R?LCM
+            CODE    0AE2H     00E0H     UNIT         ?PR?DO_TC_TYPE?MAIN
+            CODE    0BC2H     00CAH     UNIT         ?PR?_LCM_DISP_ORP?LCM
+            CODE    0C8CH     00B4H     UNIT         ?PR?_LED_DATA_WRITE?LED
+            CODE    0D40H     00A0H     UNIT         ?CO?MAIN
+            CODE    0DE0H     009FH     UNIT         ?PR?DO_RESET_TYPE?MAIN
+            CODE    0E7FH     009BH     UNIT         ?PR?_LCM_DISP_I_ADD?LCM
+            CODE    0F1AH     0094H     UNIT         ?PR?EEPROM_WRITEDEFAULT?MAIN
+            CODE    0FAEH     008CH     UNIT         ?C_C51STARTUP
+            CODE    103AH     007DH     UNIT         ?C?LIB_CODE
+            CODE    10B7H     0073H     UNIT         ?PR?_LCM_DISP_PROGRAM_DISPLAY?LCM
+            CODE    112AH     0071H     UNIT         ?PR?_LCM_BACKLIGHT?LCM
+            CODE    119BH     006AH     UNIT         ?PR?_LCM_DISP_WATERFLOW?LCM
+            CODE    1205H     005EH     UNIT         ?PR?LCM_DISP_VOL_K2K3?LCM
+            CODE    1263H     0053H     UNIT         ?PR?_CURRENTSEG?MAIN
+            CODE    12B6H     0051H     UNIT         ?PR?TIME1?MAIN
+            CODE    1307H     0047H     UNIT         ?PR?LED_INIT?LED
+            CODE    134EH     0043H     UNIT         ?PR?_AD111_WRITE_BYTE?AD111
+            CODE    1391H     0041H     UNIT         ?PR?_AD111_READ_BYTE?AD111
+            CODE    13D2H     003CH     UNIT         ?PR?_EEPROM_WRITE_BYTE0?EEPROM
+            CODE    140EH     003CH     UNIT         ?PR?EEPROM_READ_BYTE0?EEPROM
+            CODE    144AH     0038H     UNIT         ?PR?LCM_INIT?LCM
+            CODE    1482H     0037H     UNIT         ?PR?_LCM_DISP_WASHLITER?LCM
+            CODE    14B9H     0036H     UNIT         ?CO?LCM
+            CODE    14EFH     0035H     UNIT         ?PR?DO_SETUP_TYPE?MAIN
+            CODE    1524H     0033H     UNIT         ?PR?_LCM_DISP_ALKA?LCM
+            CODE    1557H     002EH     UNIT         ?CO?LED
+            CODE    1585H     002EH     UNIT         ?PR?_EEPROM_READ_WORD?MAIN
+            CODE    15B3H     002CH     UNIT         ?PR?_LCM_DATA_WRITE?LCM
+            CODE    15DFH     002BH     UNIT         ?C_INITSEG
+            CODE    160AH     002AH     UNIT         ?PR?_RGB?LCM
+            CODE    1634H     0027H     UNIT         ?PR?AD111_INIT?AD111
+            CODE    165BH     0027H     UNIT         ?PR?LCM_DISP_S41?LCM
+            CODE    1682H     0025H     UNIT         ?PR?TIME0?MAIN
+            CODE    16A7H     0024H     UNIT         ?PR?_GET_TMP0?AD
+            CODE    16CBH     0024H     UNIT         ?PR?_GET_TMP1?AD
+            CODE    16EFH     0022H     UNIT         ?PR?_EEPROM_READ_BYTE?EEPROM
+            CODE    1711H     0021H     UNIT         ?PR?EEPROM_INIT?EEPROM
+            CODE    1732H     0020H     UNIT         ?PR?_AD111_READ_COM?AD111
+            CODE    1752H     0020H     UNIT         ?PR?PORT_INIT?MAIN
+            CODE    1772H     001FH     UNIT         ?PR?GET_AD111_VALUE?AD111
+            CODE    1791H     001FH     UNIT         ?PR?_LCM_COLUMNADDRESS?LCM
+            CODE    17B0H     001FH     UNIT         ?PR?LED_CLS?LED
+            CODE    17CFH     001EH     UNIT         ?CO?AD
+            CODE    17EDH     001EH     UNIT         ?PR?_EEPROM_WRITE_BYTE?EEPROM
+            CODE    180BH     001EH     UNIT         ?PR?_LCM_CMD_WRITE?LCM
+            CODE    1829H     001EH     UNIT         ?PR?_INCREMENT_R?MCP4011
+            CODE    1847H     001EH     UNIT         ?PR?_DECREMENT_R?MCP4011
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 3
+
+
+            CODE    1865H     001AH     UNIT         ?PR?INITUART?MAIN
+            CODE    187FH     0019H     UNIT         ?PR?GET_ADC_VALUE?AD
+            CODE    1898H     0019H     UNIT         ?PR?WATEROVERHOT_WARNING?AD
+            CODE    18B1H     0019H     UNIT         ?PR?POWEROVERHOT_WARNING?AD
+            CODE    18CAH     0018H     UNIT         ?PR?_LCM_DISP_ACID?LCM
+            CODE    18E2H     0017H     UNIT         ?PR?_EEPROM_DELAY?EEPROM
+            CODE    18F9H     0017H     UNIT         ?PR?T1_INIT?MAIN
+            CODE    1910H     0017H     UNIT         ?PR?_DELAY?MAIN
+            CODE    1927H     0016H     UNIT         ?PR?_EEPROM_WRITE_WORD?MAIN
+            CODE    193DH     0014H     UNIT         ?PR?EEPROM_RESTART0?EEPROM
+            CODE    1951H     0014H     UNIT         ?PR?T0_INIT?MAIN
+            CODE    1965H     0012H     UNIT         ?PR?AD111_START?AD111
+            CODE    1977H     0012H     UNIT         ?PR?_BUZZER?MAIN
+            CODE    1989H     0012H     UNIT         ?PR?SETUP_TIME_IS_UP?MAIN
+            CODE    199BH     0012H     UNIT         ?PR?DO_ELECTROLYZE?MAIN
+            CODE    19ADH     0011H     UNIT         ?PR?IS_SLEEPCOUNTER_COUNTDOWN_FINISH?COUNTER
+            CODE    19BEH     0010H     UNIT         ?PR?SERIAL?MAIN
+            CODE    19CEH     000FH     UNIT         ?PR?EEPROM_START0?EEPROM
+            CODE    19DDH     000FH     UNIT         ?PR?EEPROM_STOP0?EEPROM
+            CODE    19ECH     000FH     UNIT         ?PR?LCM_FILL?LCM
+            CODE    19FBH     000FH     UNIT         ?PR?LCM_CLS?LCM
+            CODE    1A0AH     000FH     UNIT         ?PR?DO_MV_TYPE?MAIN
+            CODE    1A19H     000FH     UNIT         ?PR?DO_MA_TYPE?MAIN
+            CODE    1A28H     000EH     UNIT         ?PR?CHECK_SLEEPCOUNTER_START?COUNTER
+            CODE    1A36H     000EH     UNIT         ?PR?INIT_VOLT_DETECT?MAIN
+            CODE    1A44H     000CH     UNIT         ?PR?IS_KEYHOLDCOUNTER_COUNTDOWN_FINISH?COUNTER
+            CODE    1A50H     000CH     UNIT         ?PR?CHECK_VOICEWAITCOUNTER_START?COUNTER
+            CODE    1A5CH     000CH     UNIT         ?PR?IS_VOICEWAITCOUNTER_COUNTDOWN_FINISH?COUNTER
+            CODE    1A68H     000CH     UNIT         ?PR?CHECK_WATERLACKCOUNTER_START?COUNTER
+            CODE    1A74H     000CH     UNIT         ?PR?IS_WATERLACKCOUNTER_COUNTDOWN_FINISH?COUNTER
+            CODE    1A80H     000CH     UNIT         ?PR?CHECK_PH_REFLASHCOUNTER_START?COUNTER
+            CODE    1A8CH     000CH     UNIT         ?PR?IS_PH_REFLASHCOUNTER_COUNTDOWN_FINISH?COUNTER
+            CODE    1A98H     000BH     UNIT         ?PR?_AD111_WRITE_COM?AD111
+            CODE    1AA3H     000BH     UNIT         ?PR?_S_DELAY?AD111
+            CODE    1AAEH     000AH     UNIT         ?PR?AD111_STOP?AD111
+            CODE    1AB8H     0009H     UNIT         ?PR?_PLAYSOUND?AD111
+            CODE    1AC1H     0009H     UNIT         ?PR?INT0_INIT?MAIN
+            CODE    1ACAH     0009H     UNIT         ?PR?_GET_K_SLOPE?MAIN
+            CODE    1AD3H     0009H     UNIT         ?PR?_GET_J_SLOPE?MAIN
+            CODE    1ADCH     0009H     UNIT         ?PR?_GET_T_SLOPE?MAIN
+            CODE    1AE5H     0009H     UNIT         ?PR?_GET_E_SLOPE?MAIN
+            CODE    1AEEH     0009H     UNIT         ?PR?_GET_R_SLOPE?MAIN
+            CODE    1AF7H     0009H     UNIT         ?PR?_GET_S_SLOPE?MAIN
+            CODE    1B00H     0009H     UNIT         ?PR?_GET_B_SLOPE?MAIN
+            CODE    1B09H     0009H     UNIT         ?PR?_GET_N_SLOPE?MAIN
+            CODE    1B12H     0008H     UNIT         ?PR?INIT_ADC?AD
+            CODE    1B1AH     0008H     UNIT         ?PR?_START_SLEEPCOUNTER?COUNTER
+            CODE    1B22H     0008H     UNIT         ?PR?STOP_SLEEPCOUNTER?COUNTER
+            CODE    1B2AH     0008H     UNIT         ?PR?_START_KEYHOLDCOUNTER?COUNTER
+            CODE    1B32H     0008H     UNIT         ?PR?STOP_KEYHOLDCOUNTER?COUNTER
+            CODE    1B3AH     0008H     UNIT         ?PR?_START_VOICEWAITCOUNTER?COUNTER
+            CODE    1B42H     0008H     UNIT         ?PR?STOP_VOICEWAITCOUNTER?COUNTER
+            CODE    1B4AH     0008H     UNIT         ?PR?_START_WATERLACKCOUNTER?COUNTER
+            CODE    1B52H     0008H     UNIT         ?PR?STOP_WATERLACKCOUNTER?COUNTER
+            CODE    1B5AH     0008H     UNIT         ?PR?_START_PH_REFLASHCOUNTER?COUNTER
+            CODE    1B62H     0008H     UNIT         ?PR?STOP_PH_REFLASHCOUNTER?COUNTER
+            CODE    1B6AH     0008H     UNIT         ?PR?DO_RTD_TYPE?MAIN
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 4
+
+
+            CODE    1B72H     0007H     UNIT         ?PR?_I2CBITDLY?AD111
+            CODE    1B79H     0007H     UNIT         ?PR?EEPROM_BITDLY?EEPROM
+            CODE    1B80H     0007H     UNIT         ?PR?_BITDLY?LED
+            CODE    1B87H     0001H     UNIT         ?PR?SETMV?MAIN
+            CODE    1B88H     0001H     UNIT         ?PR?SETMA?MAIN
+            CODE    1B89H     0001H     UNIT         ?PR?VOLT_CTRL?MAIN
+            CODE    1B8AH     0001H     UNIT         ?PR?DISP_TEST?MAIN
+            CODE    1B8BH     0001H     UNIT         ?PR?LED_FILL?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   TC_PRODUCT (AD)
+
+
+SEGMENT                                            DATA_GROUP          IDATA_GROUP
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?PR?TIME0?MAIN                                   0008H    0002H      -----    -----
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    -----    -----      -----    -----
+  +--> ?PR?PORT_INIT?MAIN
+  +--> ?PR?EEPROM_INIT?EEPROM
+  +--> ?PR?LED_INIT?LED
+  +--> ?PR?LED_FILL?MAIN
+  +--> ?PR?T0_INIT?MAIN
+  +--> ?PR?T1_INIT?MAIN
+  +--> ?PR?INT0_INIT?MAIN
+  +--> ?PR?AD111_INIT?AD111
+  +--> ?PR?INITUART?MAIN
+  +--> ?PR?SETMV?MAIN
+  +--> ?PR?_BUZZER?MAIN
+  +--> ?PR?_EEPROM_READ_BYTE?EEPROM
+  +--> ?PR?_EEPROM_WRITE_BYTE?EEPROM
+  +--> ?PR?EEPROM_WRITEDEFAULT?MAIN
+  +--> ?PR?DISP_TEST?MAIN
+  +--> ?PR?_EEPROM_READ_WORD?MAIN
+  +--> ?PR?DO_TC_TYPE?MAIN
+  +--> ?PR?DO_RTD_TYPE?MAIN
+  +--> ?PR?DO_MV_TYPE?MAIN
+  +--> ?PR?DO_MA_TYPE?MAIN
+  +--> ?PR?DO_SETUP_TYPE?MAIN
+  +--> ?PR?DO_RESET_TYPE?MAIN
+
+?PR?EEPROM_INIT?EEPROM                           -----    -----      -----    -----
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?LED_INIT?LED                                 -----    -----      -----    -----
+  +--> ?PR?_BITDLY?LED
+  +--> ?PR?_LED_DISP?LED
+
+?PR?_LED_DISP?LED                                000AH    000EH      -----    -----
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 5
+
+
+  +--> ?PR?_LED_DATA_WRITE?LED
+  +--> ?CO?LED
+
+?PR?_LED_DATA_WRITE?LED                          0018H    0007H      -----    -----
+  +--> ?PR?_BITDLY?LED
+
+?PR?T1_INIT?MAIN                                 -----    -----      -----    -----
+  +--> ?PR?AD111_INIT?AD111
+
+?PR?AD111_INIT?AD111                             -----    -----      -----    -----
+  +--> ?PR?_I2CBITDLY?AD111
+
+?PR?_EEPROM_READ_BYTE?EEPROM                     -----    -----      -----    -----
+  +--> ?PR?EEPROM_START0?EEPROM
+  +--> ?PR?_EEPROM_WRITE_BYTE0?EEPROM
+  +--> ?PR?EEPROM_RESTART0?EEPROM
+  +--> ?PR?EEPROM_READ_BYTE0?EEPROM
+  +--> ?PR?EEPROM_STOP0?EEPROM
+
+?PR?EEPROM_START0?EEPROM                         -----    -----      -----    -----
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?_EEPROM_WRITE_BYTE0?EEPROM                   -----    -----      007BH    0001H
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?EEPROM_RESTART0?EEPROM                       -----    -----      -----    -----
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?EEPROM_READ_BYTE0?EEPROM                     -----    -----      007BH    0002H
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?EEPROM_STOP0?EEPROM                          -----    -----      -----    -----
+  +--> ?PR?EEPROM_BITDLY?EEPROM
+
+?PR?_EEPROM_WRITE_BYTE?EEPROM                    -----    -----      -----    -----
+  +--> ?PR?EEPROM_START0?EEPROM
+  +--> ?PR?_EEPROM_WRITE_BYTE0?EEPROM
+  +--> ?PR?EEPROM_STOP0?EEPROM
+  +--> ?PR?_EEPROM_DELAY?EEPROM
+
+?PR?EEPROM_WRITEDEFAULT?MAIN                     000AH    0001H      -----    -----
+  +--> ?PR?_EEPROM_WRITE_BYTE?EEPROM
+  +--> ?PR?_EEPROM_WRITE_WORD?MAIN
+
+?PR?_EEPROM_WRITE_WORD?MAIN                      000BH    0003H      -----    -----
+  +--> ?PR?_EEPROM_WRITE_BYTE?EEPROM
+
+?PR?_EEPROM_READ_WORD?MAIN                       000AH    0003H      -----    -----
+  +--> ?PR?_EEPROM_READ_BYTE?EEPROM
+
+?PR?DO_TC_TYPE?MAIN                              000AH    0004H      -----    -----
+  +--> ?PR?GET_AD111_VALUE?AD111
+  +--> ?PR?_GET_K_SLOPE?MAIN
+  +--> ?PR?_GET_J_SLOPE?MAIN
+  +--> ?PR?_GET_T_SLOPE?MAIN
+  +--> ?PR?_GET_E_SLOPE?MAIN
+  +--> ?PR?_GET_R_SLOPE?MAIN
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 6
+
+
+  +--> ?PR?_GET_S_SLOPE?MAIN
+  +--> ?PR?_GET_B_SLOPE?MAIN
+  +--> ?PR?_GET_N_SLOPE?MAIN
+
+?PR?GET_AD111_VALUE?AD111                        -----    -----      007BH    0002H
+  +--> ?PR?AD111_INIT?AD111
+  +--> ?PR?_AD111_WRITE_COM?AD111
+  +--> ?PR?_AD111_READ_COM?AD111
+
+?PR?_AD111_WRITE_COM?AD111                       -----    -----      -----    -----
+  +--> ?PR?_AD111_WRITE_BYTE?AD111
+  +--> ?PR?AD111_STOP?AD111
+
+?PR?_AD111_WRITE_BYTE?AD111                      -----    -----      007DH    0001H
+  +--> ?PR?AD111_START?AD111
+  +--> ?PR?_I2CBITDLY?AD111
+
+?PR?AD111_START?AD111                            -----    -----      -----    -----
+  +--> ?PR?_I2CBITDLY?AD111
+
+?PR?AD111_STOP?AD111                             -----    -----      -----    -----
+  +--> ?PR?_I2CBITDLY?AD111
+
+?PR?_AD111_READ_COM?AD111                        -----    -----      -----    -----
+  +--> ?PR?_AD111_WRITE_BYTE?AD111
+  +--> ?PR?_AD111_READ_BYTE?AD111
+  +--> ?PR?AD111_STOP?AD111
+
+?PR?_AD111_READ_BYTE?AD111                       -----    -----      007DH    0002H
+  +--> ?PR?_I2CBITDLY?AD111
+
+?PR?_GET_K_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_J_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_T_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_E_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_R_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_S_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_B_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?_GET_N_SLOPE?MAIN                            000EH    0004H      -----    -----
+
+?PR?DO_RTD_TYPE?MAIN                             000AH    0002H      -----    -----
+  +--> ?PR?GET_AD111_VALUE?AD111
+
+?PR?DO_MV_TYPE?MAIN                              000AH    0002H      -----    -----
+  +--> ?PR?GET_AD111_VALUE?AD111
+
+?PR?DO_MA_TYPE?MAIN                              000AH    0002H      -----    -----
+  +--> ?PR?GET_AD111_VALUE?AD111
+
+?PR?DO_SETUP_TYPE?MAIN                           000AH    0006H      -----    -----
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 7
+
+
+  +--> ?PR?_PLAYSOUND?AD111
+  +--> ?PR?_SETUP_LED_DISP?LED
+  +--> ?PR?_EEPROM_READ_BYTE?EEPROM
+  +--> ?PR?GET_KEY?MAIN
+
+?PR?_SETUP_LED_DISP?LED                          0010H    0008H      -----    -----
+  +--> ?CO?LED
+  +--> ?PR?_LED_DATA_WRITE?LED
+
+?PR?GET_KEY?MAIN                                 0010H    0001H      -----    -----
+
+?PR?DO_RESET_TYPE?MAIN                           -----    -----      -----    -----
+  +--> ?PR?EEPROM_WRITEDEFAULT?MAIN
+  +--> ?PR?DISP_TEST?MAIN
+  +--> ?PR?_EEPROM_READ_BYTE?EEPROM
+  +--> ?PR?_EEPROM_READ_WORD?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  TC_PRODUCT (AD)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C?IMUL
+  C:103AH         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:104CH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?SLCMP
+  C:10A1H         PUBLIC        ?C?SLCMP
+  -------         ENDMOD        ?C?SLCMP
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?INIT_ADC?AD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GET_ADC_VALUE?AD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?WATEROVERHOT_WARNING?AD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?POWEROVERHOT_WARNING?AD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_S_DELAY?AD111
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_START_SLEEPCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_SLEEPCOUNTER?COUNTER
+
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 8
+
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IS_SLEEPCOUNTER_COUNTDOWN_FINISH?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHECK_SLEEPCOUNTER_START?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_START_KEYHOLDCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_KEYHOLDCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHECK_KEYHOLDCOUNTER_START?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IS_KEYHOLDCOUNTER_COUNTDOWN_FINISH?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_START_VOICEWAITCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_VOICEWAITCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHECK_VOICEWAITCOUNTER_START?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IS_VOICEWAITCOUNTER_COUNTDOWN_FINISH?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_START_WATERLACKCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_WATERLACKCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHECK_WATERLACKCOUNTER_START?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IS_WATERLACKCOUNTER_COUNTDOWN_FINISH?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_START_PH_REFLASHCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_PH_REFLASHCOUNTER?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHECK_PH_REFLASHCOUNTER_START?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IS_PH_REFLASHCOUNTER_COUNTDOWN_FINISH?COUNTER
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_BACKLIGHT?LCM
+
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 9
+
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LCM_FILL?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LCM_INIT?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_PROGRAM_DISPLAY?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LCM_DISP_VOL_K2K3?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_WATERFLOW?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_I_ADD?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_WASHLITER?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_ACID?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_ORP?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_PH_AND_R?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_KL?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCM_DISP_ALKA?LCM
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LED_CLS?LED
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SENDCHAR?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SETUP_TIME_IS_UP?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?INIT_VOLT_DETECT?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SETCURRENT?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CURRENTSEG?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DO_RESET?MAIN
+
+BL51 BANKED LINKER/LOCATER V5.12                                                      12/10/2013  12:05:56  PAGE 10
+
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SETMA?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?VOLT_CTRL?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DO_ELECTROLYZE?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_INCREMENT_R?MCP4011
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DECREMENT_R?MCP4011
+
+Program Size: data=127.4 xdata=0 code=7052
+LINK/LOCATE RUN COMPLETE.  51 WARNING(S),  0 ERROR(S)

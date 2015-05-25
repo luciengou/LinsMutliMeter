@@ -1,0 +1,10 @@
+"main.obj",
+"LED.obj",
+"MCP4011.obj",
+"Counter.obj",
+"EEPROM.obj",
+"TYPE_SLOPE.obj",
+"AD111.obj" 
+TO "TC_PRODUCT" 
+
+REMOVEUNUSED 

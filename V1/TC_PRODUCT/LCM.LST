@@ -1,0 +1,632 @@
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE LCM
+OBJECT MODULE PLACED IN LCM.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LCM.c BROWSE
+
+line level    source
+
+   1          /*******************************************
+   2          /*      Project : A705-2
+   3          /*      David Chen
+   4          /*      2012/05/17
+   5          /*******************************************/
+   6          
+   7          #include <MPC82G516.h>
+   8          #include <LCM.h>
+   9          #include <intrins.h>
+  10          
+  11          
+  12          //#define LCD_DATA      P0
+  13          // Define control I/O for LCM back light
+  14          #define program_display  19
+  15          #define program_temp     35
+  16          #define program_Value    35
+  17          sbit BL_RED         = P1^3;     // LCM back light control for red color using PCA module 1
+  18          sbit BL_GREEN   = P1^5; // LCM back light control for green color using PCA module 2
+  19          sbit BL_BLUE    = P1^4; // LCM back light control for blue color using PCA module 3
+  20          
+  21          // Define Data[8], Data Latch, A0, CS, WR I/O signals of LCM
+  22          #define LCM_Data        P0
+  23          sbit LCM_DataLE = P2^0; 
+  24          sbit LCM_CS             = P2^6; 
+  25          sbit LCM_A0             = P3^4;
+  26          sbit LCM_WR             = P2^7;
+  27          
+  28          const unsigned char code tab_8_to_15[23] = {
+  29                  0xAF,0xA0,0x6D,0xE9,0xE2,0xCB,0xCF,0xA1,0xEF,0xEB,0xE7,0xEF,0x0F,0xAF,0x4F,0x47,0xE6,0x67,0x00, 0xA7, 0x0
+             -E, 0x40, 0xAE  };
+  30          //     0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F    H    P BLANK    n  
+             -  L     -         U
+  31          
+  32          const unsigned char code tab_1_to_5[11] = {
+  33                  0xAF,0xA0,0xCB,0xE9,0xE4,0x6D,0x6F,0xA8,0xEF,0xED,0x00};
+  34          //     0    1    2    3    4    5    6    7    8    9  BLANK
+  35          
+  36          const unsigned char code tab_16[4] = {
+  37                  0x00, 0x85, 0xBE, 0x9F};
+  38          //   Blank    1     2     3
+  39          
+  40          const unsigned char code tab_17[5] = {
+  41                  0x00, 0x05, 0xB6, 0x97, 0x47};
+  42          //   Blank   1     2     3     4
+  43          
+  44          const unsigned char code tab_6_to_7[11] = {0x5F,0x50,0x6B,0x79,0x74,0x3D,0x3F,0x58,0x7F,0x7D,0x6E};//0x7E,
+             -0x37,0x0F,0x73,0x2F,0x2E};
+  45          //                               dp bgc afed
+  46          #define FC_PerSec_of_OneLiterPerMin 50
+  47          
+  48          // Define DDRAM mapping of LCM
+  49          unsigned int KX=0x03F8;  // for K1~K9 and X1~X4 of LCM
+  50          unsigned int R=0;       // for R1~R6 , 9SP, 12SP
+  51          unsigned char S41=0;
+  52          unsigned char  first_power=1;
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 2   
+
+  53          /*******************************************************/
+  54          /***************************************************************/
+  55          void RGB(unsigned char r, unsigned char g, unsigned char b) 
+  56          { 
+  57   1              CCAP1L=CCAP1H=~r;   CCAP2L=CCAP2H=~b;   CCAP3L=CCAP3H=~g;
+  58   1      
+  59   1              CMOD=0x00; 
+  60   1              CL=0x00;
+  61   1              CH=0x00;
+  62   1      
+  63   1              CCAPM1=0x42;    //PCA module 1
+  64   1              CCAPM2=0x42;    //PCA module 2
+  65   1              CCAPM3=0x42;    //PCA module 3
+  66   1      
+  67   1              CR=1;
+  68   1              CCON= 0x1f;
+  69   1              CR=1;
+  70   1              
+  71   1      }
+  72          /****************************************************/
+  73          void LCM_Backlight(unsigned char BacklightValue)
+  74          {
+  75   1              switch(BacklightValue)
+  76   1              {
+  77   2                      case BL_NoColor:                        //0
+  78   2                              RGB(0,0,0);
+  79   2                              CR = 0;
+  80   2                              break;
+  81   2              
+  82   2                      case BL_Purple:                 //1
+  83   2                              RGB(95,0,220);
+  84   2                              break;
+  85   2              
+  86   2                      case BL_BrightBlue:                  //2
+  87   2                              RGB(30,0,255);      //00,0,255);
+  88   2                              break;
+  89   2              
+  90   2                      case BL_Blue:                           //3
+  91   2                              RGB(15,0,255);      //(15,10,170);
+  92   2                              break;
+  93   2              
+  94   2                      case BL_DarkBlue:                       //4
+  95   2                              RGB(0,0,255);       //  000,010,60);
+  96   2                              break;
+  97   2              
+  98   2                      case BL_Green:                          //5
+  99   2                              RGB(0,255,0);
+ 100   2                              break;
+ 101   2      
+ 102   2                      case BL_Yellow:                 //6
+ 103   2                              RGB(255,255,0);    //100,180,000
+ 104   2                              break;
+ 105   2              
+ 106   2                      case BL_Orange:                 //7
+ 107   2                              RGB(255,180,0);     //255,255,0);
+ 108   2                              break;
+ 109   2              
+ 110   2                      case BL_Red:                            //8
+ 111   2                              RGB(255,0,0);
+ 112   2                              break;
+ 113   2              }
+ 114   1      }
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 3   
+
+ 115          /*****************************************/
+ 116          void LCM_CMD_Write(unsigned char Value)
+ 117          {
+ 118   1           LCM_DataLE=1;
+ 119   1           LCM_Data=Value;
+ 120   1              _nop_();
+ 121   1              _nop_();
+ 122   1              _nop_();
+ 123   1              _nop_();
+ 124   1              LCM_DataLE=0;
+ 125   1      
+ 126   1              LCM_A0=1;
+ 127   1              _nop_();
+ 128   1              LCM_CS=0;
+ 129   1              _nop_();
+ 130   1              LCM_WR=0;
+ 131   1              _nop_();
+ 132   1              _nop_();
+ 133   1              _nop_();
+ 134   1              LCM_WR=1;
+ 135   1              _nop_();
+ 136   1              _nop_();
+ 137   1              LCM_CS=1;
+ 138   1              _nop_();
+ 139   1              _nop_();
+ 140   1      }
+ 141          /************************************************/
+ 142          void LCM_DATA_Write(unsigned char Value)
+ 143          {
+ 144   1           LCM_DataLE=1;
+ 145   1           LCM_Data=Value;
+ 146   1              _nop_();
+ 147   1              _nop_();
+ 148   1              _nop_();
+ 149   1              _nop_();
+ 150   1              LCM_DataLE=0;
+ 151   1      
+ 152   1              LCM_A0=0;
+ 153   1              _nop_();
+ 154   1              LCM_CS=0;
+ 155   1              _nop_();
+ 156   1              LCM_WR=0;
+ 157   1              _nop_();
+ 158   1              _nop_();
+ 159   1              _nop_();
+ 160   1              LCM_WR=1;
+ 161   1              _nop_();
+ 162   1              _nop_();
+ 163   1              LCM_CS=1;
+ 164   1              _nop_();
+ 165   1              _nop_();
+ 166   1      }
+ 167          /*************************************************/
+ 168          void LCM_ColumnAddress(unsigned char address)
+ 169          {
+ 170   1      
+ 171   1          LCM_CMD_Write(0x10+(address>>4));   //X6 X5 X4  
+ 172   1          _nop_();
+ 173   1          _nop_();
+ 174   1          LCM_CMD_Write(address&0x0f);        //X3 X2 X1 X0
+ 175   1          _nop_();
+ 176   1          _nop_();
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 4   
+
+ 177   1      }
+ 178          /**********************************************/
+ 179          void LCM_Fill(void)
+ 180          {
+ 181   1              unsigned char c;
+ 182   1      
+ 183   1              LCM_CMD_Write(0xB0);    //PageAddressSet();
+ 184   1      
+ 185   1              LCM_ColumnAddress(0x00);
+ 186   1              for (c=0; c<=41; c++)
+ 187   1                      LCM_DATA_Write(0xff);
+ 188   1      }
+ 189          /************************************************/
+ 190          void LCM_Cls(void)
+ 191          {
+ 192   1              unsigned char c;
+ 193   1      
+ 194   1              LCM_CMD_Write(0xB0);    //PageAddressSet();
+ 195   1      
+ 196   1              LCM_ColumnAddress(0x00);
+ 197   1              for (c=0; c<=41; c++)
+ 198   1                      LCM_DATA_Write(0x00);
+ 199   1      }
+ 200          /****************************************************/
+ 201          void LCM_Init(void)
+ 202          {
+ 203   1              LCM_CS=1;
+ 204   1              LCM_WR=1;       
+ 205   1              _nop_();
+ 206   1              LCM_CMD_Write(0x2F);    //PowerControlSet();
+ 207   1      
+ 208   1              LCM_CMD_Write(0xB0);    //PageAddressSet();
+ 209   1      
+ 210   1              LCM_ColumnAddress(0x00);
+ 211   1              LCM_CMD_Write(0xF1);    //EnterModeSet();
+ 212   1      
+ 213   1              LCM_CMD_Write(0xAC);    //DutyModeSet();
+ 214   1      
+ 215   1              LCM_CMD_Write(0xF0);    //FinishModeSet();
+ 216   1      
+ 217   1              LCM_CMD_Write(0xA4);    //DisplayAllPointsOFF();
+ 218   1      
+ 219   1              LCM_CMD_Write(0xAF);    //DisplayON();
+ 220   1      
+ 221   1              LCM_CMD_Write(0xA6);    //DisplayNormal();
+ 222   1      
+ 223   1              LCM_CMD_Write(0xA1);    //SegmentDriverDirectionSelect();
+ 224   1      
+ 225   1              LCM_CMD_Write(0xC0);    //CommonDriverDirectionSelect();
+ 226   1      
+ 227   1              LCM_Cls();
+ 228   1      }
+ 229          
+ 230          /*****************************************************/
+ 231          void LCM_Disp_Program_display(unsigned char c, unsigned int t)
+ 232          {
+ 233   1              unsigned char c1, tmp;
+ 234   1      
+ 235   1              LCM_ColumnAddress(program_display);  
+ 236   1              LCM_DATA_Write(0x01);
+ 237   1              tmp = tab_6_to_7[10];
+ 238   1              LCM_DATA_Write(tmp);
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 5   
+
+ 239   1              LCM_DATA_Write(tmp>>4);
+ 240   1              tmp = tab_6_to_7[c%10];
+ 241   1              LCM_DATA_Write(tmp);
+ 242   1              LCM_DATA_Write(tmp>>4);
+ 243   1      
+ 244   1              c1 = (unsigned char) (t/100);
+ 245   1              LCM_ColumnAddress(program_temp);
+ 246   1              tmp = tab_8_to_15[c1];
+ 247   1              LCM_DATA_Write(tmp);
+ 248   1              LCM_DATA_Write(tmp>>4);
+ 249   1              tmp = tab_8_to_15[(unsigned char) ((t/10)%10)];
+ 250   1              tmp |= 0x10;
+ 251   1              LCM_DATA_Write(tmp);
+ 252   1              LCM_DATA_Write(tmp>>4);
+ 253   1      
+ 254   1              tmp = tab_8_to_15[(unsigned char) (t%10)];
+ 255   1              LCM_DATA_Write(tmp);
+ 256   1              LCM_DATA_Write(tmp>>4);
+ 257   1      
+ 258   1              LCM_ColumnAddress(41);
+ 259   1              LCM_DATA_Write(0x02);   //C
+ 260   1      }
+ 261          
+ 262          /*********************************************************/
+ 263          void LCM_Disp_VOL_K2K3(void)
+ 264          {
+ 265   1              unsigned char tmp;
+ 266   1      
+ 267   1              LCM_ColumnAddress(5);
+ 268   1              tmp = 0;
+ 269   1              if (K3) tmp |= 0x01;
+ 270   1              if (X1) tmp |= 0x02;
+ 271   1              LCM_DATA_Write(tmp);            // Speak5
+ 272   1              tmp = (X2)?     0x02 : 0;
+ 273   1              LCM_DATA_Write(tmp);            // S6
+ 274   1              tmp = (X3)?     0x02 : 0;
+ 275   1              if (ORP)
+ 276   1                      tmp |= 0x04;
+ 277   1              LCM_DATA_Write(tmp);            // S7
+ 278   1              tmp = (X4)?     0x02 : 0;
+ 279   1              if (K2) tmp |= 0x08;
+ 280   1              LCM_DATA_Write(tmp);            // S8
+ 281   1      }
+ 282          /*******************************/
+ 283          /*     display c,sec,L_min     */
+ 284          /*******************************/
+ 285          void LCM_Disp_S41(void)    //temp c
+ 286          {
+ 287   1              unsigned char tmp;
+ 288   1      
+ 289   1              LCM_ColumnAddress(41);  // S41
+ 290   1              tmp = S41;
+ 291   1              if (L_MIN)
+ 292   1                      S41 |= 0x02;   //0x08
+ 293   1              else
+ 294   1                      S41 &= ~0x02;
+ 295   1              if (R4)
+ 296   1                      S41 |= 0x01;   //0x01
+ 297   1              else
+ 298   1                      S41 &= ~0x01;
+ 299   1                      
+ 300   1              LCM_DATA_Write(S41);
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 6   
+
+ 301   1      }
+ 302          //======================================
+ 303          void LCM_Disp_WaterFlow(unsigned int i) 
+ 304          {
+ 305   1              unsigned char tmp, c1;
+ 306   1      
+ 307   1              SET_SP9();
+ 308   1              c1 = (unsigned char) (i/100);
+ 309   1              LCM_ColumnAddress(35);
+ 310   1              tmp = (c1)?     tab_8_to_15[c1] : 0;
+ 311   1              LCM_DATA_Write(tmp);
+ 312   1              LCM_DATA_Write(tmp>>4);
+ 313   1              tmp = tab_8_to_15[(unsigned char) ((i/10)%10)];
+ 314   1              if (SP9)
+ 315   1                      tmp |= 0x10;
+ 316   1              LCM_DATA_Write(tmp);
+ 317   1              LCM_DATA_Write(tmp>>4);
+ 318   1              tmp = tab_8_to_15[(unsigned char) (i%10)];
+ 319   1              LCM_DATA_Write(tmp);
+ 320   1              LCM_DATA_Write(tmp>>4);
+ 321   1              CLR_SP9();
+ 322   1      
+ 323   1              SET_L_MIN();
+ 324   1              LCM_Disp_S41();                         
+ 325   1      }
+ 326          /********************************************************/
+ 327          void LCM_Disp_I_add(unsigned char c, unsigned char mode)
+ 328          {       
+ 329   1              unsigned char c1, c2, c3;;
+ 330   1      
+ 331   1              LCM_ColumnAddress(program_Value);               
+ 332   1              if (mode == 0)                          // all 7-seg off
+ 333   1              {
+ 334   2                      LCM_DATA_Write(0);
+ 335   2                      LCM_DATA_Write(0);
+ 336   2                      LCM_DATA_Write(0);
+ 337   2                      LCM_DATA_Write(0);
+ 338   2                      LCM_DATA_Write(0);      
+ 339   2                      LCM_DATA_Write(0);
+ 340   2              }
+ 341   1              else
+ 342   1              {
+ 343   2                      if (c > 20)
+ 344   2                      {
+ 345   3                              if (c < 30)
+ 346   3                              {
+ 347   4                                      c1 = 0;
+ 348   4                                      c2 = 0x40;
+ 349   4                                      c3 = tab_8_to_15[c%10];
+ 350   4                              }
+ 351   3                              else
+ 352   3                              {
+ 353   4                                      c1 = 0x40;
+ 354   4                                      c = c-20;
+ 355   4                                      c2 = tab_8_to_15[c/10];
+ 356   4                                      c3 = tab_8_to_15[c%10];
+ 357   4                              }
+ 358   3                      }
+ 359   2                      else
+ 360   2                      {
+ 361   3                              if (c > 10)
+ 362   3                              {
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 7   
+
+ 363   4                                      c1 = c2 = 0;
+ 364   4                                      c3 = tab_8_to_15[20-c];
+ 365   4                              }
+ 366   3                              else
+ 367   3                              {
+ 368   4                                      c1 = 0;
+ 369   4                                      c = 20-c;
+ 370   4                                      c2 = tab_8_to_15[c/10];
+ 371   4                                      c3 = tab_8_to_15[c%10];
+ 372   4                              }
+ 373   3                      }
+ 374   2      
+ 375   2                      LCM_DATA_Write(c1);
+ 376   2                      LCM_DATA_Write(c1>>4);
+ 377   2                      LCM_DATA_Write(c2);
+ 378   2                      LCM_DATA_Write(c2>>4);
+ 379   2                      LCM_DATA_Write(c3);
+ 380   2                      LCM_DATA_Write(c3>>4);
+ 381   2              }
+ 382   1      }
+ 383          /**********************************************************/
+ 384          void LCM_Disp_WashLiter(unsigned char c, unsigned char mode)
+ 385          {       
+ 386   1              unsigned char tmp;
+ 387   1      
+ 388   1              LCM_ColumnAddress(34);  //35    
+ 389   1              if (mode == 0)                          // all 7-seg off
+ 390   1              {
+ 391   2                      LCM_DATA_Write(9);
+ 392   2                      LCM_DATA_Write(9);
+ 393   2                      LCM_DATA_Write(9);
+ 394   2                      LCM_DATA_Write(9);
+ 395   2      //              LCM_DATA_Write(14);             //'L'
+ 396   2                      LCM_DATA_Write(9);
+ 397   2              }
+ 398   1              else
+ 399   1              {
+ 400   2                      tmp = tab_8_to_15[(unsigned char) (c/10)];
+ 401   2                      LCM_DATA_Write(tmp);
+ 402   2                      LCM_DATA_Write(tmp>>4);
+ 403   2                      tmp = tab_8_to_15[(unsigned char) (c%10)];
+ 404   2                      LCM_DATA_Write(tmp);
+ 405   2                      LCM_DATA_Write(tmp>>4);
+ 406   2      //              LCM_DATA_Write(14);             //'L'
+ 407   2      //              LCM_DATA_Write(0);                      
+ 408   2              }
+ 409   1      }
+ 410          
+ 411          void LCM_Disp_Acid(unsigned char c)
+ 412          {
+ 413   1              unsigned char tmp;
+ 414   1      
+ 415   1              LCM_ColumnAddress(0);
+ 416   1              tmp = tab_16[c];
+ 417   1              LCM_DATA_Write(tmp);
+ 418   1              LCM_DATA_Write(tmp>>4);
+ 419   1      }
+ 420          /*************************************************************/
+ 421          void LCM_Disp_ORP(unsigned int ORP_Value, unsigned char ORP_Sign)
+ 422          {
+ 423   1              unsigned char tmp;
+ 424   1      
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 8   
+
+ 425   1              LCM_ColumnAddress(9);                   //S9, S10
+ 426   1              if (ORP_Sign)
+ 427   1                      tmp = tab_8_to_15[21];
+ 428   1              else
+ 429   1                      tmp = 0;
+ 430   1              if (R1)
+ 431   1                      tmp |= 0x10;
+ 432   1              LCM_DATA_Write(tmp);
+ 433   1              LCM_DATA_Write(tmp>>4);
+ 434   1      
+ 435   1              tmp = tab_8_to_15[ORP_Value/100];       //S11, S12
+ 436   1              if (R3)
+ 437   1                      tmp |= 0x10;
+ 438   1              LCM_DATA_Write(tmp);
+ 439   1              LCM_DATA_Write(tmp>>4);
+ 440   1      
+ 441   1              tmp = tab_8_to_15[(ORP_Value/10)%10];   //S13, S14
+ 442   1              if (R5)
+ 443   1                      tmp |= 0x10;
+ 444   1              LCM_DATA_Write(tmp);
+ 445   1              LCM_DATA_Write(tmp>>4);
+ 446   1      
+ 447   1              tmp = tab_8_to_15[ORP_Value%10];        //S15, S16
+ 448   1              if (SP12)
+ 449   1                      tmp |= 0x10;
+ 450   1              LCM_DATA_Write(tmp);
+ 451   1              LCM_DATA_Write(tmp>>4);
+ 452   1      
+ 453   1              tmp = 0;                                                //S17, S18
+ 454   1              if (R2)
+ 455   1                      tmp |= 0x10;
+ 456   1              LCM_DATA_Write(tmp);
+ 457   1              LCM_DATA_Write(tmp>>4);
+ 458   1      
+ 459   1              if (MV) tmp = 0x04;
+ 460   1              LCM_DATA_Write(tmp);            // S19
+ 461   1      
+ 462   1              LCM_Disp_S41();
+ 463   1      }
+ 464          /******************************************/
+ 465          void LCM_Disp_PH_and_R(unsigned int ORP_Value)
+ 466          {
+*** WARNING C235 IN LINE 466 OF LCM.C: parameter 1: different types
+ 467   1              unsigned char tmp;
+ 468   1      
+ 469   1              LCM_ColumnAddress(9);                   //S9, S10
+ 470   1              if (ORP_Value)
+ 471   1                      tmp = tab_8_to_15[21];
+ 472   1      //      else
+ 473   1      //              tmp = 0;
+ 474   1              if (R1)
+ 475   1                      tmp |= 0x10;
+ 476   1              LCM_DATA_Write(tmp);
+ 477   1              LCM_DATA_Write(tmp>>4);
+ 478   1      
+ 479   1              tmp = tab_8_to_15[(ORP_Value/1000)%10]; //S11, S12
+ 480   1              if (R3)
+ 481   1                      tmp |= 0x10;
+ 482   1              LCM_DATA_Write(tmp);
+ 483   1              LCM_DATA_Write(tmp>>4);
+ 484   1      
+ 485   1              tmp = tab_8_to_15[(ORP_Value/100)%10];  //S13, S14
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 9   
+
+ 486   1              if (R5)
+ 487   1                      tmp |= 0x10;
+ 488   1              LCM_DATA_Write(tmp);
+ 489   1              LCM_DATA_Write(tmp>>4);
+ 490   1      
+ 491   1              tmp = tab_8_to_15[(ORP_Value/10)%10];   //S15, S16
+ 492   1              if (SP12)
+ 493   1                      tmp |= 0x10;
+ 494   1              LCM_DATA_Write(tmp);
+ 495   1              LCM_DATA_Write(tmp>>4);
+ 496   1              tmp = tab_8_to_15[ORP_Value%10];        //S13, S14
+ 497   1              if (R5)
+ 498   1                      tmp |= 0x10;
+ 499   1              LCM_DATA_Write(tmp);
+ 500   1              LCM_DATA_Write(tmp>>4);
+ 501   1      
+ 502   1              tmp = (MV)? 0x04 : 1;
+ 503   1              LCM_DATA_Write(tmp);            // S19
+ 504   1      
+ 505   1              LCM_Disp_S41();
+ 506   1      }
+ 507          /*=====================
+ 508          mode = 0 : Normal Operation
+ 509          mode = 1 : K4 = 0
+ 510          mode = 2 : VL = 0
+ 511          mode = 3 : K4, VL = 0
+ 512          Display  setting temp
+ 513          ======================*/
+ 514          void LCM_Disp_KL(unsigned int VL, unsigned char mode)
+ 515          {
+ 516   1              unsigned char c;
+ 517   1              unsigned int  i;
+ 518   1         if(first_power ==1)
+ 519   1           {
+ 520   2                 LCM_ColumnAddress(23);
+ 521   2                 c = (mode & 0x01)?   0 : 0x0f;               // mode = 1 or 3
+ 522   2                 LCM_DATA_Write(c);
+ 523   2                 first_power=0;
+ 524   2                }
+ 525   1              else
+ 526   1                {
+ 527   2             LCM_ColumnAddress(23);
+ 528   2                 c = (mode & 0x01)?   0 : 0x08;               // mode = 1 or 3
+ 529   2                 LCM_DATA_Write(c);
+ 530   2                }
+ 531   1      
+ 532   1              c = (unsigned char)(VL/10000);
+ 533   1              i = VL%10000;
+ 534   1              c = ((c==0)||(mode & 0x02))? 0 : tab_1_to_5[c];
+ 535   1              if (K5)
+ 536   1                      c |= 0x00;
+ 537   1              LCM_DATA_Write(c);                              // S30
+ 538   1              LCM_DATA_Write(c>>4);                   // S25
+ 539   1              c = (unsigned char)(i/1000);
+ 540   1              i = VL%1000;
+ 541   1              c = (mode & 0x02)?      0 : tab_1_to_5[c];
+ 542   1                      if (K6)
+ 543   1                      c |= 0x00;
+ 544   1              LCM_DATA_Write(c);                              // S30
+ 545   1              LCM_DATA_Write(c>>4);                   // S27
+ 546   1              c = (unsigned char)(i/100);
+ 547   1              i = i%100;
+C51 COMPILER V7.50   LCM                                                                   12/10/2013 12:05:56 PAGE 10  
+
+ 548   1              c = (mode & 0x02)?      0 : tab_1_to_5[c];
+ 549   1                      if (K7)
+ 550   1                      c |= 0x00;
+ 551   1              LCM_DATA_Write(c);                              // S30
+ 552   1              LCM_DATA_Write(c>>4);                   // S29
+ 553   1      
+ 554   1              c = (unsigned char)(i/10);
+ 555   1              i = i%10;
+ 556   1              c = (mode & 0x02)?      0 : tab_1_to_5[c];
+ 557   1              if (K8)
+ 558   1                      c |= 0x00;
+ 559   1              LCM_DATA_Write(c);                              // S30
+ 560   1              LCM_DATA_Write(c>>4);                   // S31
+ 561   1      
+ 562   1              c = (unsigned char)(i);
+ 563   1              c = (mode & 0x02)?      0 : tab_1_to_5[c];
+ 564   1              if (K9)
+ 565   1                      c |= 0x00;
+ 566   1              LCM_DATA_Write(c);                              // S32
+ 567   1              LCM_DATA_Write(c>>4);                   // S33
+ 568   1      }
+ 569          /**********************************************/
+ 570          void LCM_Disp_Alka(unsigned char c)
+ 571          {
+ 572   1              unsigned char tmp;
+ 573   1      
+ 574   1              LCM_ColumnAddress(2);
+ 575   1              tmp = tab_17[c];
+ 576   1              if (FILTER)                          // filter flag of LCM
+ 577   1                      tmp |= 0x08;
+ 578   1              LCM_DATA_Write(tmp);
+ 579   1              LCM_DATA_Write(tmp>>4);
+ 580   1              tmp = 0;
+ 581   1              if (R6)                              // R6 flag of LCM
+ 582   1                      tmp |= 0x01;
+ 583   1              if (ALKA)                               // alkaline flag of LCM
+ 584   1                      tmp |= 0x04;
+ 585   1              LCM_DATA_Write(tmp);
+ 586   1      }
+ 587          /************************************/ 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1740    ----
+   CONSTANT SIZE    =     54    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

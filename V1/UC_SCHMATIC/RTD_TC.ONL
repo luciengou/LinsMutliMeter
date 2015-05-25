@@ -1,0 +1,3212 @@
+(PCB RTD_TC
+ (description
+  (timeStamp "2013 11 01 02 03 30")
+  (program "CAPTURE.EXE" (Version "10.5.0.p001 CIS"))
+  (source "Original data from OrCAD/CAPTURE schematic")
+  (title "")
+  (date "Monday, October 21, 2013")
+  (document "C:\\UC_PRODUCT\\UC_SCHMATIC\\RTD_TC.DSN")
+  (revision "ver1")
+  (organization "")
+  (address1 "")
+  (address2 "")
+  (address3 "")
+  (address4 "")
+  (partvaluecombine "{Value}")
+  (pcbfootprintcombine "{PCB Footprint}"))
+ (structure )
+ (placement
+  (component 78L05_1
+   (place U108
+    (property 
+     ("PCB Footprint" "TO-92")
+     (timestamp 0101AEF4)
+     ("Source Package" 78L05_1)
+     (Value 78L05)))
+   (place U111
+    (property 
+     ("PCB Footprint" "TO-92")
+     (timestamp 010023C6)
+     ("Source Package" 78L05_1)
+     (Value 78L24))))
+  (component LTC485_4
+   (place U4
+    (property 
+     ("PCB Footprint" SOIC16W)
+     (timestamp 010C0D1A)
+     ("Source Package" LTC485_4)
+     (Value [ADM2483]))))
+  (component 4051/SO
+   (place U112
+    (property 
+     (timestamp 0104259E)
+     ("Source Package" 4051/SO)
+     (Value 4051/SO)))
+   (place U117
+    (property 
+     (timestamp 0106279C)
+     ("Source Package" 4051/SO)
+     (Value 4051/SO))))
+  (component CON2
+   (place J2
+    (property 
+     (timestamp 010BA598)
+     ("Source Package" CON2)
+     (Value mV_OUT)))
+   (place J3
+    (property 
+     (timestamp 010BA63C)
+     ("Source Package" CON2)
+     (Value mA_OUT)))
+   (place J5
+    (property 
+     ("PCB Footprint" "CON-2P\\2.54")
+     (timestamp 010C0CE5)
+     ("Source Package" CON2)
+     (Value RS485_OUT))))
+  (component R_0
+   (place R42
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0107E088)
+     ("Source Package" R_0)
+     (Value 10K)))
+   (place R43
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01080D1A)
+     ("Source Package" R_0)
+     (Value 10K))))
+  (component FUSE
+   (place F101
+    (property 
+     ("PCB Footprint" FUSE\\5.08)
+     (timestamp 01002E42)
+     ("Source Package" FUSE)
+     (Value FUSE))))
+  (component NJM4565_1
+   (place U7
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 003BCDCD)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U8
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 0037FB05)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U9
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 0041E5DB)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U113
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 01047F78)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U114
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 0104D3D5)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U115
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 01058C2F)
+     ("Source Package" NJM4565_1)
+     (Value OP2177)))
+   (place U116
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 01058D2C)
+     ("Source Package" NJM4565_1)
+     (Value OP2177))))
+  (component RESISTOR0603
+   (place R21
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037FA4D)
+     ("Source Package" RESISTOR0603)
+     (Value 24K9)))
+   (place R22
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037FA65)
+     ("Source Package" RESISTOR0603)
+     (Value 100K)))
+   (place R23
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037F9DB)
+     ("Source Package" RESISTOR0603)
+     (Value 20K))))
+  (component "BRIDGE-DB104_0"
+   (place DB101
+    (property 
+     ("PCB Footprint" BD\\3X2.3)
+     (timestamp 01002FE5)
+     ("Source Package" "BRIDGE-DB104_0")
+     (Value B6S))))
+  (component LM358
+   (place U403
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 0108053F)
+     ("Source Package" LM358)
+     (Value LM358)))
+   (place U404
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 0105E6EB)
+     ("Source Package" LM358)
+     (Value LM358)))
+   (place U405
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 01080D76)
+     ("Source Package" LM358)
+     (Value LM358))))
+  (component "DIG-1"
+   (place SW1
+    (property 
+     (timestamp 010458C9)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW2
+    (property 
+     (timestamp 0104598E)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW3
+    (property 
+     (timestamp 01045A53)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW4
+    (property 
+     (timestamp 010638BE)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW5
+    (property 
+     (timestamp 010638C5)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW6
+    (property 
+     (timestamp 010638CC)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW7
+    (property 
+     (timestamp 010B959C)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW8
+    (property 
+     (timestamp 010B963E)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW9
+    (property 
+     ("PCB Footprint" PUSH_BOTTOM)
+     (timestamp 010CD740)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1")))
+   (place SW10
+    (property 
+     ("PCB Footprint" PUSH_BOTTOM)
+     (timestamp 010CD7E8)
+     ("Source Package" "DIG-1")
+     (Value "DIG-1"))))
+  (component CON3
+   (place J1
+    (property 
+     (timestamp 01005EF4)
+     ("Source Package" CON3)
+     (Value AC_IN))))
+  (component VARISTOR
+   (place MOV101
+    (property 
+     ("PCB Footprint" RTH\\5.08)
+     (timestamp 01002E82)
+     ("Source Package" VARISTOR)
+     (Value 7N471K)))
+   (place MOV401
+    (property 
+     ("PCB Footprint" RTH\\5.08)
+     (timestamp 0105E6CD)
+     ("Source Package" VARISTOR)
+     (Value 9G330K)))
+   (place MOV402
+    (property 
+     ("PCB Footprint" RTH\\5.08)
+     (timestamp 0108A459)
+     ("Source Package" VARISTOR)
+     (Value 9G330K))))
+  (component "CAP NP_0"
+   (place C29
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01100848)
+     ("Source Package" "CAP NP_0")
+     (Value 0.1uF)))
+   (place C18
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010900E2)
+     ("Source Package" "CAP NP_0")
+     (Value 0.1uF))))
+  (component "CAPACITOR X"
+   (place C114
+    (property 
+     ("PCB Footprint" CX\\7.6)
+     (timestamp 01003008)
+     ("Source Package" "CAPACITOR X")
+     (Value 102/250V)))
+   (place C101
+    (property 
+     ("PCB Footprint" CX\\10.2)
+     (timestamp 01002E4A)
+     ("Source Package" "CAPACITOR X")
+     (Value 0.1uF/450V)))
+   (place C102
+    (property 
+     ("PCB Footprint" CX\\7.6)
+     (timestamp 01002E5A)
+     ("Source Package" "CAPACITOR X")
+     (Value 102/250V)))
+   (place C104
+    (property 
+     ("PCB Footprint" CX\\7.6)
+     (timestamp 01003095)
+     ("Source Package" "CAPACITOR X")
+     (Value 102/250V)))
+   (place C105
+    (property 
+     ("PCB Footprint" CX\\7.6)
+     (timestamp 0100308B)
+     ("Source Package" "CAPACITOR X")
+     (Value 102/250V))))
+  (component x1205S8_0
+   (place U13
+    (property 
+     ("PCB Footprint" sop_1d27_8sp_5w6l)
+     (timestamp 01100574)
+     ("Source Package" x1205S8_0)
+     (Value "EM3027IDSSO8B SO8"))))
+  (component INDUCTOR_7
+   (place L16
+    (property 
+     ("PCB Footprint" L0805)
+     (timestamp 0108FF93)
+     ("Source Package" INDUCTOR_7)
+     (Value "Bead 1A 0805"))))
+  (component x1205S8_1
+   (place U10
+    (property 
+     ("PCB Footprint" sop_1d27_8sp_5w6l)
+     (timestamp 010900D4)
+     ("Source Package" x1205S8_1)
+     (Value "AT24C08 SO8"))))
+  (component YC15_0
+   (place RP2
+    (property 
+     ("PCB Footprint" RP_D64_2X5SP_1D6W3D2L)
+     (timestamp 0108FF73)
+     ("Source Package" YC15_0)
+     (Value 10K/YC15)))
+   (place RP3
+    (property 
+     ("PCB Footprint" RP_D64_2X5SP_1D6W3D2L)
+     (timestamp 01090014)
+     ("Source Package" YC15_0)
+     (Value 10K/YC15)))
+   (place RP4
+    (property 
+     (timestamp 010A1599)
+     ("Source Package" YC15_0)
+     (Value YC15_0)))
+   (place RP5
+    (property 
+     ("PCB Footprint" RP_D64_2X5SP_1D6W3D2L)
+     (timestamp 010D0F4C)
+     ("Source Package" YC15_0)
+     (Value 10K/YC15))))
+  (component UC3843
+   (place U109
+    (property 
+     ("PCB Footprint" "SOIC-8")
+     (timestamp 01002ED8)
+     ("Source Package" UC3843)
+     (Value UC3843))))
+  (component "CAP NP"
+   (place C59
+    (property 
+     ("PCB Footprint" C0805)
+     (timestamp 0107E891)
+     ("Source Package" "CAP NP")
+     (Value 0.1uF/50V)))
+   (place C1
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010599DC)
+     ("Source Package" "CAP NP")
+     (Value 102)))
+   (place C61
+    (property 
+     ("PCB Footprint" C0805)
+     (timestamp 0107DEBB)
+     ("Source Package" "CAP NP")
+     (Value 102)))
+   (place C63
+    (property 
+     ("PCB Footprint" C0805)
+     (timestamp 01080D32)
+     ("Source Package" "CAP NP")
+     (Value 0.1uF/50V)))
+   (place C64
+    (property 
+     ("PCB Footprint" C0805)
+     (timestamp 01080D9F)
+     ("Source Package" "CAP NP")
+     (Value 102)))
+   (place C11
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0105B791)
+     ("Source Package" "CAP NP")
+     (Value 102)))
+   (place C12
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108FF5B)
+     ("Source Package" "CAP NP")
+     (Value 1uF)))
+   (place C13
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108FF63)
+     ("Source Package" "CAP NP")
+     (Value 0.1uF)))
+   (place C14
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108FF7B)
+     ("Source Package" "CAP NP")
+     (Value 0.1uF)))
+   (place C15
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108FF83)
+     ("Source Package" "CAP NP")
+     (Value 20pF)))
+   (place C16
+    (property 
+     ("PCB Footprint" C0805)
+     (timestamp 0108FFCD)
+     ("Source Package" "CAP NP")
+     (Value 10uF/10V)))
+   (place C17
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108FFD6)
+     ("Source Package" "CAP NP")
+     (Value 20pF))))
+  (component TL431_0
+   (place ZD103
+    (property 
+     ("PCB Footprint" "TO-92RAC")
+     (timestamp 0101AEE9)
+     ("Source Package" TL431_0)
+     (Value TL431))))
+  (component PC817_1
+   (place U110
+    (property 
+     ("PCB Footprint" PC357)
+     (timestamp 01002F26)
+     ("Source Package" PC817_1)
+     (Value PC357))))
+  (component 2SK2608
+   (place TFT100
+    (property 
+     ("PCB Footprint" "TO-220")
+     (timestamp 0100305C)
+     ("Source Package" 2SK2608)
+     (Value [2SK2608]))))
+  (component CON6
+   (place J4
+    (property 
+     (timestamp 010BB4E1)
+     ("Source Package" CON6)
+     (Value LED1_OUT)))
+   (place J6
+    (property 
+     (timestamp 010C88B6)
+     ("Source Package" CON6)
+     (Value LED2_OUT)))
+   (place J7
+    (property 
+     (timestamp 010C8ACF)
+     ("Source Package" CON6)
+     (Value LED3_OUT))))
+  (component "NPN-2SD882_1"
+   (place Q403
+    (property 
+     ("PCB Footprint" "TO-220")
+     (timestamp 0105E6DE)
+     ("Source Package" "NPN-2SD882_1")
+     (Value 2SD882)))
+   (place Q404
+    (property 
+     ("PCB Footprint" "TO-220")
+     (timestamp 0108A462)
+     ("Source Package" "NPN-2SD882_1")
+     (Value 2SD882))))
+  (component "HEADER 4_0"
+   (place JP1
+    (property 
+     ("PCB Footprint" CON_2_4DP_4D7W10D1L)
+     (timestamp 0108FFFB)
+     ("Source Package" "HEADER 4_0")
+     (Value "DNI CP-W20-04"))))
+  (component H431CM
+   (place ZD104
+    (property 
+     ("PCB Footprint" "SOT-89")
+     (timestamp 01002F8E)
+     ("Source Package" H431CM)
+     (Value TL431))))
+  (component R0603
+   (place R101
+    (property 
+     ("PCB Footprint" R2512)
+     (timestamp 01002F12)
+     ("Source Package" R0603)
+     (Value [68K])))
+   (place R102
+    (property 
+     ("PCB Footprint" R2512)
+     (timestamp 01002F1A)
+     ("Source Package" R0603)
+     (Value [68K])))
+   (place R103
+    (property 
+     ("PCB Footprint" R2512)
+     (timestamp 01002F08)
+     ("Source Package" R0603)
+     (Value [68K])))
+   (place R104
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002EB6)
+     ("Source Package" R0603)
+     (Value 47K)))
+   (place R105
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002EAE)
+     ("Source Package" R0603)
+     (Value 1K)))
+   (place R106
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F7A)
+     ("Source Package" R0603)
+     (Value 100E)))
+   (place R107
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F32)
+     ("Source Package" R0603)
+     (Value 3K6)))
+   (place R108
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F3A)
+     ("Source Package" R0603)
+     (Value 510E)))
+   (place R109
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F42)
+     ("Source Package" R0603)
+     (Value 2K)))
+   (place R110
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F4A)
+     ("Source Package" R0603)
+     (Value 1K)))
+   (place R111
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F62)
+     ("Source Package" R0603)
+     (Value 5K11)))
+   (place R112
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01002F54)
+     ("Source Package" R0603)
+     (Value 4K75)))
+   (place R113
+    (property 
+     ("PCB Footprint" R2512)
+     (timestamp 01002FBC)
+     ("Source Package" R0603)
+     (Value 4E))))
+  (component DIODE
+   (place D107
+    (property 
+     (timestamp 01051ACE)
+     ("Source Package" DIODE)
+     (Value IN4148))))
+  (component DIODE_0
+   (place D4
+    (property 
+     ("PCB Footprint" "ds1206-2p")
+     (timestamp 011034C1)
+     ("Source Package" DIODE_0)
+     (Value "1N4148 "))))
+  (component "DIODE GS1M_0"
+   (place D102
+    (property 
+     ("PCB Footprint" "DO-214AC")
+     (timestamp 01003081)
+     ("Source Package" "DIODE GS1M_0")
+     (Value RS1J)))
+   (place D105
+    (property 
+     ("PCB Footprint" "DO-214AC")
+     (timestamp 01002EC8)
+     ("Source Package" "DIODE GS1M_0")
+     (Value RS1J)))
+   (place D106
+    (property 
+     ("PCB Footprint" "DO-214AC")
+     (timestamp 010030D4)
+     ("Source Package" "DIODE GS1M_0")
+     (Value RS1J))))
+  (component "RESISTOR 0603"
+   (place R408
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105E63A)
+     ("Source Package" "RESISTOR 0603")
+     (Value 10K)))
+   (place R411
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105E61A)
+     ("Source Package" "RESISTOR 0603")
+     (Value 4.7K)))
+   (place R413
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0108A410)
+     ("Source Package" "RESISTOR 0603")
+     (Value 100K)))
+   (place R414
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0108A422)
+     ("Source Package" "RESISTOR 0603")
+     (Value 10K)))
+   (place R415
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105E622)
+     ("Source Package" "RESISTOR 0603")
+     (Value 1K)))
+   (place R416
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0108A418)
+     ("Source Package" "RESISTOR 0603")
+     (Value 1K))))
+  (component "INDUCTOR BEAD"
+   (place L107
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0101AF8C)
+     ("Source Package" "INDUCTOR BEAD")
+     (Value BEAD)))
+   (place L108
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0101AF44)
+     ("Source Package" "INDUCTOR BEAD")
+     (Value BEAD)))
+   (place L109
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0101AF50)
+     ("Source Package" "INDUCTOR BEAD")
+     (Value BEAD))))
+  (component "NPN-2SC1623_0"
+   (place Q405
+    (property 
+     ("PCB Footprint" "SC-59")
+     (timestamp 010D17B9)
+     ("Source Package" "NPN-2SC1623_0")
+     (Value 2SC1623)))
+   (place Q1
+    (property 
+     ("PCB Footprint" "SC-59EBC")
+     (timestamp 0041F8A6)
+     ("Source Package" "NPN-2SC1623_0")
+     (Value 2SC1623))))
+  (component CRYSTAL_3
+   (place Y1
+    (property 
+     ("PCB Footprint" XT_4D9_2DP_4D7W11L)
+     (timestamp 0108FF8B)
+     ("Source Package" CRYSTAL_3)
+     (Value "12M 50ppm "))))
+  (component C0603
+   (place C110
+    (property 
+     ("PCB Footprint" C1206)
+     (timestamp 0100306B)
+     ("Source Package" C0603)
+     (Value 10uF)))
+   (place C111
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002F00)
+     ("Source Package" C0603)
+     (Value 105)))
+   (place C20
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 003E8CD7)
+     ("Source Package" C0603)
+     (Value 104)))
+   (place C112
+    (property 
+     ("PCB Footprint" C1206)
+     (timestamp 01003051)
+     ("Source Package" C0603)
+     (Value 10uF)))
+   (place C115
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01003045)
+     ("Source Package" C0603)
+     (Value 4n7)))
+   (place C2
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 003D8335)
+     ("Source Package" C0603)
+     (Value 104)))
+   (place C3
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 00396F59)
+     ("Source Package" C0603)
+     (Value 104)))
+   (place C413
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0105E642)
+     ("Source Package" C0603)
+     (Value 104)))
+   (place C414
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108A42A)
+     ("Source Package" C0603)
+     (Value 104)))
+   (place C106
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 01002F6E)
+     ("Source Package" C0603)
+     (Value 4.7uF/50V)))
+   (place C108
+    (property 
+     ("PCB Footprint" C1206)
+     (timestamp 010030DF)
+     ("Source Package" C0603)
+     (Value 4.7uF))))
+  (component RESISTOR_0603_0
+   (place R25
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037FBB9)
+     ("Source Package" RESISTOR_0603_0)
+     (Value 2K)))
+   (place R26
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037FB87)
+     ("Source Package" RESISTOR_0603_0)
+     (Value [2K])))
+   (place R24
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0037FADD)
+     ("Source Package" RESISTOR_0603_0)
+     (Value 2K))))
+  (component CR3023_1
+   (place V1
+    (property 
+     ("PCB Footprint" br_5_3dp_5d7w23l)
+     (timestamp 0110333D)
+     ("Source Package" CR3023_1)
+     (Value "Battery hold"))))
+  (component CRYSTAL_4
+   (place Y2
+    (property 
+     ("PCB Footprint" xt_1d1_2dp_3wl)
+     (timestamp 011029CB)
+     ("Source Package" CRYSTAL_4)
+     (Value "32.768KHz 20ppm"))))
+  (component 95SQ015/TO_1
+   (place D5
+    (property 
+     ("PCB Footprint" d_3_2sp_1d5w3d6l)
+     (timestamp 01103B76)
+     ("Source Package" 95SQ015/TO_1)
+     (Value 3.6V/1W))))
+  (component NTC
+   (place R11
+    (property 
+     (timestamp 0102FBE1)
+     ("Source Package" NTC)
+     (Value 10K))))
+  (component CE\\4.7\\10
+   (place C150
+    (property 
+     ("PCB Footprint" CE\\4.7\\10)
+     (timestamp 0101AF98)
+     ("Source Package" CE\\4.7\\10)
+     (Value 1000uF/16V))))
+  (component "DIODE-BAS21"
+   (place D103
+    (property 
+     ("PCB Footprint" "SOT-23")
+     (timestamp 01003014)
+     ("Source Package" "DIODE-BAS21")
+     (Value BAS16)))
+   (place D104
+    (property 
+     ("PCB Footprint" "SOT-23")
+     (timestamp 01003020)
+     ("Source Package" "DIODE-BAS21")
+     (Value BAS16))))
+  (component M7
+   (place D101
+    (property 
+     ("PCB Footprint" "DO-214AC")
+     (timestamp 01002EA6)
+     ("Source Package" M7)
+     (Value M7))))
+  (component CAPACITOR_0603_0
+   (place C21
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010023CE)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C4
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0037FA31)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C5
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0106E4D7)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C6
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0037FB69)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C7
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0037FBFD)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C8
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0037FC1D)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C9
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01072D58)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C152
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF22)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C154
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF00)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C155
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF0C)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C156
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF80)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C158
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF38)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C159
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0101AF6A)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104)))
+   (place C10
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0104EB36)
+     ("Source Package" CAPACITOR_0603_0)
+     (Value 104))))
+  (component MCP4012_2
+   (place U11
+    (property 
+     ("PCB Footprint" "SOT23-6")
+     (timestamp 0107D45F)
+     ("Source Package" MCP4012_2)
+     (Value MCP4725)))
+   (place U12
+    (property 
+     ("PCB Footprint" "SOT23-6")
+     (timestamp 01080D84)
+     ("Source Package" MCP4012_2)
+     (Value MCP4725))))
+  (component "DIODE-TVS_0"
+   (place D2
+    (property 
+     ("PCB Footprint" "DO-15")
+     (timestamp 010C0D30)
+     ("Source Package" "DIODE-TVS_0")
+     (Value [P6KE18A])))
+   (place D3
+    (property 
+     ("PCB Footprint" "DO-15")
+     (timestamp 010C0D48)
+     ("Source Package" "DIODE-TVS_0")
+     (Value [P6KE18A]))))
+  (component ADS1100_0
+   (place U6
+    (property 
+     ("PCB Footprint" "SOT-23-6")
+     (timestamp 0106F902)
+     ("Source Package" ADS1100_0)
+     (Value ADS1110))))
+  (component PLCC44
+   (place U2
+    (property 
+     ("PCB Footprint" IC_1D27_44SP_17D8WL)
+     (timestamp 0108FFC5)
+     ("Source Package" PLCC44)
+     (Value PLCC44))))
+  (component "COMMON CHOKE"
+   (place TL101
+    (property 
+     ("PCB Footprint" CML\\9.9\\8.7)
+     (timestamp 01002E53)
+     ("Source Package" "COMMON CHOKE")
+     (Value CHOKE))))
+  (component "RESISTOR 1/4W"
+   (place R116
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0101AEC7)
+     ("Source Package" "RESISTOR 1/4W")
+     (Value 1K)))
+   (place R417
+    (property 
+     ("PCB Footprint" R1/4W)
+     (timestamp 0105E6A9)
+     ("Source Package" "RESISTOR 1/4W")
+     (Value "10   1/2W")))
+   (place R418
+    (property 
+     ("PCB Footprint" R1/4W)
+     (timestamp 01085228)
+     ("Source Package" "RESISTOR 1/4W")
+     (Value 4.7K))))
+  (component CAP
+   (place C22
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 010023D6)
+     ("Source Package" CAP)
+     (Value 100uF/25V)))
+   (place C23
+    (property 
+     ("PCB Footprint" CE\\4.7\\10)
+     (timestamp 010023DE)
+     ("Source Package" CAP)
+     (Value 470uF/25V)))
+   (place C107
+    (property 
+     ("PCB Footprint" CE\\5\\10)
+     (timestamp 01002FED)
+     ("Source Package" CAP)
+     (Value 3.3uF/450V))))
+  (component R
+   (place R27
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01040AF9)
+     ("Source Package" R)
+     (Value 15K)))
+   (place R28
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01040B01)
+     ("Source Package" R)
+     (Value 27K)))
+   (place R29
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01040B09)
+     ("Source Package" R)
+     (Value 33K)))
+   (place R420
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0108A47C)
+     ("Source Package" R)
+     (Value 100K)))
+   (place R421
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010B8800)
+     ("Source Package" R)
+     (Value 20K)))
+   (place R1
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003B0A0A)
+     ("Source Package" R)
+     (Value 10M)))
+   (place R30
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01040B11)
+     ("Source Package" R)
+     (Value 12K)))
+   (place R31
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0104D57A)
+     ("Source Package" R)
+     (Value 10M)))
+   (place R2
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003A3D41)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R32
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0104E78C)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R3
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003A3D59)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R33
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010503C3)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R4
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003A41FE)
+     ("Source Package" R)
+     (Value 51.1K)))
+   (place R5
+    (property 
+     ("PCB Footprint" R1/2W)
+     (timestamp 0105B98E)
+     ("Source Package" R)
+     (Value "150  1/2W")))
+   (place R34
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010506AB)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R35
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105078C)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R6
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105969B)
+     ("Source Package" R)
+     (Value 1M)))
+   (place R7
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105C743)
+     ("Source Package" R)
+     (Value 1M)))
+   (place R36
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010FA3D2)
+     ("Source Package" R)
+     (Value 47)))
+   (place R8
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0041FFF1)
+     ("Source Package" R)
+     (Value 1K)))
+   (place R37
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0041FFD0)
+     ("Source Package" R)
+     (Value 15K)))
+   (place R9
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010650DD)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R38
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010484FE)
+     ("Source Package" R)
+     (Value 10k)))
+   (place R39
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 00489F67)
+     ("Source Package" R)
+     (Value 2K)))
+   (place R40
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01051198)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R41
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01051279)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R10
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010651DB)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R44
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010D1BC5)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R12
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0108FFDE)
+     ("Source Package" R)
+     (Value 1M)))
+   (place R45
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010D3581)
+     ("Source Package" R)
+     (Value 47)))
+   (place R13
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0039BFC4)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R46
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 01100BC0)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R14
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0103A700)
+     ("Source Package" R)
+     (Value 28.2K)))
+   (place R47
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0110358A)
+     ("Source Package" R)
+     (Value 1K)))
+   (place R15
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0103AC08)
+     ("Source Package" R)
+     (Value 18.1K)))
+   (place R79
+    (property 
+     ("PCB Footprint" R0805)
+     (timestamp 0107E3B2)
+     ("Source Package" R)
+     (Value 4.7R)))
+   (place R16
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003B59C3)
+     ("Source Package" R)
+     (Value 10K)))
+   (place R17
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003B595D)
+     ("Source Package" R)
+     (Value 30K1)))
+   (place R18
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003B597F)
+     ("Source Package" R)
+     (Value 18K2)))
+   (place R19
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 003B59A1)
+     ("Source Package" R)
+     (Value 124K)))
+   (place R410
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 0105E75E)
+     ("Source Package" R)
+     (Value 47K)))
+   (place R412
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 010850AF)
+     ("Source Package" R)
+     (Value 98.7K)))
+   (place R80
+    (property 
+     ("PCB Footprint" R0805)
+     (timestamp 01080D22)
+     ("Source Package" R)
+     (Value 4.7R)))
+   (place R20
+    (property 
+     ("PCB Footprint" R0603)
+     (timestamp 00393EC8)
+     ("Source Package" R)
+     (Value 10K))))
+  (component 79L05_0
+   (place U107
+    (property 
+     ("PCB Footprint" "TO-92")
+     (timestamp 0101AED8)
+     ("Source Package" 79L05_0)
+     (Value 79L05))))
+  (component "CAPACITOR 6D2P5"
+   (place C151
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 0101AF74)
+     ("Source Package" "CAPACITOR 6D2P5")
+     (Value 100uF/25V)))
+   (place C153
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 0101AF2C)
+     ("Source Package" "CAPACITOR 6D2P5")
+     (Value 100uF/25V)))
+   (place C157
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 0101AF5C)
+     ("Source Package" "CAPACITOR 6D2P5")
+     (Value 100uF/25V)))
+   (place C162
+    (property 
+     ("PCB Footprint" CE\\2.5\\6)
+     (timestamp 0101AFC0)
+     ("Source Package" "CAPACITOR 6D2P5")
+     (Value 100uF/25V))))
+  (component "CAPACITOR DIP "
+   (place C24
+    (property 
+     ("PCB Footprint" CAP\\5.08)
+     (timestamp 010C0D3C)
+     ("Source Package" "CAPACITOR DIP ")
+     (Value "ZFS-01")))
+   (place C19
+    (property 
+     ("PCB Footprint" CAP\\5.08)
+     (timestamp 010C0D24)
+     ("Source Package" "CAPACITOR DIP ")
+     (Value "ZFS-01"))))
+  (component BUZZER
+   (place LS1
+    (property 
+     (timestamp 010D0AB3)
+     ("Source Package" BUZZER)
+     (Value BUZZER))))
+  (component "TRANSFORMER POWER_6"
+   (place TR102
+    (property 
+     (timestamp 010118C2)
+     ("Source Package" "TRANSFORMER POWER_6")
+     (Value "EI-20"))))
+  (component C
+   (place C27
+    (property 
+     ("PCB Footprint" "CE-D8P3.5")
+     (timestamp 01090074)
+     ("Source Package" C)
+     (Value 220uF/16V)))
+   (place C28
+    (property 
+     ("PCB Footprint" "CE-D8P3.5")
+     (timestamp 010D25EA)
+     ("Source Package" C)
+     (Value 220uF/16V)))
+   (place C60
+    (property 
+     ("PCB Footprint" "CE-D8P3.5")
+     (timestamp 0107E7A6)
+     ("Source Package" C)
+     (Value 220uF/16V)))
+   (place C30
+    (property 
+     ("PCB Footprint" "CE-D8P3.5")
+     (timestamp 01103C3F)
+     ("Source Package" C)
+     (Value 10uF/16V)))
+   (place C62
+    (property 
+     ("PCB Footprint" "CE-D8P3.5")
+     (timestamp 01080D2A)
+     ("Source Package" C)
+     (Value 220uF/16V))))
+  (component "CNT-3_4"
+   (place U3
+    (property 
+     ("PCB Footprint" SOT23_3sp_123)
+     (timestamp 01090004)
+     ("Source Package" "CNT-3_4")
+     (Value "ADM1812-5 SOT-23"))))
+  (component "CAPACITOR 0603"
+   (place C113
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002E9A)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 105)))
+   (place C116
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002F98)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C25
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010C0D52)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C117
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002FA0)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 102)))
+   (place C26
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010C0D60)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C118
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002FA8)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C119
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01002FB0)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 102)))
+   (place C409
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0105E699)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C410
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010886C2)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C411
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0105E652)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C412
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 01088AA1)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C415
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108A432)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C416
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108A43F)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C417
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 0108A4A0)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 104)))
+   (place C109
+    (property 
+     ("PCB Footprint" C0603)
+     (timestamp 010030E7)
+     ("Source Package" "CAPACITOR 0603")
+     (Value 105)))))
+ (library
+  (image RESISTOR_0603_0
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\洪銘澤\\MY DOCUMENTS\\MY PROGRAM\\CMA_ITM\\CMA421\\線路圖\\MAIN.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image x1205S8_0
+   (property 
+    (sourcelib "H:\\MY PROJECTS\\PROJECTS\\SNMP_LINE_CARD\\SCHEMATICS\\LINECARD_SNMP_RB11_970304.DSN"))
+   (pin 999 1
+    (property 
+     (pinname X1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname X2)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname IRQN)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname VSS)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname VCC)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname VBACK)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname SCL)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname SDA)
+     (pintype 4))))
+  (image TL431_0
+   (property 
+    (sourcelib "J:\\CS2-2\\CS2-2.DSN"))
+   (pin 999 A
+    (property 
+     (pinname A)
+     (pintype 4)))
+   (pin 999 C
+    (property 
+     (pinname C)
+     (pintype 4)))
+   (pin 999 R
+    (property 
+     (pinname R)
+     (pintype 0))))
+  (image H431CM
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 2
+    (property 
+     (pinname A)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname C)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname R)
+     (pintype 0))))
+  (image R
+   (property 
+    (sourcelib C:\\ORCAD\\CAPTURE\\LIBRARY\\DISCRETE.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image BUZZER
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\ELECTROMECHANICAL.OLB))
+   (pin 999 1
+    (property 
+     (pinname A)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname B)
+     (pintype 4))))
+  (image R0603
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image C0603
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image CAPACITOR_0603_0
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\洪銘澤\\MY DOCUMENTS\\MY PROGRAM\\CMA_ITM\\CMA421\\線路圖\\MAIN.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "CAPACITOR 0603"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image CAP
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "CAPACITOR X"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "INDUCTOR BEAD"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "CAPACITOR DIP "
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image PLCC44
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 35
+    (property 
+     (pinname V30)
+     (pintype 4)))
+   (pin 999 21
+    (property 
+     (pinname X1)
+     (pintype 0)))
+   (pin 999 20
+    (property 
+     (pinname X2)
+     (pintype 0)))
+   (pin 999 10
+    (property 
+     (pinname RESET)
+     (pintype 0)))
+   (pin 999 14
+    (property 
+     (pinname I\\N\\T\\0\\/P3.2)
+     (pintype 1)))
+   (pin 999 15
+    (property 
+     (pinname I\\N\\T\\1\\/P3.3)
+     (pintype 1)))
+   (pin 999 16
+    (property 
+     (pinname T0CKO/TO/P3.4)
+     (pintype 1)))
+   (pin 999 17
+    (property 
+     (pinname S2CKO/ALE/T1/P3.5)
+     (pintype 1)))
+   (pin 999 2
+    (property 
+     (pinname P1.0)
+     (pintype 1)))
+   (pin 999 3
+    (property 
+     (pinname P1.1)
+     (pintype 1)))
+   (pin 999 4
+    (property 
+     (pinname P1.2)
+     (pintype 1)))
+   (pin 999 5
+    (property 
+     (pinname P1.3)
+     (pintype 1)))
+   (pin 999 6
+    (property 
+     (pinname P1.4)
+     (pintype 1)))
+   (pin 999 7
+    (property 
+     (pinname P1.5)
+     (pintype 1)))
+   (pin 999 8
+    (property 
+     (pinname P1.6)
+     (pintype 1)))
+   (pin 999 9
+    (property 
+     (pinname P1.7)
+     (pintype 1)))
+   (pin 999 43
+    (property 
+     (pinname P0.0)
+     (pintype 1)))
+   (pin 999 42
+    (property 
+     (pinname P0.1)
+     (pintype 1)))
+   (pin 999 41
+    (property 
+     (pinname P0.2)
+     (pintype 1)))
+   (pin 999 40
+    (property 
+     (pinname P0.3)
+     (pintype 1)))
+   (pin 999 39
+    (property 
+     (pinname P0.4)
+     (pintype 1)))
+   (pin 999 38
+    (property 
+     (pinname P0.5)
+     (pintype 1)))
+   (pin 999 37
+    (property 
+     (pinname P0.6)
+     (pintype 1)))
+   (pin 999 36
+    (property 
+     (pinname P0.7)
+     (pintype 1)))
+   (pin 999 24
+    (property 
+     (pinname P2.0)
+     (pintype 1)))
+   (pin 999 25
+    (property 
+     (pinname P2.1)
+     (pintype 1)))
+   (pin 999 26
+    (property 
+     (pinname P2.2)
+     (pintype 1)))
+   (pin 999 27
+    (property 
+     (pinname P2.3)
+     (pintype 1)))
+   (pin 999 28
+    (property 
+     (pinname P2.4)
+     (pintype 1)))
+   (pin 999 29
+    (property 
+     (pinname P2.5)
+     (pintype 1)))
+   (pin 999 30
+    (property 
+     (pinname P2.6)
+     (pintype 1)))
+   (pin 999 31
+    (property 
+     (pinname P2.7)
+     (pintype 1)))
+   (pin 999 19
+    (property 
+     (pinname R\\D\\/P3.7)
+     (pintype 1)))
+   (pin 999 18
+    (property 
+     (pinname W\\R\\/P3.6)
+     (pintype 1)))
+   (pin 999 32
+    (property 
+     (pinname OCD_SCL)
+     (pintype 1)))
+   (pin 999 33
+    (property 
+     (pinname OCD_SDA)
+     (pintype 1)))
+   (pin 999 13
+    (property 
+     (pinname TXD/P3.1)
+     (pintype 1)))
+   (pin 999 11
+    (property 
+     (pinname RXD/P3.0)
+     (pintype 1)))
+   (pin 999 44
+    (property 
+     (pinname VCC)
+     (pintype 4)))
+   (pin 999 22
+    (property 
+     (pinname GND)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname I\\N\\T\\3\\/P4.2)
+     (pintype 1)))
+   (pin 999 12
+    (property 
+     (pinname I\\N\\T\\2\\/P4.3)
+     (pintype 1)))
+   (pin 999 23
+    (property 
+     (pinname P4.0)
+     (pintype 1)))
+   (pin 999 34
+    (property 
+     (pinname ALE/P4.1)
+     (pintype 1))))
+  (image "CNT-3_4"
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705_0515.DSN"))
+   (pin 999 1
+    (property 
+     (pinname GND)
+     (pintype 7)))
+   (pin 999 2
+    (property 
+     (pinname RESET)
+     (pintype 2)))
+   (pin 999 3
+    (property 
+     (pinname VCC)
+     (pintype 7))))
+  (image C
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\HANK\\桌面\\TTEAT\\HANK.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "CAP NP"
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\HANK\\桌面\\TTEAT\\HANK.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image LTC485_4
+   (property 
+    (sourcelib "D:\\新資料夾\\CS1\\CS1-RS485\\CS1-RS485-SCH\\CS1-RS485-051123.DSN"))
+   (pin 999 1
+    (property 
+     (pinname VDD1)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname GND1)
+     (pintype 0)))
+   (pin 999 3
+    (property 
+     (pinname RXD)
+     (pintype 0)))
+   (pin 999 16
+    (property 
+     (pinname VDD2)
+     (pintype 0)))
+   (pin 999 15
+    (property 
+     (pinname GND2)
+     (pintype 0)))
+   (pin 999 14
+    (property 
+     (pinname NC)
+     (pintype 1)))
+   (pin 999 13
+    (property 
+     (pinname B)
+     (pintype 0)))
+   (pin 999 4
+    (property 
+     (pinname /RE)
+     (pintype 0)))
+   (pin 999 5
+    (property 
+     (pinname DE)
+     (pintype 0)))
+   (pin 999 6
+    (property 
+     (pinname TXD)
+     (pintype 0)))
+   (pin 999 7
+    (property 
+     (pinname PV)
+     (pintype 0)))
+   (pin 999 8
+    (property 
+     (pinname GND1)
+     (pintype 0)))
+   (pin 999 12
+    (property 
+     (pinname A)
+     (pintype 0)))
+   (pin 999 11
+    (property 
+     (pinname NC)
+     (pintype 0)))
+   (pin 999 10
+    (property 
+     (pinname NC)
+     (pintype 0)))
+   (pin 999 9
+    (property 
+     (pinname GND2)
+     (pintype 0))))
+  (image "CAP NP_0"
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image ADS1100_0
+   (property 
+    (sourcelib "C:\\銓盛\\線路圖\\CS2-TM-PR-SG-PM-RS-BOT-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname Vin+)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname Gnd)
+     (pintype 7)))
+   (pin 999 3
+    (property 
+     (pinname SCL)
+     (pintype 0)))
+   (pin 999 4
+    (property 
+     (pinname SDA)
+     (pintype 0)))
+   (pin 999 5
+    (property 
+     (pinname Vdd)
+     (pintype 7)))
+   (pin 999 6
+    (property 
+     (pinname "Vin-")
+     (pintype 0))))
+  (image NJM4565_1
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\DUAL PANEL3.DSN"))
+   (pin 999 3
+    (property 
+     (pinname +IN_A)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname "-IN_A")
+     (pintype 0)))
+   (pin 999 1
+    (property 
+     (pinname OUT_A)
+     (pintype 2)))
+   (pin 999 8
+    (property 
+     (pinname 8)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname 4)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname +IN_B)
+     (pintype 0)))
+   (pin 999 6
+    (property 
+     (pinname "-IN_B")
+     (pintype 0)))
+   (pin 999 7
+    (property 
+     (pinname OUT_B)
+     (pintype 2))))
+  (image FUSE
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "RESISTOR 1/4W"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "RESISTOR 0603"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "HEADER 4_0"
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname 4)
+     (pintype 4))))
+  (image CE\\4.7\\10
+   (property 
+    (sourcelib "C:\\TECHNICAL DATA\\MY SCH\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "CAPACITOR 6D2P5"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image CRYSTAL_3
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image 79L05_0
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CS2-1.DSN"))
+   (pin 999 2
+    (property 
+     (pinname IN)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname OUT)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname GND)
+     (pintype 4))))
+  (image VARISTOR
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image 78L05_1
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CS2-1.DSN"))
+   (pin 999 3
+    (property 
+     (pinname IN)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname OUT)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname GND)
+     (pintype 4))))
+  (image CRYSTAL_4
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\0315\\DSN\\C-101WATER_MAIN_0321.DSN"))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4))))
+  (image UC3843
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname CMP)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname Vf)
+     (pintype 0)))
+   (pin 999 3
+    (property 
+     (pinname IS)
+     (pintype 0)))
+   (pin 999 4
+    (property 
+     (pinname R/C)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname GND)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname O/D)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname Vcc)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname Vref)
+     (pintype 4))))
+  (image CR3023_1
+   (property 
+    (sourcelib "D:\\C-101WATER_MAIN.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4))))
+  (image "TRANSFORMER POWER_6"
+   (property 
+    (sourcelib C:\\群亞\\UC_PRODUCT\\RTD_TC.DSN))
+   (pin 999 9
+    (property 
+     (pinname BD)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname TD)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname BB2)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname AA2)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname SECONDARY)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname BB1)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname PRIMARY2)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname PRIMARY1)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname AA1)
+     (pintype 4))))
+  (image "NPN-2SD882_1"
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\ML\\MY DOCUMENTS\\CSEC\\鍾中鋒\\CS2-2\\CS2-2.DSN"))
+   (pin 999 3
+    (property 
+     (pinname BASE)
+     (pintype 0)))
+   (pin 999 1
+    (property 
+     (pinname EMITTER)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname COLLECTOR)
+     (pintype 4))))
+  (image R_0
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image NTC
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\IEC\\DEVICE.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "NPN-2SC1623_0"
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\ML\\MY DOCUMENTS\\CSEC\\鍾中鋒\\CS2-2\\CS2-2.DSN"))
+   (pin 999 B
+    (property 
+     (pinname BASE)
+     (pintype 0)))
+   (pin 999 E
+    (property 
+     (pinname EMITTER)
+     (pintype 4)))
+   (pin 999 C
+    (property 
+     (pinname COLLECTOR)
+     (pintype 4))))
+  (image CON3
+   (property 
+    (sourcelib C:\\CADENCE\\PSD_14.2\\TOOLS\\CAPTURE\\LIBRARY\\CONNECTOR.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4))))
+  (image CON2
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\CONNECTOR.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image CON6
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\CONNECTOR.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname 4)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname 5)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname 6)
+     (pintype 4))))
+  (image M7
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\ASSISTANT\\桌面\\DCP1113\\DCP-1121.DSN"))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image "DIODE GS1M_0"
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\RUNTOP\\MY DOCUMENTS\\LIN\\CSEC\\藍致軒\\DSP\\DCP.DSN"))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image "DIODE-TVS_0"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\DUAL PANEL3.DSN"))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image "DIODE-BAS21"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image DIODE_0
+   (property 
+    (sourcelib "E:\\千山淨水\\C-101WATER_MAIN_V4.0.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image "COMMON CHOKE"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\DUAL PANEL3.DSN"))
+   (pin 999 4
+    (property 
+     (pinname IN1)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname OUT1)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname IN2)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname OUT2)
+     (pintype 4))))
+  (image 95SQ015/TO_1
+   (property 
+    (sourcelib "E:\\千山淨水\\V2\\C-101WATER_MAIN.DSN"))
+   (pin 999 2
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image DIODE
+   (property 
+    (sourcelib C:\\ORCAD\\CAPTURE\\LIBRARY\\DISCRETE.OLB))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4))))
+  (image YC15_0
+   (property 
+    (sourcelib C:\\群亞\\UC_PRODUCT\\RTD_TC.DSN))
+   (pin 999 5
+    (property 
+     (pinname 5)
+     (pintype 4)))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname 3)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname 4)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname 6)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname 7)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname 8)
+     (pintype 4)))
+   (pin 999 9
+    (property 
+     (pinname 9)
+     (pintype 4))))
+  (image 2SK2608
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname GATE)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname DRAIN)
+     (pintype 0)))
+   (pin 999 3
+    (property 
+     (pinname SOURCE)
+     (pintype 0))))
+  (image PC817_1
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\POWER.DSN"))
+   (pin 999 1
+    (property 
+     (pinname ANODE)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname CATHODE)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname COLLECTOR)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname EMITTER)
+     (pintype 4))))
+  (image "DIG-1"
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\IEC\\DEVICE.OLB))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 0))))
+  (image 4051/SO
+   (property 
+    (sourcelib C:\\CADENCE\\SPB_15.5\\TOOLS\\CAPTURE\\LIBRARY\\MUXDECODER.OLB))
+   (pin 999 6
+    (property 
+     (pinname E\\N\\)
+     (pintype 0)))
+   (pin 999 8
+    (property 
+     (pinname GND)
+     (pintype 7)))
+   (pin 999 11
+    (property 
+     (pinname A)
+     (pintype 0)))
+   (pin 999 10
+    (property 
+     (pinname B)
+     (pintype 0)))
+   (pin 999 9
+    (property 
+     (pinname C)
+     (pintype 0)))
+   (pin 999 16
+    (property 
+     (pinname VDD)
+     (pintype 7)))
+   (pin 999 7
+    (property 
+     (pinname VEE)
+     (pintype 7)))
+   (pin 999 3
+    (property 
+     (pinname X)
+     (pintype 1)))
+   (pin 999 13
+    (property 
+     (pinname X0)
+     (pintype 1)))
+   (pin 999 14
+    (property 
+     (pinname X1)
+     (pintype 1)))
+   (pin 999 15
+    (property 
+     (pinname X2)
+     (pintype 1)))
+   (pin 999 12
+    (property 
+     (pinname X3)
+     (pintype 1)))
+   (pin 999 1
+    (property 
+     (pinname X4)
+     (pintype 1)))
+   (pin 999 5
+    (property 
+     (pinname X5)
+     (pintype 1)))
+   (pin 999 2
+    (property 
+     (pinname X6)
+     (pintype 1)))
+   (pin 999 4
+    (property 
+     (pinname X7)
+     (pintype 1))))
+  (image LM358
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CAPTURE\\LIBRARY\\MY LIBRARY\\MY LIBRARY.OLB"))
+   (pin 999 3
+    (property 
+     (pinname +IN_A)
+     (pintype 0)))
+   (pin 999 2
+    (property 
+     (pinname "-IN_A")
+     (pintype 0)))
+   (pin 999 1
+    (property 
+     (pinname OUT_A)
+     (pintype 2)))
+   (pin 999 8
+    (property 
+     (pinname V+)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname "V-")
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname +IN_B)
+     (pintype 0)))
+   (pin 999 6
+    (property 
+     (pinname "-IN_B")
+     (pintype 0)))
+   (pin 999 7
+    (property 
+     (pinname OUT_B)
+     (pintype 2))))
+  (image "BRIDGE-DB104_0"
+   (property 
+    (sourcelib "C:\\PROGRAM FILES\\ORCAD\\CS2-1.DSN"))
+   (pin 999 1
+    (property 
+     (pinname AC1)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname +DC)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname AC2)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname "-DC")
+     (pintype 4))))
+  (image RESISTOR0603
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\ANDY\\MY DOCUMENTS\\MY PROGRAM\\CMA_ITM\\CMA421\\線路圖\\MY LIBRARY.OLB"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4))))
+  (image x1205S8_1
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\HANK\\桌面\\小型桌上型飲水機\\電路圖\\電控板\\C-98C-WATER_MAIN_V1.0.DSN"))
+   (pin 999 1
+    (property 
+     (pinname A0)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname A1)
+     (pintype 4)))
+   (pin 999 7
+    (property 
+     (pinname WP)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname GND)
+     (pintype 4)))
+   (pin 999 8
+    (property 
+     (pinname VCC)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname A2)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname SCL)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname SDA)
+     (pintype 4))))
+  (image MCP4012_2
+   (property 
+    (sourcelib "C:\\DOCUMENTS AND SETTINGS\\HANK\\桌面\\A705-1VS-V3-6\\A705-1VS-V3-6.DSN"))
+   (pin 999 1
+    (property 
+     (pinname VOUT)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname VSS)
+     (pintype 4)))
+   (pin 999 3
+    (property 
+     (pinname VDD)
+     (pintype 4)))
+   (pin 999 4
+    (property 
+     (pinname SDA)
+     (pintype 4)))
+   (pin 999 5
+    (property 
+     (pinname SCL)
+     (pintype 4)))
+   (pin 999 6
+    (property 
+     (pinname A0)
+     (pintype 4))))
+  (image INDUCTOR_7
+   (property 
+    (sourcelib "C:\\CADENCE\\BRD\\A705-2\\DSN\\A705-2.DSN"))
+   (pin 999 1
+    (property 
+     (pinname 1)
+     (pintype 4)))
+   (pin 999 2
+    (property 
+     (pinname 2)
+     (pintype 4)))))
+ (network
+  (net N17843096
+   (pins
+     U13-3 V1-3 V1-1 R47-2 D5-1 C30-1))
+  (net +TC_IN
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     R2-1 R1-2))
+  (net "-TC_IN"
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     C27-2 C14-2 C13-2 U10-4 U10-2 U10-3 U10-1 U3-1 C17-2
+     C15-2 C16-2 U2-22 JP1-4 U10-7 C18-2 C12-2 U4-8 U4-15
+     C25-1 D3-1 D2-1 U4-9 C26-1 SW9-1 SW10-1 Q405-E C28-2
+     C29-2 U13-4 V1-2 D5-2 C30-2 R417-2 U11-2 C60-2 C59-2
+     C61-1 R42-1 U11-6 C62-2 C63-2 C64-1 R43-1 U12-6 U12-2
+     C413-2 R410-1 R418-2 C412-1 C409-1 C414-2 MOV402-2 R420-1 C416-1
+     C415-2 R421-1 J2-2 C159-1 L107-2 ZD103-A C155-2 C162-2 J4-5
+     J6-5 J7-5 R25-1 C7-2 R20-2 C8-2 C20-2 R37-2 R22-1
+     U112-6 SW3-1 C10-1 D107-2 R41-1 C1-1 R5-2 C11-1 R10-1
+     U117-6 SW4-1 SW5-1 SW6-1 U117-1 U117-5 U117-2 U117-4 C5-2
+     U6-2 C9-2 SW1-1 SW2-1 R36-2))
+  (net SW5_1
+   (pins
+     RP4-6 U2-39 U117-10 SW5-2))
+  (net SW6_1
+   (pins
+     RP4-7 U2-38 U117-9 SW4-2))
+  (net N3668589
+   (pins
+     U8-5 R22-2 R21-1))
+  (net N16786412
+   (pins
+     U111-3 C23-1 C109-1 C108-1 D106-2))
+  (net N16887503
+   (pins
+     C153-1 U108-1 L109-1 C154-1))
+  (net N17295856
+   (pins
+     R79-2 U11-3 C60-1 C59-1))
+  (net N17298518
+   (pins
+     U11-1 R42-2 C61-2 U403-3))
+  (net PG
+    (property 
+     (nettype S))
+   (pins
+     C105-1 C118-2 R104-2 C106-2 C117-2 U110-3 C115-2 U109-2 C116-2
+     DB101-4 C114-1 R113-2 U109-5 C104-2 C107-2 TR102-4))
+  (net N3668451
+   (pins
+     R23-1 C4-1 U8-6))
+  (net N17303289
+   (pins
+     U403-2 U403-1 R408-1))
+  (net RS485B
+   (pins
+     D3-2 C19-2 J5-1))
+  (net PT_G
+    (property 
+     (nettype S))
+   (pins
+     C113-2 ZD104-2 C114-2 C111-2 C110-2 TR102-6 R112-2 U108-2 U107-1
+     C156-1 L107-1 C157-1 C152-2 C150-2 C158-1 C151-1 C153-2 C154-2
+     C112-2))
+  (net 485_TX
+   (pins
+     RP3-3 U2-13 U4-6))
+  (net RS485A
+   (pins
+     C24-2 D2-2 J5-2))
+  (net N3817552
+   (pins
+     R4-2 C2-2 R13-1 U7-1))
+  (net 485_DE/RE
+   (pins
+     RP3-7 U2-17 U4-5 U4-4))
+  (net N17567028
+   (pins
+     U4-12 C24-1))
+  (net N17567018
+   (pins
+     U4-13 C19-1))
+  (net 485_RX
+   (pins
+     RP3-2 U2-11 U4-3))
+  (net N17367171
+   (pins
+     RP3-8 U2-18))
+  (net N17367116
+   (pins
+     RP3-6 U2-16))
+  (net PE
+    (property 
+     (nettype S))
+   (pins
+     J1-3))
+  (net N17304888
+   (pins
+     R80-2 U12-3 C62-1 C63-1))
+  (net N17304910
+   (pins
+     U12-1 R43-2 C64-2 U405-3))
+  (net N16789492
+   (pins
+     U110-1 R109-1))
+  (net N17304968
+   (pins
+     U405-1 U405-2 R414-1))
+  (net N16789052
+   (pins
+     TL101-1 C101-2 MOV101-2 F101-2))
+  (net N16789106
+   (pins
+     C118-1 R108-2 U110-4))
+  (net N16789003
+   (pins
+     R106-2 TFT100-1 R104-1))
+  (net EEP_SCL
+   (pins
+     RP2-6 U2-28 U10-6))
+  (net N16789138
+   (pins
+     R105-2 C117-1 U109-3))
+  (net BEEP_OUT
+   (pins
+     RP2-9 U2-31 R44-2))
+  (net N16789428
+   (pins
+     R108-1 U109-1))
+  (net LED2_SDA_1
+   (pins
+     U2-5 RP5-5 U2-7 RP5-7 J6-4))
+  (net LED2_SCL_1
+   (pins
+     U2-6 RP5-6 U2-4 RP5-4 J6-3))
+  (net N16789236
+   (pins
+     U109-8 R107-2 C116-1))
+  (net N17042227
+   (pins
+     U112-1 R30-2))
+  (net N17042223
+   (pins
+     U112-2 R28-2))
+  (net CPU_X1
+   (pins
+     C15-1 R12-2 U2-21 Y1-1))
+  (net N16789779
+   (pins
+     D104-3 TR102-7))
+  (net N17042221
+   (pins
+     U112-5 R27-2))
+  (net P07
+   (pins
+     RP4-9 U2-36))
+  (net N16789178
+   (pins
+     U109-6 R106-1))
+  (net N17447865
+   (pins
+     RP2-8 U2-30))
+  (net N17313806
+   (pins
+     R417-1 U404-3 Q403-1 C412-2))
+  (net N16789114
+   (pins
+     TR102-1 D101-2))
+  (net LED1_SCL_1
+   (pins
+     U2-2 RP5-2 J4-3))
+  (net N17313152
+   (pins
+     R415-2 Q403-3))
+  (net N16789773
+   (pins
+     D103-1 TR102-5))
+  (net LED1_SDA_1
+   (pins
+     U2-3 RP5-3 J4-4))
+  (net N16789228
+   (pins
+     U109-4 R107-1 C115-1))
+  (net OCD_SDA
+   (pins
+     U2-33 JP1-3))
+  (net N16789015
+   (pins
+     R105-1 R113-1 TFT100-3))
+  (net N16788939
+   (pins
+     D106-1 TR102-9))
+  (net N17367196
+   (pins
+     L16-2 U2-44 C14-1 C16-1))
+  (net N17163882
+   (pins
+     R408-2 U404-5 C413-1))
+  (net N17319924
+   (pins
+     U404-1 R412-1 R411-2 C410-1))
+  (net N16789771
+   (pins
+     TR102-3 D105-1))
+  (net EEP_SDA
+   (pins
+     U10-5 RP2-7 U2-29))
+  (net CPU_X2
+   (pins
+     C17-1 R12-1 U2-20 Y1-2))
+  (net N17163964
+   (pins
+     R411-1 U404-6 R410-2))
+  (net OCD_SCL
+   (pins
+     U2-32 JP1-1))
+  (net N17329702
+   (pins
+     R412-2 U404-2 R418-1 C410-2))
+  (net GND
+    (property 
+     (nettype S))
+   (pins
+     U112-8 U117-8))
+  (net N171638100
+   (pins
+     U404-7 R415-1))
+  (net N17052300
+   (pins
+     U112-4 R29-2))
+  (net AC1/86~264V
+   (pins
+     C101-1 TL101-4 MOV101-1 F101-1 J1-2 J1-1))
+  (net LED3_SDA_1
+   (pins
+     J7-4))
+  (net LED3_SCL_1
+   (pins
+     J7-3))
+  (net N16788945
+   (pins
+     D102-2 TR102-8))
+  (net SET_OFFSET
+   (pins
+     RP3-5 U2-15 SW10-2))
+  (net FUNCTION_SET
+   (pins
+     RP3-4 U2-14 SW9-2))
+  (net N16789001
+   (pins
+     U109-7 D105-2 C106-1 C104-1 R102-1))
+  (net N17074296
+   (pins
+     R37-1 U9-3 R38-2))
+  (net N16788979
+   (pins
+     DB101-3 D101-1 C105-2 R103-2))
+  (net N16838275
+   (pins
+     R102-2 R101-2))
+  (net N16838092
+   (pins
+     R101-1 R103-1))
+  (net TC_IN
+   (pins
+     R26-1 C6-1 C3-2 U7-7 U112-3 U117-13 U8-2 R25-2))
+  (net N4305659
+   (pins
+     U112-14 R17-2))
+  (net "RTD-"
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     R33-1))
+  (net N4305976
+   (pins
+     U112-15 R18-2))
+  (net SW1_1
+   (pins
+     RP4-2 U2-43 U112-11 SW3-2))
+  (net N4306294
+   (pins
+     U112-12 R19-2))
+  (net RTD+
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     Q1-E R31-2 R32-1))
+  (net AD_SDA_1
+   (pins
+     U6-4))
+  (net AD_SCL_1
+   (pins
+     U6-3))
+  (net "-5V_2"
+   (pins
+     U405-4 U403-4 U404-4 L108-2 C159-2 R14-2 U114-4 U116-4 U9-4
+     U8-4 U115-4 U113-4 U7-4 U112-7 U117-7 C8-1))
+  (net +5V_2
+   (pins
+     U10-8 C13-1 U3-3 JP1-2 RP4-1 RP3-1 C18-1 RP2-1 C27-1
+     L16-1 C26-2 U4-1 U4-7 R45-1 C28-1 U13-8 C29-1 R46-1
+     D4-1 R79-1 R80-1 C155-1 R116-1 L109-2 U114-8 U116-8 U9-8
+     U8-8 U115-8 U113-8 R1-1 U7-8 U112-16 R31-1 U117-16 U6-5
+     C9-1 C7-1 R15-2))
+  (net +2.5V_2
+   (pins
+     R116-2 ZD103-C ZD103-R C162-1 R8-1 R38-1))
+  (net +24V_2
+   (pins
+     C22-1 C21-1 U111-1 J4-1 J6-1 J7-1))
+  (net POG_2
+   (pins
+     U111-2 C22-2 C23-2 C21-2 D102-1 C108-2 C109-2 J4-2 J6-2
+     J7-2))
+  (net +12V_2
+   (pins
+     U4-16 C25-2 U405-8 MOV401-1 C411-1 C409-2 U404-8 U403-8 Q404-2
+     C416-2 J3-1 C111-1 C110-1 D103-3 R109-2 R111-2 C152-1 U108-3
+     C150-1 J4-6 J6-6 J7-6))
+  (net AC1
+   (pins
+     C102-1 TL101-3 DB101-1))
+  (net MA_SCL_1
+   (pins
+     RP2-4 U2-26 U11-5))
+  (net N17637139
+   (pins
+     Q405-B R44-1))
+  (net N16789050
+   (pins
+     U110-2 ZD104-3 C119-1 R110-1))
+  (net AC2
+   (pins
+     TL101-2 DB101-2 C102-2))
+  (net "-5V_1"
+   (pins
+     C113-1 C112-1 D104-1 U107-2 C156-2 C151-2))
+  (net N17192844
+   (pins
+     R6-1 R10-2 R9-2))
+  (net N17643719
+   (pins
+     LS1-1 R45-2))
+  (net N17367176
+   (pins
+     RP3-9 U2-19))
+  (net N17651703
+   (pins
+     Q405-C LS1-2))
+  (net N17209062
+   (pins
+     U117-3 U9-5))
+  (net 2.5V
+    (property 
+     (nettype S))
+   (pins
+     R21-2))
+  (net N17100803
+   (pins
+     R32-2 C10-2 U113-5))
+  (net N17343565
+   (pins
+     R413-1 U405-6 C417-1 SW7-2 SW8-2))
+  (net N17343542
+   (pins
+     R414-2 U405-5 C414-1))
+  (net N17367410
+   (pins
+     U2-10 U3-2))
+  (net N3766681
+   (pins
+     R39-1 U8-3 C5-1 R24-2))
+  (net N17463870
+   (pins
+     C12-1 U2-35))
+  (net N17343690
+   (pins
+     Q404-3 R416-2))
+  (net SW4_1
+   (pins
+     RP4-5 U2-40 U117-11 SW6-2))
+  (net SW2_1
+   (pins
+     RP4-3 U2-42 U112-10 SW2-2))
+  (net SW3_1
+   (pins
+     RP4-4 U2-41 SW1-2 U112-9))
+  (net N17348775
+   (pins
+     R416-1 U405-7))
+  (net P06
+   (pins
+     RP4-8 U2-37))
+  (net N3818778
+   (pins
+     R4-1 U7-2 C2-1 R3-1))
+  (net MV_SDA_1
+   (pins
+     RP2-3 U2-25 U12-4))
+  (net MA_SDA_1
+   (pins
+     RP2-5 U2-27 U11-4))
+  (net MV_OUT
+   (pins
+     MOV402-1 C417-2 C415-1 R413-2 Q404-1 J2-1))
+  (net MV_SCL_1
+   (pins
+     RP2-2 U2-24 U12-5))
+  (net MA_GND
+   (pins
+     C411-2 MOV401-2 Q403-2 J3-2))
+  (net N3930638
+   (pins
+     U7-6 C3-1 R19-1 R18-1 R17-1 R16-1 R20-1 R30-1 R27-1
+     R28-1 R29-1))
+  (net N3668997
+   (pins
+     C6-2 R26-2 U8-1 U6-1))
+  (net N17780591
+   (pins
+     R3-2 R14-1 R11-1 R36-1))
+  (net N17798864
+   (pins
+     R15-1 R11-2))
+  (net N17114315
+   (pins
+     U113-6 R35-1 R34-1))
+  (net N17116549
+   (pins
+     U114-5 D107-1 R33-2))
+  (net N17119143
+   (pins
+     R40-2 U114-7 R34-2))
+  (net N17127073
+   (pins
+     U114-6 R40-1 R41-2))
+  (net RTD_IN
+   (pins
+     R35-2 U113-7 U117-14))
+  (net N17256582
+   (pins
+     R13-2 U7-5))
+  (net N3668649
+   (pins
+     R23-2 U8-7 R39-2 U6-6 C4-2))
+  (net N16887489
+   (pins
+     C157-2 C158-2 U107-3 L108-1))
+  (net N16789374
+   (pins
+     R112-1 R111-1 ZD104-1 C119-2 R110-2))
+  (net N17829328
+   (pins
+     R46-2 U13-7))
+  (net N4312927
+   (pins
+     R24-1 U9-7 U9-6))
+  (net MV_IN
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     U115-6 U115-7 U117-15 R9-1))
+  (net RTC_SCL
+   (pins
+     U2-8 RP5-8 U13-6))
+  (net RTC_SDA
+   (pins
+     U2-9 RP5-9 U13-5))
+  (net N17144765
+   (pins
+     R6-2 C1-2 U115-5))
+  (net N17837592
+   (pins
+     Y2-1 U13-1))
+  (net N17837961
+   (pins
+     Y2-2 U13-2))
+  (net N17537532
+   (pins
+     R420-2 SW7-1))
+  (net N17539004
+   (pins
+     R421-2 SW8-1))
+  (net MA_IN
+    (property 
+     (nettype P)
+     (netdir 1))
+   (pins
+     R5-1 C11-2 R7-1 U116-7 U116-6 U117-12))
+  (net N4323500
+   (pins
+     Q1-B U9-1))
+  (net N4324350
+   (pins
+     U9-2 Q1-C R8-2))
+  (net N17156664
+   (pins
+     U116-5 R7-2))
+  (net N4306657
+   (pins
+     U112-13 R16-2))
+  (net N16789546
+   (pins
+     TR102-2 TFT100-2 C107-1))
+  (net N17842722
+   (pins
+     R47-1 D4-2))
+  (net N3932582
+   (pins
+     R2-2 C20-1 U7-3)))
+)

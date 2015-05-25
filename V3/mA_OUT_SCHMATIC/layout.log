@@ -1,0 +1,342 @@
+Sun Jan 05 15:09:13 UserDiv from Layout.INI for AutoECO: 60
+Sun Jan 05 15:09:13 Loaded file C:\CADENCE\SPB_15.5\TOOLS\LAYOUT_PLUS\DATA\DEFAULT.TCH
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BCON100T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BCON156T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BGA.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\CLCC.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DCON050T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DCON085T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIMM050F.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIMM050T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIN.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIP100B.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIP100T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DSUBT.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DSUBT_HD.LLB
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ECON100T.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\FBUS.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ISA.llb
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\JUMPER.LLB
+Sun Jan 05 15:09:13 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\LAYOUT.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\LCON100T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PC104.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCI.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCON100T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCON156T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PGA.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PLCC.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\QUAD.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\QUADB.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\RELAY.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\RF.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SBUS.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM050F.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM050T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM100F.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM100T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIP.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SM.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SOG.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SOJ.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\STIFF.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TELE.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_AXIAL.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_CAP_P.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_CYLND.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_DIODE.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_DISC.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_RAD.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TO.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TRAINING.LLB
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\VRES.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\WCON100T.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\XT.llb
+Sun Jan 05 15:09:14 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ZIGZAG.llb
+Sun Jan 05 15:09:14 Library file not found:USER.PRT
+Sun Jan 05 15:09:14 Library file not found:USER.PRT
+Sun Jan 05 15:09:26 Library file not found:USER.PRT
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BCON100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BCON156T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\BGA.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\CLCC.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DCON050T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DCON085T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIMM050F.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIMM050T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIN.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIP100B.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DIP100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DSUBT.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\DSUBT_HD.LLB
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ECON100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\FBUS.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ISA.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\JUMPER.LLB
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\LAYOUT.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\LCON100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PC104.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCI.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCON100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PCON156T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PGA.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\PLCC.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\QUAD.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\QUADB.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\RELAY.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\RF.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SBUS.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM050F.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM050T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM100F.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIMM100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SIP.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SM.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SOG.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\SOJ.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\STIFF.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TELE.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_AXIAL.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_CAP_P.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_CYLND.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_DIODE.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_DISC.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TM_RAD.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TO.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\TRAINING.LLB
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\VRES.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\WCON100T.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\XT.llb
+Sun Jan 05 15:09:36 Loaded file C:\Cadence\SPB_15.5\tools\Layout_Plus\library\ZIGZAG.llb
+Sun Jan 05 15:09:36 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:42 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Library file not found:USER.PRT
+Sun Jan 05 15:09:43 Loaded file C:\CADENCE\SPB_15.5\TOOLS\LAYOUT_PLUS\DATA\DEFAULT.TCH
+Sun Jan 05 15:09:43 Saved as file C:\CADENCE\SPB_15.5\TOOLS\LAYOUT_PLUS\DATA\DEFAULT.TCH
+Sun Jan 05 15:12:53 UserDiv from Layout.INI for AutoECO: 60

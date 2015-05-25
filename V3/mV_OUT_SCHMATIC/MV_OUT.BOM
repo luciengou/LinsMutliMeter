@@ -1,0 +1,30 @@
+  Revised: Wednesday, January 15, 2014
+          Revision: 
+
+
+
+
+
+
+
+Bill Of Materials        January 15,2014      13:08:49	Page1
+
+Item	Quantity	Reference	Part
+______________________________________________
+
+1	1	C75	220uF/16V
+2	1	C76	0.1uF/50V
+3	1	C77	102
+4	4	C440,C441,C442,C443	104
+5	1	J11	OUT_INTERFACE
+6	1	J19	mV_OUT
+7	1	MOV406	9G330K
+8	1	Q411	2SC1623
+9	2	R78,R527	10K
+10	1	R84	4.7R
+11	1	R524	11.75K
+12	1	R525	47K
+13	1	R526	1K
+14	1	SW14	DIG-1
+15	1	U22	DAC6571
+16	2	U429,U430	LM358

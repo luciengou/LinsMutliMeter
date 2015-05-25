@@ -1,0 +1,136 @@
+\t (00:00:06) allegro 15.5 p008 (v15-5-81J) i86
+\t (00:00:06) 
+
+\t (00:00:08) Opening existing drawing...
+\d (00:00:10) Database opened: C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd
+\t (00:00:10) Grids are drawn 4.0000, 4.0000 apart for enhanced viewability.
+\i (00:00:10) trapsize 11867
+\i (00:00:10) trapsize 14042
+\i (00:00:10) trapsize 14042
+\i (00:00:34) pads in 
+\i (00:00:39) setwindow form.pads_in
+\i (00:00:39) FORM pads_in cancel  
+\i (00:00:47) setwindow pcb
+\i (00:00:47) open 
+\i (00:00:56) fillin "Temp1.brd"
+\t (00:00:56) Opening existing drawing...
+\t (00:00:56) Grids are drawn 4.0000, 4.0000 apart for enhanced viewability.
+\i (00:00:56) trapsize 14042
+\d (00:00:56) Database opened: C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd
+\i (00:01:56) net_properties 
+\i (00:01:57) setwindow cmgr
+\i (00:01:57) cm newView ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:00) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:02:46) cm close ( frame ( workbook 14:Net "36:General Properties" ) )
+\i (00:03:25) setwindow pcb
+\i (00:03:25) signal init 
+   (00:03:25) Loading sigallegro.cxt 
+   (00:03:25) Loading signal.cxt 
+   (00:03:25) Loading skillExt.cxt 
+\i (00:03:37) setwindow form.siginit
+\i (00:03:37) FORM siginit cancel  
+\i (00:03:51) setwindow pcb
+\i (00:03:51) net_properties 
+\i (00:03:51) setwindow cmgr
+\i (00:03:51) cm newView ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:04:27) cm fetch FTS_MODE ( System "System" ) System
+\i (00:04:27) cm fetch SIM_DATA ( System "System" ) System
+\i (00:04:27) cm fetch SIM_MEASUREMENT ( System "System" ) System
+\i (00:04:27) cm fetch AGGRESSOR_SWITCH_MODE ( System "System" ) System
+\i (00:04:27) cm fetch AGGRESSOR_DRIVER_SELECTION ( System "System" ) System
+\i (00:04:27) cm fetch XTALK_TIMING_WINDOWS ( System "System" ) System
+\i (00:04:27) cm fetch CREATE_WAVEFORMS ( System "System" ) System
+\i (00:04:27) cm fetch CREATE_CIRCUIT ( System "System" ) System
+\i (00:04:27) cm fetch USE_CUSTOM_STIMULUS ( System "System" ) System
+\i (00:04:31) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:04:31) cm select ( worksheet 14:Net "36:General Properties" "37:General Properties" )
+\i (00:04:38) cm close ( frame ( workbook 14:Net "36:General Properties" ) )
+\i (00:04:42) cm exit
+\i (00:04:50) setwindow pcb
+\i (00:04:50) save 
+\f (00:04:50) C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd: File Exists. Overwrite? 
+\i (00:04:54) fillin no 
+\i (00:04:57) fillin "menu_cancel"
+\i (00:05:00) open 
+\f (00:05:00) Do you want to save the changes you made to Temp1.brd?
+\i (00:05:02) fillin menu_cancel 
+\i (00:07:03) net schedule 
+   (00:07:03) Loading cmds.cxt 
+   (00:07:03) Loading axlcore.cxt 
+\i (00:07:15) identify nets 
+\i (00:07:29) setwindow form.fpsxidnets
+\i (00:07:29) FORM fpsxidnets cancel  
+\i (00:07:46) setwindow pcb
+\i (00:07:46) ecl param 
+\i (00:07:50) setwindow form.eclfrm
+\i (00:07:50) FORM eclfrm close  
+\i (00:07:53) setwindow pcb
+\i (00:07:53) net logic 
+\i (00:08:00) fillin confirm
+\i (00:08:20) partition 
+\i (00:08:53) create module 
+\i (00:09:09) opencd C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd 
+\f (00:09:09) Do you want to save the changes you made to Temp1.brd?
+\i (00:09:11) fillin yes 
+\t (00:09:11) Opening existing drawing...
+\t (00:09:11) Grids are drawn 4.0000, 4.0000 apart for enhanced viewability.
+\i (00:09:11) trapsize 14042
+\d (00:09:11) Database opened: C:/UC_PRODUCT/UC_SCHMATIC/Temp1.brd
+\i (00:09:34) plctxt in 
+\i (00:09:37) setwindow form.plctxt
+\i (00:09:37) FORM plctxt cancel  
+\i (00:09:55) setwindow pcb
+\i (00:09:55) text edit 
+\t (00:09:56) Pick text to edit.
+\i (00:10:21) net_properties 
+\w (00:10:21) Can not launch Constraint Manager while a command is active.
+\i (00:10:27) pick grid 382.0815 281.2731
+\t (00:10:27) last pick:  382.0000  281.0000
+\e (00:10:27) Text not found!
+\i (00:10:31) setwindow pcb
+\i (00:10:31) pick grid 389.9449 313.5694
+\t (00:10:31) last pick:  390.0000  314.0000
+\e (00:10:31) Text not found!
+\i (00:10:32) setwindow pcb
+\i (00:10:32) pick grid 437.1256 311.0419
+\t (00:10:32) last pick:  437.0000  311.0000
+\e (00:10:32) Text not found!
+\i (00:12:16) setwindow pcb
+\i (00:12:16) pick grid 402.0209 326.4879
+\t (00:12:16) last pick:  402.0000  326.0000
+\e (00:12:16) Text not found!
+\i (00:15:05) setwindow pcb
+\i (00:15:05) add text 
+\t (00:15:05) Pick text location.
+\i (00:15:26) shape merge shapes 
+\t (00:15:26) Pick primary shape to merge to
+\i (00:15:32) move 
+\t (00:15:32) Select element(s) to move.
+\i (00:15:40) copy 
+\t (00:15:41) Select the element(s) to copy.
+\i (00:16:03) net_properties 
+\w (00:16:03) Can not launch Constraint Manager while a command is active.
+\i (00:16:28) netout 
+\e (00:16:28) Finish current command first.
+\i (00:16:45) plctxt in 
+\i (00:16:52) setwindow form.plctxt
+\i (00:16:52) FORM plctxt body_center YES 
+\i (00:16:56) FORM plctxt execute  
+\t (00:16:56) Starting Place symbols by text file...
+\e (00:16:57) plctxt had errors - use Viewlog to review the log file.
+\i (00:17:13) setwindow text
+\i (00:17:13) close 
+\i (00:17:15) setwindow form.plctxt
+\i (00:17:15) FORM plctxt execute  
+\t (00:17:15) Starting Place symbols by text file...
+\e (00:17:16) plctxt had errors - use Viewlog to review the log file.
+\i (00:17:19) setwindow text
+\i (00:17:19) close 
+\i (00:17:21) setwindow form.plctxt
+\i (00:17:21) FORM plctxt browse  
+\i (00:17:37) fillin "menu_cancel"
+\i (00:17:39) FORM plctxt cancel  
+\i (00:17:41) setwindow pcb
+\i (00:17:41) exit 
+\f (00:17:41) Do you want to save the changes you made to Temp1.brd?
+\i (00:17:43) fillin no 

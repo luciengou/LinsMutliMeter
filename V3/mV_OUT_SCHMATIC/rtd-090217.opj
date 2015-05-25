@@ -1,0 +1,27 @@
+(ExpressProject ""
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (File ".\rtd-090217.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (NoModify))
+  (Folder "Outputs")
+  (Folder "Referenced Projects")
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" "c:\群亞\uc_product\rtd-090217.dsn")
+      (Path "Design Resources" "c:\群亞\uc_product\rtd-090217.dsn" "SCHEMATIC1")
+      (Select "Design Resources" "c:\群亞\uc_product\rtd-090217.dsn"
+         "SCHEMATIC1" "MAIN_SCH"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 -1 -1 -8 -30 0 200 0 397"))
+      (Tab 0)))
+  (MPSSessionName "林志強")
+  (PartMRUSelector))

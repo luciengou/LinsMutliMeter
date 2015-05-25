@@ -1,0 +1,224 @@
+(ExpressProject ""
+  (ProjectVersion "19981106")
+  (ProjectType "PCB")
+  (Folder "Design Resources"
+    (Folder "Library")
+    (File ".\rtd_tc.dsn"
+      (Type "Schematic Design"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (NoModify)
+    (BOM_Scope "0")
+    (BOM_Mode "0")
+    (BOM_Report_File "C:\UC_PRODUCT\UC_SCHMATIC\RTD_TC.BOM")
+    (BOM_Merge_Include "FALSE")
+    (BOM_Property_Combine_7.0 "{Item}\t{Quantity}\t{Reference}\t{Value}")
+    (BOM_Header "Item\tQuantity\tReference\tPart")
+    (BOM_Include_File
+       "C:\DOCUMENTS AND SETTINGS\林志強\桌面\銓盛\外包LAYOUT\RTD_TC.INC")
+    (BOM_Include_File_Combine_7.0 "{Item}\t{Quantity}\t{Reference}\t{Value}")
+    (BOM_One_Part_Per_Line "FALSE")
+    (BOM_View_Output "FALSE")
+    (Netlist_TAB "0")
+    (OTHER_Part_Value "{Value}")
+    (OTHER_Netlist_File "RTD_TC.NET")
+    (OTHER_Netlist_File2 "RTD_TC.CMP")
+    (OTHER_View_Output "FALSE")
+    (OTHER_View_Output2 "FALSE")
+    (OTHER_Formatter "future.dll")
+    (OTHER_PCB_Footprint "{PCB Footprint}")
+    (OTHER_Switch0 "TRUE")
+    (OTHER_Switch1 "TRUE")
+    (OTHER_Switch2 "TRUE")
+    (OTHER_Switch3 "FALSE")
+    (OTHER_Switch4 "FALSE")
+    (OTHER_Switch5 "FALSE")
+    (OTHER_Switch6 "FALSE")
+    (DRC_Scope "0")
+    (DRC_Action "0")
+    (DRC_Create_Warnings "TRUE")
+    (DRC_Check_Ports "TRUE")
+    (DRC_Check_Off-Page_Connectors "FALSE")
+    (DRC_Identical_References "TRUE")
+    (DRC_Type_Mismatch "TRUE")
+    (DRC_Report_Ports_and_Off-page_Connectors "FALSE")
+    (DRC_SDT_Compatibility "FALSE")
+    (DRC_Report_Off-grid_Objects "FALSE")
+    (DRC_Check_Unconnected_Nets "TRUE")
+    (DRC_Report_Netnames "TRUE")
+    (DRC_View_Output "TRUE")
+    (DRC_Report_File
+       "C:\DOCUMENTS AND SETTINGS\林志強\桌面\銓盛\外包LAYOUT\RTD_TC.DRC")
+    (Open_BOM_in_Excel "FALSE")
+    (DRC_Check_for_Misleading_TAP "TRUE")
+    (DRC_Visible_Power_pins "FALSE")
+    (EXPORT_Scope "0")
+    (EXPORT_Contents "0")
+    (EXPORT_File_Name "C:\UC_PRODUCT\UC_SCHMATIC\RTD_TC.EXP")
+    (BoardSim_HDLVarPath "c:\uc_product\uc_schmatic\Indesign\hdl.var")
+    (BoardSim_Logfile_path "c:\uc_product\uc_schmatic\Indesign\Detail.log")
+    (BoardSim_Compile_Set "1")
+    (BoardSim_Compile_Args "-message -v93")
+    (BoardSim_Elab_Set "1")
+    (BoardSim_Elab_Args
+       "-message -sdf_cmd_file c:\uc_product\uc_schmatic\Indesign\sdf.cmd")
+    (BoardSim_Sim_Set "1")
+    (BoardSim_Sim_Args "-message")
+    (BoardSim_Simvis_Set "1")
+    (BoardSim_Simint_Set "1"))
+  (Folder "Outputs"
+    (File ".\rtd_tc.bom"
+      (Type "Report"))
+    (File ".\rtd_tc.net"
+      (Type "Report"))
+    (File ".\rtd_tc.olb"
+      (Type "Schematic Library"))
+    (File ".\rtd_tc.exp"
+      (Type "Report")))
+  (Folder "Referenced Projects")
+  (PartMRUSelector
+    (CON12
+      (FullPartName "CON12.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON8
+      (FullPartName "CON8.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("SW PUSHBUTTON-SPST"
+      (FullPartName "SW PUSHBUTTON-SPST.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (CON4
+      (FullPartName "CON4.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON3
+      (FullPartName "CON3.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (LED
+      (FullPartName "LED.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (R_0
+      (FullPartName "R_0.Normal")
+      (LibraryName "C:\CADENCE\BRD\A705-2\DSN\A705-2.DSN")
+      (DeviceIndex "0"))
+    (C
+      (FullPartName "C.Normal")
+      (LibraryName "C:\DOCUMENTS AND SETTINGS\HANK\桌面\TTEAT\HANK.OLB")
+      (DeviceIndex "0"))
+    (4051/SO
+      (FullPartName "4051/SO.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\MUXDECODER.OLB")
+      (DeviceIndex "0"))
+    (R0603
+      (FullPartName "R0603.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\CAPTURE\LIBRARY\MY LIBRARY.OLB")
+      (DeviceIndex "0"))
+    (CON7
+      (FullPartName "CON7.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    ("RELAY SPDT"
+      (FullPartName "RELAY SPDT.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\OLDLIBS\DEVICE.OLB")
+      (DeviceIndex "0"))
+    (PNP
+      (FullPartName "PNP.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\OLDLIBS\DEVICE.OLB")
+      (DeviceIndex "0"))
+    (NPN-2SC1623_0
+      (FullPartName "NPN-2SC1623_0.Normal")
+      (LibraryName
+         "C:\DOCUMENTS AND SETTINGS\ML\MY DOCUMENTS\CSEC\鍾中鋒\CS2-2\CS2-2.DSN")
+      (DeviceIndex "0"))
+    (BUZZER
+      (FullPartName "BUZZER.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\ELECTROMECHANICAL.OLB")
+      (DeviceIndex "0"))
+    (OFFPAGELEFT-L
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (CON6
+      (FullPartName "CON6.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (CON2
+      (FullPartName "CON2.Normal")
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CONNECTOR.OLB")
+      (DeviceIndex "0"))
+    (MAX232
+      (FullPartName "MAX232.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\LINEDRIVERRECEIVER.OLB")
+      (DeviceIndex "0"))
+    (LTC1485/SO
+      (FullPartName "LTC1485/SO.Normal")
+      (LibraryName
+         "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\LINEDRIVERRECEIVER.OLB")
+      (DeviceIndex "0"))
+    (OFFPAGELEFT-R
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0"))
+    (YC15_0
+      (FullPartName "YC15_0.Normal")
+      (LibraryName "C:\CADENCE\BRD\A705-2\DSN\A705-2.DSN")
+      (DeviceIndex "0"))
+    (DIODE
+      (FullPartName "DIODE.Normal")
+      (LibraryName "C:\ORCAD\CAPTURE\LIBRARY\DISCRETE.OLB")
+      (DeviceIndex "0"))
+    (NJM4565_1
+      (FullPartName "NJM4565_1.Normal")
+      (LibraryName "C:\PROGRAM FILES\ORCAD\DUAL PANEL3.DSN")
+      (DeviceIndex "0"))
+    (PORTLEFT-L
+      (LibraryName "C:\CADENCE\SPB_15.5\TOOLS\CAPTURE\LIBRARY\CAPSYM.OLB")
+      (DeviceIndex "0")))
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" ".\rtd_tc.dsn"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 2 3 320 598 -8 -30 0 200 0 397"))
+      (Tab 0))
+    (Doc
+      (Type "COrSchematicDoc")
+      (Frame
+        (Placement "44 2 1 0 606 -8 -30 125 1291 125 558")
+        (Scroll "0 558")
+        (Zoom "100")
+        (Occurrence "/"))
+      (Path "C:\UC_PRODUCT\UC_SCHMATIC\TC_MV_SCHMATIC\RTD_TC.DSN")
+      (Schematic "SCHEMATIC1")
+      (Page "CPU")))
+  (MPSSessionName "Pavilion g4")
+  (LastUsedLibraryBrowseDirectory "C:\Cadence\SPB_15.5\tools\capture\library")
+  (Folder "Simulation Resources"
+    (Folder "Indesign"
+      (File ".\indesign\cds.lib"
+        (Type "Report")
+        (DisplayName ".\Indesign\cds.lib"))
+      (File ".\indesign\hdl.var"
+        (Type "Report")
+        (DisplayName ".\Indesign\hdl.var"))
+      (File ".\indesign\rtd_tc.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\rtd_tc.vhd"))
+      (File ".\indesign\stubi.vhd"
+        (Type "VHDL Source")
+        (DisplayName ".\Indesign\StubI.vhd"))
+      (File ".\indesign\sdf.cmd"
+        (Type "Report")
+        (DisplayName ".\Indesign\sdf.cmd"))
+      (File ".\indesign\detail.log"
+        (Type "Report")
+        (DisplayName ".\Indesign\Detail.log")))))

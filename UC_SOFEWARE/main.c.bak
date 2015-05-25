@@ -1,0 +1,1301 @@
+/***********************************************
+  PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   CPU : MPC82G516
+   BEGIN DATE: 2013.11.01
+   FINISHED  : 2014.01.25
+   WRITEBY   :JOHNSON LIN
+   AD111  setup   SET 1001 0000 FOR A0 TYPE 
+    8CH =  pga =1 ,32767BITS
+**************************************************/
+#include <MG82FE564.H>
+#include <intrins.h>
+#include <IO_DEFINE.h>
+#include <LED.h>
+#include <AD3421.h>
+#include <DAC6571_mV.h>
+#include <DAC6571_mA.h>
+#include <RTC3130.h>
+#include <EEPROM.H>
+#include <STDLIB.H>
+#include <TYPE_SLOPE.H>
+
+#define   BASE_TEMP		32		 //F & C Transfor Data
+#define   MAX_TEMP		3240     //F 1800C
+#define   MAX_VOLT		4400	 //mV
+#define   EEP_START		60
+#define   EEP_END			2000
+#define   JOHNSON             0x5a
+#define   LIN                 0xa5
+
+#define   K_TYPE		0		//2466F   54.807mV	P0=0x00
+#define   J_TYPE		1		//1368F   42.922mV
+#define   T_TYPE   	    2		//360F    9.286mV
+#define   E_TYPE		3		//1440F   61.022mV
+#define   R_TYPE		4		//2880F   18.842mV
+#define   S_TYPE		5		//2880F   16.771mV
+#define   B_TYPE		6		//3240F   13.585mV
+#define   N_TYPE	    7		//?       ?
+
+#define	TC_FUNCTION		0
+#define	RTD_FUNCTION	1
+#define	mV_FUNCTION		2
+#define	mA_FUNCTION		3
+#define	SETUP_FUNCTION	4
+#define	CLEAR_FUNCTION	5
+
+#define   ON    1
+#define   OFF   0
+
+//timer out work select
+#define	DISPLAY_SEND_TIME  0	 // DISPLAY TIME  
+#define	ADC_READ_TIME      1     //	ADC_READ_TIME
+#define	DATE_READ_TIME     2	 //	RTC_READ_TIME
+#define	DATE_SEND_TIME     3	 //	RTC_SEND_TIME
+#define UART_SEND_TIME     4	 //	UART_SEND_TIME
+#define MV_SEND_TIME       5	 // mV_OUT_ TIME
+#define	SETUP_TIMEOUT      6	 //	FAIL_TIMEOUT
+#define	TIMEUP_TIME        7	 //
+
+
+#define NOMAL_FUNCTION    0
+#define MODE_CAL          1
+#define C_F_CAL           2
+#define TYPE_CAL          3
+#define TC_ZERO_CAL       4
+#define TC_SPAN_CAL       5
+#define RTD_ZERO_CAL      6
+#define RTD_SPAN_CAL      7
+#define mV_ZERO_CAL       8
+#define mV_SPAN_CAL       9
+#define mA_ZERO_CAL       10
+#define mA_SPAN_CAL       11
+#define ALARM_LO_CAL      12
+#define ALARM_HI_CAL      13
+#define YEAR_DATE_CAL     14
+#define MON_DATE_CAL      15
+#define DAY_DATE_CAL      16
+#define HOUR_DATE_CAL     17
+#define MIN_DATE_CAL      18
+#define PRODUCT_RESET     19
+
+
+	           
+#define  Mode_Select 18    //EEP Address
+#define  C_F_Select  19
+#define  Type_Select 20
+#define  TC_Zero     21	  
+#define  TC_Span     23
+#define  RTD_Zero    25
+#define  RTD_Span    27
+#define  mV_Zero     29									  
+#define  mV_Span     31
+#define  mA_Zero     33
+#define  mA_Span     35
+#define  Alarm_Low   37
+#define  Alarm_Hi    39
+#define  Year_Date   41
+#define  Mon_Date    42
+#define  Day_Date    43
+#define  Week_Date   44
+#define  Hour_Date   45
+#define  Min_Date    46
+#define  EEP_ADR     50
+//===============================
+/*
+unsigned int code tab_k[155] ={ 0,208,418,629,840,1053,1267,1481,1696,1913,2129,2347,2565,2783,3000,3219,3438,3656,3875,4093,
+                                4311,4746,5179,5608,6036,6461,6884,7305,7725,8146,8567,8988,9410,9834,10260,10687,11118,11548,
+                                11982,12416,12852,13289,13727,14166,14607,15047,15489,15931,16373,16817,17261,17706,18151,18597,
+                                19043,19490,19938,20385,20833,21281,21730,22178,22628,23076,23526,23974,24423,24871,25320,25768,
+                                26217,26664,27111,27558,28003,28449,28894,29338,29782,30225,30666,31107,31547,31987,32425,32862,
+                                33299,33734,34169,34601,35034,35465,35895,36324,36752,37179,37604,38028,38452,38875,39296,39716,
+                                40135,40553,40970,41386,41799,42213,42626,43037,43448,43856,44265,44672,45078,45483,45886,46290,
+                                46691,47091,47490,47888,48285,48679,49073,49466,49856,50246,50634,51021,51406,51789,52172,52552,
+                                52931,53306,53682,54055,54427,54797,55165,55532,55896,56261,56622,56983,57342,57701,33};
+
+unsigned int code tab_j[78] ={0,534,1073,1617,2167,2721,3279,3842,4407,4974,5546,6119,6695,7272,7851,8431,9012,9594,10177,
+                              10762,11346,11930,12515,13099,13684,14269,14853,15437,16020,16604,17187,17770,18352,18934,
+							  19516,20097,20677,21258,21838,22419,22999,23580,24161,24742,25324,25906,26490,27074,27659,
+							  28246,28834,29425,30016,30610,31207,31805,32407,33012,33619,34230,34843,35461,36083,36708,
+							  37336,37970,38607,39248,39894,40543,41196,41853,42514,43178,43846,44516,45188,33};
+					    
+unsigned long int code tab_t[84] ={0,65333,65133,64935,64739,64546,64356,64168,63983,63801,63621,63444,63270,63099,62930,62764,
+								   62601,62442,62284,62130,61980,61831,61687,61545,61406,61271,61138,61010,60884,60762,
+								   60643,60527,60414,60305,60199,60096,59997,59902,59810,59722,59637,0,205,412,620,831,1044,1259,
+								   1477,1696,1918,2142,2369,2597,2829,3062,3296,3534,3773,4014,4258,4503,4750,5000,5250,5503,
+								   5758,6014,6272,6532,6793,7056,7321,7588,7856,8126,8396,8670,8944,9219,9497,9776,33};
+
+unsigned long int code tab_e[84] = {0,622,1255,1896,2547,3208,3877,4558,5246,5944,6651,7365,8089,8819,9557,10304,11055,
+                                    11815,12580,13351,14128,14909,15696,16488,17284,18085,18889,19698,20510,21326,22144,
+                                    22966,23790,24618,25447,26279,27114,27951,28789,29629,30471,31314,32159,33005,33853,
+                                   34700,35550,36400,37250,38101,38953,39804,40656,41508,42360,43212,44063,44915,45765,
+								    46616,47465,48314,49163,50010,50857,51702,52546,53391,54233,55074,55914,56753,57591,
+								    58428,59263,60097,60929,61760,62590,63418,64244,33 };
+unsigned long int code tab_t[84]
+
+unsigned long int code tab_t[84]
+*/
+unsigned long int code tab_r[165] ={0,57,117,180,244,312,382,454,527,603,681,761,842,925,1010,1096,1183,1272,1362,1453,1546,1639,
+                                   1734,1830,1927,2025,2123,2222,2324,2425,2527,2630,2733,2837,2943,3049,3155,3263,3370,3478,
+								   3587,3696,3807,3917,4028,4141,4252,4365,4479,4592,4707,4822,4937,5052,5169,5286,5403,5521,
+								   5639,5758,5877,5997,6117,6238,6359,6480,6603,6725,6848,6973,7097,7222,7347,7473,7599,7726,
+								   7854,7982,8110,8239,8369,8498,8629,8759,8891,9022,9155,9288,9422,9555,9689,9824,9959,10095,
+								   10231,10368,10505,10643,10781,10919,11058,11198,11337,11478,11618,11760,11901,12043,12185,
+								   12328,12471,12616,12759,12904,13048,13194,13338,13484,13630,13776,13922,14069,14215,14362,
+								   14510,14657,14804,14952,15100,15248,15396,15545,15693,15841,15988,16138,16287,16435,16584,
+								   16732,16882,17030,17179,17327,17475,17625,17773,17921,18069,18218,18366,18513,18662,18809,
+								   18957,19104,19252,19398,19544,19691,19837,33} ;
+
+extern unsigned char key = 0,key_bak = 0;
+extern unsigned char AV_COD ;
+extern unsigned char NG_COD = 0;
+idata unsigned char Soft_Timer[8] = {16,16,4,2,59,2,20,30};
+idata unsigned char T0_cnt,T2_cnt, T1_cnt;
+
+unsigned char MAIN_SW;
+unsigned char Work_Type;
+unsigned char C_F_Type;
+unsigned char TC_Type;
+unsigned int  TC_Zero_offset;
+unsigned int  TC_Span_offset;
+unsigned int  RTD_Zero_offset;
+unsigned int  RTD_Span_offset;
+unsigned int  mV_Zero_offset;
+unsigned int  mV_Span_offset;
+unsigned int  mA_Zero_offset;
+unsigned int  mA_Span_offset;
+unsigned int  alarm_Low_set;
+unsigned int  alarm_Hi_set;
+unsigned char  use_year;
+unsigned char  use_mon;
+unsigned char  use_day;
+unsigned char  use_week;
+unsigned char  use_hour;
+unsigned char  use_min;
+unsigned char  eep_count;
+unsigned int   Disp_year;
+unsigned int   Data_Value;
+
+unsigned char CAIT = 0x01;
+unsigned char tmp1;
+unsigned char AD_Hi;
+unsigned char AD_Mid;
+unsigned char AD_Lo;
+unsigned char AD_Status;
+unsigned char PCB_SETUP;
+unsigned char Soft_Timer_Enable = 0;
+unsigned char Key_backup, ReceiveDate;
+
+bit f_half_sec, f_key_hold, f_water_out, f_alarm_no_water,f_Power_on,f_reflash;
+bit ReceiveFlag=0,f_acid3=0, f_clean=0, f_lock, f_show_orp=0;
+
+/***************************************
+	   Port In/Out Setting
+*****************************************/
+void PORT_Init(void)
+{
+	P0M0 = 0xFF;	  //00=Qb,01=pull output, 10= input only,11=open drain
+ 	P0M1 = 0x00;	 //P0= ALL INPUT
+	P0 =  0xff;
+
+	P1M0 = 0x00;	 //P1= ALL OUTPUT
+	P1M1 = 0xFF;     //SETUP P1 ALL LO //  define P1.3 P1.4 P1.5 as push-pull
+    P1 = 0x00;
+
+	P2M0 = 0x00;	 //P2= ALL OUTOUT
+	P2M1 = 0xFF; 	 //SETUP P2 ALL LO
+	P2 =  0x00;
+
+    P3M0 = 0xED;	 //
+	P3M1 = 0x13;
+	P3 = 0x2C;
+}
+/*******************************************
+     interrupt   0
+*******************************************/
+void ex_int0(void) interrupt 0
+{;
+}
+/*******************************************
+     interrupt   1
+*******************************************/
+void time0(void) interrupt  1     //   T=1/16 sec 
+{
+ unsigned int Value_code;
+	TR0 = 0;
+	T1_cnt++;
+	if ((T1_cnt%8)==0)
+	Value_code = SBUF;
+	TH0 = 0x0B;	 //0b
+	TL0 = 0xDC;
+	TR0 = 1;
+}
+
+/*******************************************
+     interrupt   3
+*******************************************/
+void time1(void) interrupt  3   //    T=1/16 sec 
+{
+	TR1 = 0;
+	T0_cnt++;							
+
+	if (Soft_Timer[DISPLAY_SEND_TIME] != 0)		Soft_Timer[DISPLAY_SEND_TIME]--;
+//	if (Soft_Timer[ADC_READ_TIME] != 0)         Soft_Timer[ADC_READ_TIME]--;
+
+	if ((T0_cnt%8)==0)	
+	  {
+	  if (Soft_Timer[DATE_READ_TIME] != 0)	Soft_Timer[DATE_READ_TIME]--;
+   	  if (Soft_Timer[ADC_READ_TIME] != 0)     Soft_Timer[ADC_READ_TIME]--;
+	    f_half_sec = 1;
+	  }
+	if (T0_cnt == 15)
+	{
+		T0_cnt = 0;
+//		if (Soft_Timer[DATE_READ_TIME] != 0)	Soft_Timer[DATE_READ_TIME]--;
+ //   	if (Soft_Timer[ADC_READ_TIME] != 0)     Soft_Timer[ADC_READ_TIME]--;
+		if (Soft_Timer[DATE_SEND_TIME] != 0)	Soft_Timer[DATE_SEND_TIME]--;
+		if (Soft_Timer[UART_SEND_TIME] != 0)	Soft_Timer[UART_SEND_TIME]--;
+		if (Soft_Timer[MV_SEND_TIME] != 0)	    Soft_Timer[MV_SEND_TIME]--;
+		if (Soft_Timer[SETUP_TIMEOUT] != 0)     Soft_Timer[SETUP_TIMEOUT]--;	
+		if (Soft_Timer[TIMEUP_TIME] != 0)		Soft_Timer[TIMEUP_TIME]--;
+	}	    	
+	TH1 = 0x0B;
+	TL1 = 0xDC;
+	TR1 = 1;
+ }		
+/*******************************************/
+void T0_Init(void)
+{
+	TR0 = 1;
+	TMOD = 0x11;
+	TH0 = 0x0B;		
+	TL0 = 0xDC;	
+	T0_cnt = 0;
+}
+/*******************************************
+    
+*******************************************/
+void T1_Init(void)
+{
+	TR1 = 0;
+	TMOD = 0x11;  
+	TH1 = 0x0B;
+	TL1 = 0xDC;
+	T1_cnt = 0;
+ }
+/*******************************************
+    
+*******************************************/
+void T2_Init(void)
+{
+	TR2 = 1;
+	T2MOD = 0x11;  //11  
+	TH2 = 0x0B;
+	TL2 = 0xDC;
+	T2_cnt = 0;
+}
+/*******************************************
+    
+*******************************************/
+void INT0_Init(void)
+{
+    INT0 = 1;
+	INT1 = 1;	 
+	IE0  = 1;		   
+	IT0  = 1;
+	EX0  = 0;	  
+}
+/*******************************************/
+void InitUart()	   //InitUart use timer2
+{
+   SCON |= 0x50;			  /* uart in mode 1 (8 bit), REN=1 */
+   T2CON &= 0xF0;               /* EXEN2=0; TR2=0; C/T2#=0; CP/RL2#=0; */
+   T2CON |= 0x30;               /* RCLK = 1; TCLK=1; */
+   TH2=0xFF;                    /* init value */
+   TL2=0xD0;                    /* init value */
+   RCAP2H=0xFF;                 /* reload value, 9600 Bds at 11.059MHz */
+   RCAP2L=0xDC;                 /* reload value, 9600 Bds at 11.059MHz */
+   ES = 1; 						     /* Enable serial interrupt */
+   TR2 = 1;                     /* Timer 2 run */
+}
+/*************************************************/
+void serial() interrupt 4
+{
+	if(TI==1)
+	{
+	   TI=0;
+	}
+	if(RI==1)
+	{
+	   RI=0;
+	   ReceiveDate = SBUF;
+	   ReceiveFlag = 1;
+	}
+}
+/*******************************************/
+void sendchar(unsigned char SendData)
+{
+   SBUF = SendData;
+}
+/****************************************/
+void delay(unsigned int i)
+{
+	unsigned char j;
+	for (; i>0; i--)
+		for (j=0; j<255; j++);
+}
+/*******************************************
+    
+*******************************************/
+void Buzzer(unsigned char status)
+{
+	if (status)
+      P2 = 	P2 |= 0x20;
+	else
+	  P2 = P2 &= ~0x20;
+}
+/*******************************************
+      CHECK PCB TYPE
+*******************************************/
+void Check_PCB(void)
+{
+  	   if(P00 == 0)                //tc
+	     {
+		     Work_Type = 0x00;
+
+			 PCB_SETUP = 0x01;
+		     if(P04 == 0)	    //mV_out
+		       {PCB_SETUP = 0x11 ;}
+  	         if(P05 == 0)	//mA_out
+		       {PCB_SETUP = 0x21 ;}
+		 }
+	   else if(P01 == 0)	       //rtd
+		 {
+			  Work_Type = 0x01;
+			    PCB_SETUP = 0x02 ;
+		      if(P04 == 0)	//mV_out
+		        {PCB_SETUP = 0x12 ;}
+		      if(P05 == 0)	//mA_out
+		        {PCB_SETUP = 0x22 ;}
+		 }
+	  else if(P02 == 0)	     //mV
+		 {
+			 Work_Type = 0x02 ;
+			  PCB_SETUP = 0x04 ;
+			  if(P04 == 0)	//mV_out
+		        {PCB_SETUP = 0x14 ;}
+		      if(P05 == 0)	//mA_out
+		        {PCB_SETUP = 0x24 ;}
+		 } 
+	  else if(P03 == 0)	        //mA
+		 { 
+		     Work_Type = 0x033 ;
+			   PCB_SETUP = 0x08 ;
+			 if(P04 == 0)	        //mV_out
+		       {PCB_SETUP = 0x18 ;}
+		     if(P05 == 0)	//mA_out
+		       {PCB_SETUP = 0x28 ;}  
+		 }
+}
+//==============================================
+void EEPROM_write_word(unsigned char addr, unsigned intdata)
+{
+	EEPROM_write_byte(addr++, (unsigned char)(intdata));
+	EEPROM_write_byte(addr, (unsigned char)(intdata>>8));
+}
+//======================================
+unsigned  EEPROM_read_word(unsigned char addr)
+{
+	unsigned int rdata;
+
+	rdata = (unsigned int)(EEPROM_read_byte(addr+1));
+	rdata <<= 8;
+	rdata += (unsigned int)(EEPROM_read_byte(addr));
+
+	return(rdata);	
+}
+//===========================================
+void EEPROM_WriteDefault(void)
+{
+    Check_PCB();
+    EEPROM_write_byte(Mode_Select,Work_Type); //setup mode
+    EEPROM_write_byte(C_F_Select, 0);  //c
+	EEPROM_write_byte(Type_Select,0);  //Type define k=0.j=1,t=2
+	EEPROM_write_word(TC_Zero, 0);	
+	EEPROM_write_word(TC_Span, 1400);
+	EEPROM_write_word(RTD_Zero, 0);
+	EEPROM_write_word(RTD_Span, 850);
+	EEPROM_write_word(mV_Zero, 0);
+	EEPROM_write_word(mV_Span, 5000);
+	EEPROM_write_word(mA_Zero, 40);	
+    EEPROM_write_word(mA_Span, 200);
+	EEPROM_write_word(Alarm_Low, 0);
+	EEPROM_write_word(Alarm_Hi, 5000);
+    EEPROM_write_byte(Year_Date, 14);
+    EEPROM_write_byte(Mon_Date, 1);
+    EEPROM_write_byte(Day_Date, 1);
+	EEPROM_write_byte(Week_Date, 3);
+    EEPROM_write_byte(Hour_Date, 12);
+    EEPROM_write_byte(Min_Date, 0);
+	EEPROM_write_word(EEP_ADR, 50);		//eep start code
+}
+/*****************************************************/
+unsigned int TEMP_F_TO_C(unsigned int tc_tmp)
+{
+ unsigned int ttmp;
+
+	   if(tc_tmp >= 320)
+	     {
+		   if(AV_COD == 0)
+		     {
+		     	ttmp = (tc_tmp-320)/1.8;
+		     }
+		  else
+		     {
+			    ttmp = (tc_tmp+320)/1.8; 
+             }
+	     }
+	   else
+	     {
+		   if(AV_COD == 1)
+			 {
+	           ttmp = (320+tc_tmp)/1.8;
+             }
+		   else
+		     {
+			  ttmp = (320-tc_tmp)/1.8;
+			 }
+		 }
+//		 NG_COD = NP_COD ;
+          return(ttmp);
+}
+/**********************************************/
+void Volt_Ctrl(void)
+{
+}
+/***********************************************/
+unsigned char Get_Key(void)
+{
+//unsigned char key ;
+//unsigned char key_bak ;					// key_bak為了記錄按鍵是否被釋放過
+
+  if(FUNCTION_KEY == 1 && OFFSET_KEY == 1 && UP_KEY == 1 && DOWN_KEY == 1) 
+    {
+	 key_bak  =  0;
+	 key = 0 ; 
+
+	 if (Soft_Timer[DATE_READ_TIME] == 4)
+	    {
+		  RTC_READ_SET();
+		  Soft_Timer[DATE_READ_TIME] = 0 ;
+		}
+	}
+  else if(FUNCTION_KEY == 0 )
+    {
+	  if(key_bak == 0)
+	   {
+	     key_bak = 1 ;
+	     key = key |= 0x01 ;
+	   }
+	  else
+	   {
+		key = key &= 0xfe ;
+	   }
+	 }
+   else if(OFFSET_KEY == 0)
+     {
+	 if(key_bak == 0)
+	   {
+	     key = key |= 0x02 ;
+	     key_bak = 1; 
+	   }
+	  else
+	   {
+		key = key &= 0xfd ;
+	   }
+	 }
+   else if(UP_KEY == 0)
+    {
+	 if(key_bak == 0)
+	   {
+	     key = key |= 0x04 ;
+	     key_bak = 1; 
+	   }
+	  else
+	   {
+		key = key &= 0xfb ;
+	   }
+	 }
+   else if(DOWN_KEY == 0)
+    {
+	 if(key_bak == 0)
+	   {
+	     key = key |= 0x08;
+	     key_bak = 1; 
+	   }
+	  else
+	   {
+		key = key &= 0xf7 ;
+	   }
+	 }
+ 
+   return key;
+}
+/************************************************/
+unsigned int DO_TC_TYPE(void)
+{
+    unsigned int Code_Value,TC_Value;
+	 unsigned char key, stat;
+
+      key = Get_Key();
+	 
+	  if(key == 0x01)
+	  {
+	     Work_Type = 4;
+	  }
+   else
+     {
+	 	
+		if (Soft_Timer[ADC_READ_TIME] == 0) 
+		   {
+/*  TEST  USED ****************************************************/
+			   stat++ ;
+ 			  Soft_Timer[ADC_READ_TIME] = 16;
+   			  	 if (stat > 165) {stat = 0;}
+					Code_Value = tab_r[stat];
+					AV_COD = 0 ;
+/*
+				 if (Code_Value > 50000)
+				   { 
+					AV_COD = 1;
+					Code_Value = ~Code_Value;
+				   }
+/*
+		   	 stat = Get_AD3421_Value();
+			 if (stat == 0)
+			   {
+			     Soft_Timer[ADC_READ_TIME] = 16;
+
+				 AD_Hi =  AD_Hi & 0x03;
+			 if(AD_Hi < 2)
+			   {
+			      AV_COD = 0;
+				  Code_Value = AD_Hi & 0x03;	  
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Mid ;
+				  Code_Value = Code_Value << 7 ;
+				  AD_Lo = AD_Lo >> 1;
+				  Code_Value = Code_Value + AD_Lo ; 
+			   }
+			  else
+			   {
+				   AV_COD = 1;
+				  Code_Value = AD_Hi & 0x03;	  
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Mid ;
+				  Code_Value = Code_Value << 7 ;
+				  AD_Lo = AD_Lo >> 1;
+				  Code_Value = Code_Value + AD_Lo ;  
+	   			  Code_Value = ~ Code_Value;
+				}
+			  }
+=====================================================================*/
+  		     if (TC_Type == K_TYPE)
+              {
+   	            TC_Value  = Get_K_Slope(Code_Value);
+				if (C_F_Type == 0) TC_Value = TEMP_F_TO_C(TC_Value);
+	          }
+            else if (TC_Type == J_TYPE)
+              {
+   	            TC_Value = Get_J_Slope(Code_Value);
+				if (C_F_Type == 0) TC_Value = TEMP_F_TO_C(TC_Value); 
+	          }
+            else if (TC_Type == T_TYPE)
+              {
+  	            TC_Value = Get_T_Slope(Code_Value);
+				if (C_F_Type == 0) TC_Value = TEMP_F_TO_C(TC_Value); 
+	          }
+            else if (TC_Type == E_TYPE)
+              {
+   	           TC_Value = Get_E_Slope(Code_Value); 
+			   if (C_F_Type == 0) TC_Value = TEMP_F_TO_C(TC_Value);
+	          }
+            else if (TC_Type == R_TYPE)
+              {
+  	            TC_Value = Get_R_Slope(Code_Value); 
+//				if (C_F_Type == 0)
+				 TC_Value = TEMP_F_TO_C(TC_Value);
+	          }
+            else if (TC_Type == S_TYPE)
+              {
+   	            TC_Value = Get_S_Slope(Code_Value);
+//				if (C_F_Type == 0)
+					TC_Value = TEMP_F_TO_C(TC_Value); 
+	          }
+/*
+            else if (TC_Type == B_TYPE)
+              {
+//	            Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+   	            TC_Value = Get_B_Slope(Code_Value); 
+				if (C_F_Type == 0)	TC_Value = TEMP_F_TO_C(TC_Value);
+	          }
+           else if (TC_Type == N_TYPE)
+              {
+//	            Code_Value  = Code_Value*(Code_Value/(TC_Span_offset- TC_Zero_offset));
+   	            TC_Value = Get_N_Slope(Code_Value); 
+				if (C_F_Type == 0)	TC_Value = TEMP_F_TO_C(TC_Value);
+	          }
+*/
+//		    }
+		  }
+	   if (Soft_Timer[DISPLAY_SEND_TIME] == 0)
+	     {
+		   Soft_Timer[DISPLAY_SEND_TIME] = 16;	
+		    LED_Disp(1,TC_Value);
+	     }
+		 if (Soft_Timer[MV_SEND_TIME] == 0)
+	     {
+		   if( P04 == 0)  Set_mV(TC_Value);
+		   if( P05 == 0)  Set_mA(TC_Value);
+		   Soft_Timer[MV_SEND_TIME] = 16;
+		 }
+	   if (Soft_Timer[UART_SEND_TIME] == 0)
+	     {
+		    TI = 1;
+		   Soft_Timer[UART_SEND_TIME] = 59 ;
+		 }
+	  }
+    return  TC_Value;
+}
+/***********************************************
+RTD=  2	27.6	40	48	56	58
+131072					
+3200 2600 1950	  950  40
+1300 2200  3250	 4100	 5000 5750	6450
+7350 7950  8700	 9300  9900	10500	 11150
+11700 12300	12850	13400 
+*************************************************/
+unsigned int DO_RTD_TYPE(void)
+{
+     unsigned long int Code_Value,RTD_Value;
+	 unsigned char key,stta;
+
+      key = Get_Key();
+	 
+	  if(key == 0x01)
+	  {
+	     Work_Type =  4;
+	  }
+	else if (Soft_Timer[ADC_READ_TIME] == 0) 
+	  {
+       stta = Get_AD3421_Value();
+			 if (stta == 0)
+			   {
+			     Soft_Timer[ADC_READ_TIME] = 16;
+
+				 AD_Hi =  AD_Hi & 0x03;
+			  if(AD_Hi < 2){AV_COD = 0;}else{AV_COD = 1;}
+				  Code_Value = AD_Hi & 0x03;	  
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Mid ;
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Lo ; 
+
+//   	   Code_Value = Code_Value*(Code_Value/(RTD_Span_offset- RTD_Zero_offset)); 
+	             RTD_Value = Get_RTD_Slope(Code_Value);
+	             if (C_F_Type == 0)	RTD_Value = TEMP_F_TO_C(RTD_Value);
+	           }
+	  }
+     if (Soft_Timer[DISPLAY_SEND_TIME] == 0)
+	     {
+		    LED_Disp(1,RTD_Value);
+		    Soft_Timer[DISPLAY_SEND_TIME] = 16 ;
+	     }
+	 if (Soft_Timer[MV_SEND_TIME] == 0)
+	     {
+		   if( P04 == 0)  Set_mV(RTD_Value);
+		   if( P05 == 0)  Set_mA(RTD_Value);
+
+   		   Soft_Timer[MV_SEND_TIME] = 2;
+		 }
+
+	 if (Soft_Timer[UART_SEND_TIME] == 0)
+	     {
+		    TI = 1;
+		   Soft_Timer[UART_SEND_TIME] = 59 ;	    	    
+	     }
+   return RTD_Value;
+}
+/***********************************************
+
+************************************************/
+unsigned  int DO_mV_TYPE(void)
+{
+     unsigned long int Code_Value,mV_Value;
+	 unsigned char key,stta;
+
+      key = Get_Key();
+	 
+	  if(key == 0x01)
+	    {
+	      Work_Type = 4;
+	    }
+	  else if (Soft_Timer[ADC_READ_TIME] == 0) 
+	   { 
+         stta = Get_AD3421_Value();
+		  if (stta == 0)
+			   {
+			     Soft_Timer[ADC_READ_TIME] = 16;
+
+				 AD_Hi =  AD_Hi & 0x03;
+			  if(AD_Hi < 2){AV_COD = 0;}else{AV_COD = 1;}
+				  Code_Value = AD_Hi & 0x03;	  
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Mid ;
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Lo ; 
+                  mV_Value = Code_Value;//*( Code_Value/(mV_Span_offset - mV_Zero_offset));
+			   if ( Code_Value > 131071 )
+	             {
+	              mV_Value = ( ~Code_Value & 0x0003ffff);
+ 			     }
+			  }
+	   }
+	   if (Soft_Timer[DISPLAY_SEND_TIME] == 0)
+	     {
+		    LED_Disp(1,mV_Value);
+		    Soft_Timer[DISPLAY_SEND_TIME] = 16 ;
+	     }
+	   if (Soft_Timer[MV_SEND_TIME] == 0)
+	     {
+		   if( P04 == 0)  Set_mV(mV_Value);
+		   if( P05 == 0)  Set_mA(mV_Value);
+
+		   Soft_Timer[MV_SEND_TIME] = 2;
+		 }
+	   if (Soft_Timer[UART_SEND_TIME] == 0)
+	     {
+		    TI = 1;
+		   Soft_Timer[UART_SEND_TIME] = 59 ;
+		 }
+
+	 return mV_Value ;
+}
+/***********************************************
+
+*************************************************/
+unsigned int DO_mA_TYPE(void)
+{
+     unsigned long int Code_Value,mA_Value;
+	 unsigned char key,stta;
+
+      key = Get_Key();
+	 
+	  if(key == 0x01)
+	    {
+	      Work_Type = 4 ;
+	    }
+  	  else if (Soft_Timer[ADC_READ_TIME] == 0)
+	     {
+         stta = Get_AD3421_Value();
+		  if (stta == 0)
+			   {
+			     Soft_Timer[ADC_READ_TIME] = 16;
+
+				 AD_Hi =  AD_Hi & 0x03;
+			  if(AD_Hi < 2){AV_COD = 0;}else{AV_COD = 1;}
+				  Code_Value = AD_Hi & 0x03;	  
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Mid ;
+				  Code_Value = Code_Value << 8 ;
+				  Code_Value = Code_Value + AD_Lo ; 
+                  mA_Value = Code_Value;//*( Code_Value/(mV_Span_offset - mV_Zero_offset));
+			   if ( AV_COD == 1 )
+	             {
+	              mA_Value = ~Code_Value & 0x0003fff;
+ 			     }
+			  }
+	      }
+	   if (Soft_Timer[DISPLAY_SEND_TIME] == 0)
+	     {
+		    LED_Disp(1,mA_Value);
+		    Soft_Timer[DISPLAY_SEND_TIME] = 16 ;
+	     }
+	   if (Soft_Timer[MV_SEND_TIME] == 0)
+	     {
+		   if( P04 == 0)  Set_mV(mA_Value);
+		   if( P05 == 0)  Set_mA(mA_Value);
+
+		   Soft_Timer[MV_SEND_TIME] = 2;
+		 }
+	   if (Soft_Timer[UART_SEND_TIME] == 0)
+	     {
+		    TI = 1;
+		   Soft_Timer[UART_SEND_TIME] = 59 ;
+		 }
+	 return mA_Value;
+}
+/************************************************/
+void RTC_WRITE_SET()
+{
+RTC_write_byte(0,2);
+RTC_write_byte(3,use_min);
+RTC_write_byte(4,use_hour);
+RTC_write_byte(5,use_week);
+RTC_write_byte(6,use_day);
+RTC_write_byte(7,use_mon);
+RTC_write_byte(8,use_year);
+RTC_write_byte(0,0);
+}
+
+/************************************************/
+void RTC_READ_SET()
+{
+ RTC_write_byte(0,1);
+ use_min  = RTC_read_byte(3);
+ use_hour = RTC_read_byte(4);
+ use_week = RTC_read_byte(5);
+ use_day  = RTC_read_byte(6);
+ use_mon  = RTC_read_byte(7);
+ use_year = RTC_read_byte(8);
+ RTC_write_byte(0,0);
+}
+
+/*************************************************/	
+void DO_SETUP_TYPE(void)
+{
+	unsigned char set_key = 0, times = 0, Itemm = 0; 
+	unsigned char item_key,confrom_key, up_key,don_key;
+	unsigned int  value_cal = 0;
+	
+
+	      SETUP_LED_Disp(Itemm,value_cal);
+
+		   while (CAIT)
+			    {
+				          set_key = Get_Key();
+
+						      if((set_key & 0x01) == 1)
+						        { item_key = 1 ;}
+						       else
+						        { item_key = 0 ;}
+
+						      if((set_key & 0x02) == 2)
+						        {confrom_key = 1 ;}
+						       else
+						        { confrom_key = 0 ;}
+
+						      if((set_key & 0x04) == 4)
+						        { up_key = 1 ;}
+						       else
+						        { up_key = 0 ;}
+
+			                  if((set_key & 0x08) == 8)
+						        { don_key = 1 ;}
+						        else
+						        { don_key = 0 ;}
+
+						   if (item_key == 1) 
+						     {
+							  Itemm ++;
+							  times=0;
+						 	 }
+						   if (Itemm > 0x13)
+							 {
+							     Itemm = 0; 
+								 CAIT = 0;
+							 } 
+						   if (confrom_key == 1) 
+						     { 
+							  times ++; //value_cal = 0;
+							 }
+
+						  if(up_key == 1)   value_cal++;
+						  if(don_key == 1)  value_cal--;
+
+		        if (Itemm == MODE_CAL)			//tc,rtd,mV,mA
+		          {
+						    SETUP_LED_Disp(Itemm,Work_Type);
+
+							   Work_Type = Work_Type + value_cal;
+							     value_cal = 0;
+							  if(Work_Type >= 4)
+							    {
+								 Work_Type = 0;
+								 value_cal = 0;
+								}	 
+							  if(confrom_key == 1)
+							    { 
+								  EEPROM_write_byte(Mode_Select,Work_Type);
+								}
+					}
+				else if (Itemm == C_F_CAL)
+		            {
+							SETUP_LED_Disp(Itemm,C_F_Type);
+							  C_F_Type = C_F_Type + value_cal;
+							    value_cal = 0;
+						       
+							   if(C_F_Type >= 2 )
+								   {
+								    C_F_Type = 0 ;
+								    value_cal = 0;
+								   }
+							   if(confrom_key == 1)
+							    { 
+								   EEPROM_write_byte(C_F_Select,C_F_Type);  //C,F
+								}
+					}
+	   	         else if (Itemm == TYPE_CAL)
+		            {
+							   TC_Type = TC_Type + value_cal; 
+								  value_cal = 0;
+							  if (TC_Type >= 6)
+							    {
+							      TC_Type = 0 ;
+								  value_cal = 0;
+							    }		   
+							     SETUP_LED_Disp(Itemm,TC_Type);
+
+								if(confrom_key == 1)
+							     {
+								   EEPROM_write_byte(Type_Select,TC_Type);  //K,J,T,E,R,B,S,N
+								 }
+					 }		
+	             else if (Itemm == TC_ZERO_CAL)
+		             {
+					           value_cal = Get_AD3421_Value();
+							   SETUP_LED_Disp(Itemm,TC_Zero_offset);
+							   if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(TC_Zero,TC_Zero_offset);  
+								}
+					  }
+	              else if (Itemm == TC_SPAN_CAL)
+		              {
+							  SETUP_LED_Disp(Itemm,TC_Span_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(TC_Span,TC_Span_offset);  //tc,rtd,mV,mA
+								}
+					 }
+	              else if (Itemm == RTD_ZERO_CAL)
+		              {
+							  SETUP_LED_Disp(Itemm,RTD_Zero_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(RTD_Zero,RTD_Zero_offset);  //rtd
+								}
+					}
+		           else if (Itemm == RTD_SPAN_CAL)
+		              {
+							  SETUP_LED_Disp(Itemm,RTD_Span_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(RTD_Span,RTD_Span_offset);  //rtd
+								}
+					 }
+		            else if (Itemm == mV_ZERO_CAL)
+		               {
+							  SETUP_LED_Disp(Itemm,mV_Zero_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(mV_Zero,mV_Zero_offset);  //mV
+								}
+					 }
+		            else if (Itemm == mV_SPAN_CAL)
+		                 {
+							  SETUP_LED_Disp(Itemm,mV_Span_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(mV_Span,mV_Span_offset);  //mV
+								}
+					 }
+		           else if (Itemm == mA_ZERO_CAL)
+		               {
+							  SETUP_LED_Disp(Itemm,mA_Zero_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(mA_Zero,mA_Zero_offset);  //mA
+								}
+					 }
+		            else if (Itemm == mA_SPAN_CAL)
+		                {
+							  SETUP_LED_Disp(Itemm,mA_Span_offset);
+							  if(confrom_key == 1)
+							    {
+								 value_cal = Get_AD3421_Value();
+								 EEPROM_write_byte(mA_Span,mA_Span_offset);  //mA
+								}
+					 }
+		           else if (Itemm == ALARM_LO_CAL)
+		                 {
+                               alarm_Low_set = alarm_Low_set + value_cal ;
+									  value_cal = 0;
+							  SETUP_LED_Disp(Itemm,alarm_Low_set);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+							     if(alarm_Low_set > 9999){value_cal = 0;alarm_Low_set = 0;}
+								 if(confrom_key == 1)
+							      {
+					                EEPROM_write_byte(Alarm_Low,alarm_Low_set);  //alarm
+								  } 
+							    }
+						}
+		             else if (Itemm == ALARM_HI_CAL)
+		                { 
+							   alarm_Hi_set = alarm_Hi_set + value_cal ;
+							    value_cal = 0;
+							   SETUP_LED_Disp(Itemm,alarm_Hi_set);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								  if(alarm_Hi_set > 9999){value_cal = 0;alarm_Hi_set = 0;}
+
+								  if(confrom_key == 1)
+							      {
+					                EEPROM_write_byte(Alarm_Hi,alarm_Hi_set);  //alarm
+								  }
+							    }
+						}
+		             else if (Itemm == YEAR_DATE_CAL)
+		                {	    if(value_cal == 0) value_cal = 1;
+							   SETUP_LED_Disp(Itemm,value_cal);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								 if(value_cal > 99){value_cal = 0;}
+							     RTC_write_byte(8,value_cal);
+							     RTC_write_byte(0,0);
+								}
+						 }
+		           else if (Itemm == MON_DATE_CAL)
+		               {
+							  if(value_cal == 0) value_cal = 1;
+							  SETUP_LED_Disp(Itemm,value_cal);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								 if(value_cal > 12){value_cal = 1;}
+							     RTC_write_byte(7,value_cal);
+							     RTC_write_byte(0,0);
+								}
+						}
+		           else if (Itemm == DAY_DATE_CAL)			//add week setup
+		               {
+							 if(value_cal == 0) value_cal = 1;
+                              SETUP_LED_Disp(Itemm,value_cal);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								 if(value_cal > 31){value_cal = 1;}
+							     RTC_write_byte(6,value_cal);
+							     RTC_write_byte(0,0);
+								}
+						}
+		          else if (Itemm == HOUR_DATE_CAL)
+		                {
+							   SETUP_LED_Disp(Itemm,value_cal);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								if(value_cal > 23){value_cal = 0;}
+							     RTC_write_byte(4,value_cal);
+							     RTC_write_byte(0,0);
+								}
+					 }
+	               else if (Itemm == MIN_DATE_CAL)
+		               {
+							   SETUP_LED_Disp(Itemm,value_cal);
+							  if((up_key == 1)||(don_key == 1))
+							    {
+								if(value_cal > 59){value_cal = 0;}
+							     RTC_write_byte(3,value_cal);
+							     RTC_write_byte(0,0);
+								}
+					 }
+				  else if (Itemm >= PRODUCT_RESET)
+					 { 
+							       Itemm = 0 ;
+								   CAIT = 0 ;
+//								   Work_Type = 0;
+					 }
+				 }	
+     Work_Type = EEPROM_read_byte(Mode_Select); 
+}
+//*******************************
+void DO_RESET_TYPE(void)
+{
+	
+     EEPROM_WriteDefault();
+     LED_Fill();                                     //  LED all light
+	 Work_Type = EEPROM_read_byte(Mode_Select);
+	 C_F_Type = EEPROM_read_byte(C_F_Select);
+	 TC_Type = EEPROM_read_byte(Type_Select);       //Type define k=0.j=1,t=2
+	 TC_Zero_offset = EEPROM_read_word(TC_Zero);	
+	 TC_Span_offset = EEPROM_read_word(TC_Span);
+	 RTD_Zero_offset = EEPROM_read_word(RTD_Zero);
+	 RTD_Span_offset = EEPROM_read_word(RTD_Span);
+	 mA_Zero_offset = EEPROM_read_word(mA_Zero);
+	 mA_Span_offset = EEPROM_read_word(mA_Span);
+	 mV_Zero_offset = EEPROM_read_word(mV_Zero);	
+     mV_Span_offset = EEPROM_read_word(mV_Span);
+	 alarm_Low_set = EEPROM_read_word(Alarm_Low);
+	 alarm_Hi_set = EEPROM_read_word(Alarm_Hi);
+     use_year = EEPROM_read_word(Year_Date);
+     use_mon = EEPROM_read_word(Mon_Date);
+     use_day = EEPROM_read_word(Day_Date);
+	 use_week = EEPROM_read_word(Week_Date);
+     use_hour = EEPROM_read_word(Hour_Date);
+     use_min = EEPROM_read_word(Min_Date);
+	 eep_count = EEPROM_read_word(EEP_ADR);
+}
+/***********************************
+****      System_Start          ****
+***********************************/ 
+main(void)
+{
+ //  SP = SP-1;//	Code_Value TC_Value out_Value
+   TR0 = 0;
+   TMOD = TMOD |= 0x01;
+   TH0  = 0xDC; //use timer0 to delay 5ms
+   TL0  = 0;
+   TF0  = 0; 
+
+ //  ISPCR = ISPCR |= 0x80;  //enable ISP/IAP
+   IFMT = 0x07 ; //#AUXRA_Rd ;set read AUXRA command
+   SCMD = 0x46; //h
+   SCMD = 0xB9; //h
+   IFD  = IFD |= 0x08; //;
+   IFMT = 0x06;  // #AUXRA_Wr ;set write AUXRA command
+   SCMD = 0x46; // #46h
+   SCMD = 0xB9; //h
+   TR0  = 1 ;  //;timer0 run
+   while( ~TF0 ) 
+      {   }
+//  JNB TF0, $ ;delay 5ms here, for external XTAL stable
+   TF0 = 0;  //
+   TR0  = 0; //;timer0 stop
+   IFMT = 0x07 ; //#AUXRA_Rd ;set read AUXRA command
+   SCMD = 0x46 ; //h
+   SCMD = 0xB9 ; //h
+   IFD	= IFD |= 0x03 ;
+//   ORL A, #03h ;select crystal as OSCin
+//   MOV IFD, A
+   IFMT = 0x06; // #AUXRA_Wr ;set write AUXRA command
+   SCMD = 0x46; // h
+   SCMD = 0xB9; //h
+   IFMT = 0x07; //#AUXRA_Rd ;set read AUXRA command
+   SCMD = 0x46; //h
+   SCMD = 0xB9; //h
+   IFD = IFD &= 0xFB; //
+ //  ANL A, #0FBh ;disable IHRCO
+ //  MOV IFD, A
+   IFMT = 0x06; //, #AUXRA_Wr ;set write AUXRA command
+   SCMD = 0x46; //h
+   SCMD = 0x0B9; //h
+
+	PORT_Init();
+	EEPROM_Init();
+	LED_Init();
+ 	T0_Init();
+	T1_Init();
+	INT0_Init();
+	AD3421_Init();
+	InitUart();
+    Set_mA(0);
+    LED_Fill();
+	Set_mV(0);
+	Buzzer(OFF);
+	Soft_Timer_Enable = 0;
+
+ 	if((EEPROM_read_byte(0) != 'N')||(EEPROM_read_byte(1) != 'E')||(EEPROM_read_byte(2) != 'W')||(EEPROM_read_byte(3) != JOHNSON)||(EEPROM_read_byte(4) != LIN))
+	  {
+		EEPROM_write_byte(0, 'N');	
+		EEPROM_write_byte(1, 'E');
+		EEPROM_write_byte(2, 'W');
+		EEPROM_write_byte(3, JOHNSON);	
+		EEPROM_write_byte(4, LIN);	
+		EEPROM_WriteDefault();
+      }
+ //      LED_Fill(); 
+	   Work_Type = EEPROM_read_byte(Mode_Select);   	
+	   C_F_Type = EEPROM_read_byte(C_F_Select);
+ 	   TC_Type  = EEPROM_read_byte(Type_Select);       //Type define k=0.j=1,t=2
+	   TC_Zero_offset = EEPROM_read_word(TC_Zero);	
+	   TC_Span_offset = EEPROM_read_word(TC_Span);
+	   RTD_Zero_offset = EEPROM_read_word(RTD_Zero);
+	   RTD_Span_offset = EEPROM_read_word(RTD_Span);
+	   mA_Zero_offset = EEPROM_read_word(mV_Zero);
+	   mA_Span_offset = EEPROM_read_word(mV_Span);
+	   mV_Zero_offset = EEPROM_read_word(mA_Zero);	
+       mV_Span_offset = EEPROM_read_word(mA_Span);
+	   alarm_Low_set = EEPROM_read_word(Alarm_Low);
+	   alarm_Hi_set = EEPROM_read_word(Alarm_Hi);
+       use_year = EEPROM_read_byte(Year_Date);
+       use_mon = EEPROM_read_byte(Mon_Date);
+       use_day = EEPROM_read_byte(Day_Date);
+       use_hour = EEPROM_read_byte(Hour_Date);
+       use_min = EEPROM_read_byte(Min_Date);
+	   eep_count =EEPROM_read_word(EEP_ADR);
+	   Disp_year = use_year+1911;
+	   RTC_WRITE_SET();
+
+	 ET0 = 1;
+	 TR0 = 1;
+ 	 ET1 = 1;
+	 TR1 = 1;
+	 EA  = 1;
+	 MAIN_SW = 1 ;
+	 Work_Type = 0;
+     TC_Type = 4 ;
+//***************************************
+	while (1)
+	{
+		switch (Work_Type)
+		  {
+			case TC_FUNCTION:
+				DO_TC_TYPE();
+				break;
+
+			case RTD_FUNCTION:
+		    	DO_RTD_TYPE();
+				break;
+
+			case mV_FUNCTION:
+				DO_mV_TYPE();
+				break;
+
+			case mA_FUNCTION:
+			    DO_mA_TYPE();
+				break;
+			
+			case SETUP_FUNCTION:
+					CAIT = 1 ;
+				DO_SETUP_TYPE();
+			
+				break;
+
+			case CLEAR_FUNCTION:
+				DO_RESET_TYPE();
+				break;
+	       }
+	 }
+/*	  
+#define	K_TYPE		0		//2466F   54.807mV	P0=0x00
+#define	J_TYPE		1		//1368F   42.922mV
+#define	T_TYPE   	2		//360F    9.286mV
+#define	E_TYPE		3		//1440F   61.022mV
+#define	R_TYPE		4		//2880F   18.842mV
+#define	S_TYPE		5		//2880F   16.771mV
+#define	B_TYPE		6		//3240F   13.585mV
+#define	N_TYPE	    7		//?       ?
+sbit TC_SW1    = P0^0;	//k=0x00;j=0x01;t=0x02;e=0x03; 
+sbit TC_SW2    = P0^1;	//r=0x04;s=0x05;b=0x06;n=0x07;
+sbit TC_SW3    = P0^2;
+
+sbit TYPE_SW1  = P0^3;	 //tc= 000 00xxx;  rtd=000 01xxx;    mV=000 10xxx
+sbit TYPE_SW2  = P0^4;	 //mA= 000 11xxx;
+sbit TYPE_SW3  = P0^5;
+*/
+}

@@ -1,0 +1,99 @@
+C51 COMPILER V7.50   AD                                                                    12/10/2013 12:05:56 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE AD
+OBJECT MODULE PLACED IN AD.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE AD.C BROWSE
+
+line level    source
+
+   1          #include <MPC82G516.h>
+   2          
+   3          unsigned char adc_ch = 0;
+   4          unsigned char adc_val[2] = {200, 200};
+   5          unsigned char code tmp0_tab[15] = {     128, 116, 105, 94, 84, 75, 67, 59, 53, 47, 41, 37, 33, 29, 26};
+   6          unsigned char code tmp1_tab[15] = {     128, 114, 101, 89, 78, 68, 59, 52, 45, 39, 34, 29, 25, 22, 19};
+   7          
+   8          void Init_ADC(void)
+   9          {
+  10   1              ADCTL = (0xC8 | (adc_ch+1));
+  11   1      }
+  12          
+  13          void Get_ADC_Value(void)
+  14          {
+  15   1              if (ADCTL & 0x10)
+  16   1              {
+  17   2                      adc_val[adc_ch] = ADCH;
+  18   2                      adc_ch++;
+  19   2                      adc_ch &= 0x01;
+  20   2                      ADCTL = (0xC8 | (adc_ch+1));
+  21   2              }
+  22   1      }
+  23          
+  24          unsigned int Get_tmp0(unsigned char val)
+  25          {
+  26   1              unsigned char c=0;
+  27   1              unsigned int reti;
+  28   1      
+  29   1              while (tmp0_tab[c] > val)
+  30   1                      c++;
+  31   1              reti = (25+c*5)*10;
+  32   1      
+  33   1              return(reti);
+  34   1      }
+  35          
+  36          unsigned int Get_tmp1(unsigned char val)
+  37          {
+  38   1              unsigned char c=0;
+  39   1              unsigned int reti;
+  40   1      
+  41   1              while (tmp1_tab[c] > val)
+  42   1                      c++;
+  43   1              reti = (25+c*5)*10;
+  44   1      
+  45   1              return(reti);
+  46   1      }
+  47          
+  48          unsigned int WaterOverHot_warning(void)
+  49          {
+  50   1              unsigned char c;
+  51   1              unsigned int reti;
+  52   1      
+  53   1              c = adc_val[0];
+  54   1              if (c < 94)
+  55   1                      reti = Get_tmp0(c);
+C51 COMPILER V7.50   AD                                                                    12/10/2013 12:05:56 PAGE 2   
+
+  56   1              else
+  57   1                      reti = 0;
+  58   1      
+  59   1              return(reti);
+  60   1      }
+  61          
+  62          unsigned int PowerOverHot_warning(void)
+  63          {
+  64   1              unsigned char c;
+  65   1              unsigned int reti;
+  66   1      
+  67   1              c = adc_val[1];
+  68   1              if (c < 39)
+  69   1                      reti = Get_tmp1(c);
+  70   1              else
+  71   1                      reti = 0;
+  72   1      
+  73   1              return(reti);
+  74   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    155    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

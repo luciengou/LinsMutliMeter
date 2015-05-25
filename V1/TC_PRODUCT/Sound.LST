@@ -1,0 +1,27 @@
+C51 COMPILER V7.50   SOUND                                                                 12/10/2013 12:05:56 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE SOUND
+OBJECT MODULE PLACED IN Sound.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE Sound.c BROWSE
+
+line level    source
+
+   1          #include <MPC82G516.h>
+   2          #include <Sound.h>
+   3          
+   4          void S_Delay(unsigned int n)  ;
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

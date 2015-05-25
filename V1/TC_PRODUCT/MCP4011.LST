@@ -1,0 +1,81 @@
+C51 COMPILER V7.50   MCP4011                                                               12/19/2013 16:33:13 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE MCP4011
+OBJECT MODULE PLACED IN MCP4011.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE MCP4011.c LARGE OMF2
+
+line level    source
+
+   1          #include <MPC82G516.h>
+   2          #include <intrins.h>
+   3          #include <MCP4011.h>
+   4          
+   5          sbit  EVR_UD    = P4^3;
+   6          sbit  EVR_CS    = P4^2;
+   7          //======================================
+   8          void Increment_R(unsigned char value_up)
+   9          {
+  10   1              unsigned char i;
+  11   1      
+  12   1              EVR_CS = 1;
+  13   1              EVR_UD = 1;
+  14   1              _nop_();    //110us
+  15   1              _nop_();
+  16   1              EVR_CS = 0;
+  17   1              _nop_();
+  18   1      
+  19   1           for (i=0; i<value_up; i++)
+  20   1              {
+  21   2                      EVR_UD = 0;
+  22   2                      _nop_();
+  23   2                      _nop_();
+  24   2                      EVR_UD = 1;
+  25   2                      _nop_();
+  26   2              }
+  27   1              EVR_CS = 1;
+  28   1              _nop_(); 
+  29   1      }
+  30          //========================================
+  31          void Decrement_R(unsigned char value_down)
+  32          {
+  33   1              unsigned char i;
+  34   1      
+  35   1              EVR_CS = 1;
+  36   1              EVR_UD = 0;                             
+  37   1              _nop_();    //110us
+  38   1              _nop_();
+  39   1              EVR_CS = 0;
+  40   1              _nop_();
+  41   1         
+  42   1           for (i=0; i<value_down; i++)
+  43   1              {
+  44   2                      EVR_UD = 1;
+  45   2                      _nop_();
+  46   2                      _nop_();
+  47   2                      EVR_UD = 0;
+  48   2                      _nop_();
+  49   2              }
+  50   1              EVR_CS = 1;
+  51   1              _nop_(); 
+  52   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V7.50   MCP4011                                                               12/19/2013 16:33:13 PAGE 2   
+
+   CODE SIZE        =     60    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

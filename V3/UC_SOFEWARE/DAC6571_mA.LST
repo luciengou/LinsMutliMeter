@@ -1,0 +1,149 @@
+C51 COMPILER V9.02   DAC6571_MA                                                            01/15/2014 14:31:01 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE DAC6571_MA
+OBJECT MODULE PLACED IN DAC6571_mA.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE DAC6571_mA.C OMF2 OPTIMIZE(4,SPEED) BROWSE DEBUG
+
+line level    source
+
+   1          /***********************************************
+   2            PRODUCT FOR NEWCAL MIX_TEMP FUNCTION
+   3             CPU : MPC82G516
+   4             BEGIN DATE: 2013.11.01
+   5             FINISHED  : 2014.01.25
+   6             WRITEBY   :JOHNSON LIN
+   7             DAC6571mA  setup   SET 1001 0000 FOR A0 TYPE 
+   8              8CH =  pga =1 ,32767BITS
+   9          **************************************************/
+  10          #include <MPC82G516.h>
+  11          #include <DAC6571_mA.h>
+  12          
+  13          #define   mA_COM  0x98    //    10011000
+  14          
+  15          sbit mA_SDA   = P2^2;
+  16          sbit mA_SCL   = P2^4;
+  17          
+  18          sbit BEEP_OUT   = P3^4;
+  19          unsigned char  _mA_ack;      // bit array of error types
+  20          
+  21          extern unsigned char Value_Hi,Value_Lo;
+  22          extern void delay(unsigned int i);
+  23          extern idata unsigned char Soft_Timer[8];
+  24          
+  25          /********************************************************/
+  26          void _mABitDly(void)               // wait 4.7uS, or thereabouts
+  27          {                                   // tune to xtal. This works at 11.0592MHz
+  28   1              unsigned char   i;
+  29   1              
+  30   1              for (i=0; i<0x12; i++);
+  31   1      }
+  32          /*****************************************************/
+  33          void DAC6571mA_Init(void)
+  34          {
+  35   1              unsigned int i;
+  36   1              mA_SCL = 1 ;
+  37   1              _mABitDly();
+  38   1              mA_SDA = 1 ;
+  39   1              _mABitDly();
+  40   1              _mABitDly();
+  41   1              _mABitDly();
+  42   1              _mABitDly();
+  43   1              mA_SDA = 0;
+  44   1      
+  45   1              for(i = 0; i < 0x100; i++);    
+  46   1      }
+  47          /*********************************************************************/
+  48          void DAC6571mA_start(void)
+  49          {
+  50   1              mA_SDA = 1 ;
+  51   1              _mABitDly();
+  52   1              mA_SCL = 1 ;
+  53   1              _mABitDly();
+  54   1         mA_SDA = 0 ;
+  55   1         _mABitDly();
+C51 COMPILER V9.02   DAC6571_MA                                                            01/15/2014 14:31:01 PAGE 2   
+
+  56   1         mA_SCL = 0 ;
+  57   1      }
+  58          /*************************************/
+  59          void DAC6571mA_stop(void)
+  60          {
+  61   1              mA_SCL = 1 ;
+  62   1              _mABitDly();
+  63   1          mA_SDA = 1 ;
+  64   1              _mABitDly();
+  65   1      }
+  66          /********************************************/
+  67          void DAC6571mA_write_byte(unsigned char bt)
+  68          {
+  69   1              idata unsigned char i;
+  70   1      
+  71   1              _mA_ack = TRUE;                                         //default have ack
+  72   1        
+  73   1              for (i=0; i<8; i++)
+  74   1              {
+  75   2                      if (bt & 0x80)
+  76   2                      mA_SDA = 1;                      // send each bit, MSB first
+  77   2                      else
+  78   2                              mA_SDA = 0;
+  79   2                      mA_SCL = 1;
+  80   2                      _mABitDly();
+  81   2                      mA_SCL = 0;
+  82   2                      _mABitDly();
+  83   2                      bt <<= 1;
+  84   2              }
+  85   1      
+  86   1              mA_SDA = 1;                       // change input and listen for ACK
+  87   1              mA_SCL = 1;
+  88   1              _mABitDly();
+  89   1              if (mA_SDA)
+  90   1                      _mA_ack = FALSE;                        // ack didn't happen, may be nothing out there
+  91   1              mA_SCL = 0;
+  92   1              _mABitDly();
+  93   1      }
+  94          /********************************************************/
+  95          void Set_mA(unsigned int mA_Value)
+  96          {
+  97   1       unsigned int mA_CODE;
+  98   1       unsigned char HI_CODE, LO_CODE;                        // 0000 00 dd dddd dddd
+  99   1           
+ 100   1                   mA_CODE = mA_Value;
+ 101   1                       HI_CODE = mA_CODE >> 6 ;                       // 0000 dddd dddd ddxx 
+ 102   1      
+ 103   1                       mA_CODE = mA_Value;
+ 104   1                       LO_CODE = mA_CODE << 2;
+ 105   1                       LO_CODE = LO_CODE & 0xfc;
+ 106   1      
+ 107   1               DAC6571mA_start();                                                             //send start bit
+ 108   1               DAC6571mA_write_byte(mA_COM);
+ 109   1               DAC6571mA_write_byte(HI_CODE);               //send hi address
+ 110   1               DAC6571mA_write_byte(LO_CODE);               //send lo address
+ 111   1               DAC6571mA_stop();                              //stop
+ 112   1      }
+ 113          /*****************************************************/
+ 114          void mA_Delay(unsigned int n)
+ 115          {
+ 116   1              while(n--);
+ 117   1      }
+C51 COMPILER V9.02   DAC6571_MA                                                            01/15/2014 14:31:01 PAGE 3   
+
+ 118          /****************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    214    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----       1
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
