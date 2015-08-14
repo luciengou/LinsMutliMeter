@@ -1,0 +1,202 @@
+C51 COMPILER V9.02   EEPROM                                                                07/30/2015 20:58:17 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE EEPROM
+OBJECT MODULE PLACED IN EEPROM.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE EEPROM.C OMF2 BROWSE DEBUG
+
+line level    source
+
+   1          /************************************
+   2          **    EEPROM FOR 24C08 DEVICE      **
+   3          *************************************/
+   4          #include <MG82FE564.H>
+   5          #include <EEPROM.h>
+   6          #include <IO_DEFINE.h>
+   7          #define  EEPROM_ADDR  0xA0
+   8          
+   9          #define  TRUE   1
+  10          #define  FALSE  0
+  11          
+  12          unsigned char  EEPROM_ack ;
+  13          /*******************************/
+  14          void EEPROM_Delay(unsigned int i)
+  15          {
+  16   1         unsigned char j;
+  17   1       for (; i>0; i--)
+  18   1       for (j=0; j<255; j++);
+  19   1      }
+  20          //==============================
+  21          void EEPROM_BitDly(void)               // wait 4.7uS, or thereabouts
+  22          {                                   // tune to xtal. This works at 11.0592MHz
+  23   1              unsigned char   i;
+  24   1              
+  25   1              for (i=0; i<0x12; i++);
+  26   1      }
+  27          //============================
+  28          void EEPROM_Init(void)
+  29          {
+  30   1              unsigned int i;
+  31   1      
+  32   1              EEPROM_SCL = 1;
+  33   1              EEPROM_BitDly();
+  34   1              EEPROM_BitDly();
+  35   1              EEPROM_BitDly();
+  36   1              EEPROM_SDA = 0;
+  37   1              for(i = 0; i < 0x100; i++); 
+  38   1      }
+  39          //===================================
+  40          void EEPROM_start0(void)
+  41          {
+  42   1              EEPROM_SDA = 1;
+  43   1              EEPROM_BitDly();
+  44   1              EEPROM_SDA = 0;
+  45   1              EEPROM_BitDly();
+  46   1              EEPROM_SCL = 0;
+  47   1              EEPROM_BitDly();
+  48   1      }
+  49          //====================================
+  50          void EEPROM_stop0(void)
+  51          {
+  52   1              EEPROM_SDA = 0;
+  53   1              EEPROM_BitDly();
+  54   1              EEPROM_SCL = 1;
+  55   1              EEPROM_BitDly();
+C51 COMPILER V9.02   EEPROM                                                                07/30/2015 20:58:17 PAGE 2   
+
+  56   1              EEPROM_SDA = 1;
+  57   1              EEPROM_BitDly();
+  58   1      }
+  59          //====================================
+  60          void EEPROM_restart0(void)
+  61          {
+  62   1              EEPROM_SDA = 1;
+  63   1              EEPROM_BitDly();
+  64   1              EEPROM_SCL = 1;
+  65   1              EEPROM_BitDly();
+  66   1              EEPROM_SDA = 0;
+  67   1              EEPROM_BitDly();
+  68   1              EEPROM_SCL = 0;
+  69   1              EEPROM_BitDly();  
+  70   1      }
+  71          //====================================
+  72          void EEPROM_write_byte0(unsigned char bt)
+  73          {
+  74   1              idata unsigned char i;
+  75   1      
+  76   1              EEPROM_ack = TRUE;                                              //default have ack
+  77   1        
+  78   1              for (i=0; i<8; i++)
+  79   1              {
+  80   2                      if (bt & 0x80)
+  81   2                         EEPROM_SDA = 1;         // send each bit, MSB first
+  82   2                      else
+  83   2                         EEPROM_SDA = 0;
+  84   2                         EEPROM_SCL = 1;
+  85   2                         EEPROM_BitDly();
+  86   2                         EEPROM_SCL = 0;
+  87   2                         EEPROM_BitDly();
+  88   2                         bt <<= 1;
+  89   2              }
+  90   1      
+  91   1              EEPROM_SDA = 1;                                // change input and listen for ACK
+  92   1              EEPROM_SCL = 1;
+  93   1              EEPROM_BitDly();
+  94   1      
+  95   1              if (EEPROM_SDA)
+  96   1                      EEPROM_ack = FALSE;                             // ack didn't happen, may be nothing out there
+  97   1                  EEPROM_SCL = 0;
+  98   1                  EEPROM_BitDly();
+  99   1      }
+ 100          //======================================
+ 101          unsigned char EEPROM_read_byte0(void)           // lastone == 1 for last byte
+ 102          {
+ 103   1              idata unsigned char i, res;
+ 104   1              res = 0;
+ 105   1              EEPROM_SDA = 1;
+ 106   1      
+ 107   1              for (i=0; i<8; i++)                 // each bit at a time, MSB first
+ 108   1              {
+ 109   2                      EEPROM_SCL = 1;
+ 110   2                  EEPROM_BitDly();
+ 111   2                            res <<= 1;
+ 112   2                      if (EEPROM_SDA)         res |= 1;
+ 113   2                          EEPROM_SCL = 0;
+ 114   2                          EEPROM_BitDly();
+ 115   2              }
+ 116   1              EEPROM_SDA = 1;                         // send ACK according to 'lastone'
+ 117   1              EEPROM_SCL = 1;
+C51 COMPILER V9.02   EEPROM                                                                07/30/2015 20:58:17 PAGE 3   
+
+ 118   1              EEPROM_BitDly();
+ 119   1              EEPROM_SCL = 0;
+ 120   1              EEPROM_SDA = 1;
+ 121   1              EEPROM_BitDly();
+ 122   1              return(res);
+ 123   1      }
+ 124          //==========================================
+ 125          void EEPROM_write_byte(unsigned char reg_addr, unsigned char reg_data)
+ 126          {
+ 127   1              EEPROM_start0();                                                //send start bit
+ 128   1              EEPROM_write_byte0(EEPROM_ADDR);
+ 129   1              EEPROM_write_byte0(0x00);                           //send hi  address
+ 130   1              EEPROM_write_byte0(reg_addr);                   //send low address
+ 131   1              EEPROM_write_byte0(reg_data);                   //send low data
+ 132   1              EEPROM_stop0();                                         //stop
+ 133   1              EEPROM_Delay(100);                                                  // wait for write cycle time
+ 134   1      }
+ 135          //=====================================================
+ 136          unsigned char EEPROM_read_byte(unsigned char reg_addr)
+ 137          {
+ 138   1              unsigned char retb;
+ 139   1      
+ 140   1              EEPROM_start0();                                                                        //send start bit
+ 141   1              EEPROM_write_byte0(EEPROM_ADDR);                                        //send com byte
+ 142   1              EEPROM_write_byte0(0x00);                                   //send high address
+ 143   1              EEPROM_write_byte0(reg_addr);                           //send low  address
+ 144   1        
+ 145   1              EEPROM_restart0();
+ 146   1              EEPROM_write_byte0(EEPROM_ADDR+1);                                      //send com byte
+ 147   1              retb = EEPROM_read_byte0();                             //get high data
+ 148   1              EEPROM_stop0();                                         //stop    
+ 149   1          
+ 150   1              return retb;
+ 151   1      }
+ 152          //==============================================
+ 153          void EEPROM_write_word(unsigned char addr, unsigned intdata)
+ 154          {
+ 155   1              EEPROM_write_byte(addr++, (unsigned char)(intdata));
+ 156   1              EEPROM_write_byte(addr, (unsigned char)(intdata>>8));
+ 157   1      }
+ 158          //======================================
+ 159          unsigned  EEPROM_read_word(unsigned char addr)
+ 160          {
+ 161   1              unsigned int rdata;
+ 162   1      
+ 163   1              rdata = (unsigned int)(EEPROM_read_byte(addr+1));
+ 164   1              rdata <<= 8;
+ 165   1              rdata += (unsigned int)(EEPROM_read_byte(addr));
+ 166   1      
+ 167   1              return(rdata);  
+ 168   1      }
+ 169          /***************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    349    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----       3
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.02   EEPROM                                                                07/30/2015 20:58:17 PAGE 4   
+
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

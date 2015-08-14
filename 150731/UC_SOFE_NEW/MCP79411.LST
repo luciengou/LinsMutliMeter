@@ -1,0 +1,206 @@
+C51 COMPILER V9.02   MCP79411                                                              07/30/2015 20:58:17 PAGE 1   
+
+
+C51 COMPILER V9.02, COMPILATION OF MODULE MCP79411
+OBJECT MODULE PLACED IN MCP79411.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE MCP79411.C OMF2 BROWSE DEBUG
+
+line level    source
+
+   1          /************************************
+   2          **          RTC3130 DEVICE             **
+   3           00h = control code
+   4             WRITE_COM = 02H must change to 00H when finished
+   5             READ_COM  = 01H must change to 00H when finished
+   6           00h= sec        0-59   BCD CODE
+   7           01h= min          59
+   8           02h= hour             24
+   9           03h= week              7
+  10           04h= day              31
+  11           05h= month                12
+  12           06h= year          00-99
+  13           07h= control code = 80H
+  14          
+  15           08h= alarm min
+  16           09h= alarm hour
+  17          
+  18           0ch= alarm day
+  19           0dh= alarm year
+  20           0eh= control code      00H
+  21          
+  22          *************************************/
+  23          #include <MG82FE564.H>
+  24          #include <MCP79411.h>
+  25          #include <IO_DEFINE.h>
+  26          
+  27          #define  RTC_WRITE_COM  0xDE
+  28          #define  RTC_READ_COM   0xDF
+  29          #define  EEP_WRITE_COM  0xAE
+  30          #define  EEP_READ_COM   0xAF
+  31          #define  FINISHED_COM   0
+  32          
+  33          #define  TRUE   1
+  34          #define  FALSE  0
+  35          
+  36          unsigned char  RTC_ack ;
+  37          /*******************************/
+  38          void RTC_Delay(unsigned int i)
+  39          {
+  40   1         unsigned char j;
+  41   1        if(i>0) i--;
+  42   1       for (j=0; j<250; j++);
+  43   1      }
+  44          //==============================
+  45          void RTC_BitDly(void)               // wait 4.7uS, or thereabouts
+  46          {                                   // tune to xtal. This works at 11.0592MHz
+  47   1              unsigned char   i;
+  48   1              
+  49   1              for (i=0; i<0x12; i++);
+  50   1      }
+  51          //==============================
+  52          void RTC_Init(void)
+  53          {
+  54   1              unsigned int i;
+  55   1      
+C51 COMPILER V9.02   MCP79411                                                              07/30/2015 20:58:17 PAGE 2   
+
+  56   1              RTC_SCL = 1;
+  57   1              RTC_BitDly();
+  58   1              RTC_BitDly();
+  59   1              RTC_BitDly();
+  60   1              RTC_SDA = 0;
+  61   1              for(i = 0; i < 0x100; i++); 
+  62   1      }
+  63          //===================================
+  64          void RTC_start0(void)
+  65          {
+  66   1              RTC_SDA = 1;
+  67   1              RTC_BitDly();
+  68   1              RTC_SDA = 0;
+  69   1              RTC_BitDly();
+  70   1              RTC_SCL = 0;
+  71   1              RTC_BitDly();
+  72   1      }
+  73          //====================================
+  74          void RTC_stop0(void)
+  75          {
+  76   1              RTC_SDA = 0;
+  77   1              RTC_BitDly();
+  78   1              RTC_SCL = 1;
+  79   1              RTC_BitDly();
+  80   1              RTC_SDA = 1;
+  81   1              RTC_BitDly();
+  82   1      }
+  83          //====================================
+  84          void RTC_restart0(void)
+  85          {
+  86   1              RTC_SDA = 1;
+  87   1              RTC_BitDly();
+  88   1              RTC_SCL = 1;
+  89   1              RTC_BitDly();
+  90   1              RTC_SDA = 0;
+  91   1              RTC_BitDly();
+  92   1              RTC_SCL = 0;
+  93   1              RTC_BitDly();  
+  94   1      }
+  95          //====================================
+  96          void RTC_write_byte0(unsigned char bt)
+  97          {
+  98   1              idata unsigned char i;
+  99   1      
+ 100   1              RTC_ack = TRUE;                                         //default have ack
+ 101   1        
+ 102   1              for (i=0; i<8; i++)
+ 103   1              {
+ 104   2                      if (bt & 0x80)
+ 105   2                         RTC_SDA = 1;         // send each bit, MSB first
+ 106   2                          else
+ 107   2                            RTC_SDA = 0;
+ 108   2                            RTC_BitDly();
+ 109   2                            RTC_SCL = 1;
+ 110   2                            RTC_BitDly();
+ 111   2                            RTC_SCL = 0;
+ 112   2                            RTC_BitDly();
+ 113   2                         bt <<= 1;
+ 114   2              }
+ 115   1              RTC_SDA = 1; 
+ 116   1              RTC_BitDly();                                  // change input and listen for ACK
+ 117   1              RTC_SCL = 1;
+C51 COMPILER V9.02   MCP79411                                                              07/30/2015 20:58:17 PAGE 3   
+
+ 118   1              RTC_BitDly();
+ 119   1      
+ 120   1              if (RTC_SDA){RTC_ack = FALSE;}                          // ack didn't happen, may be nothing out there
+ 121   1                  RTC_SCL = 0;
+ 122   1                  RTC_BitDly();
+ 123   1      }
+ 124          //======================================
+ 125          unsigned char RTC_read_byte0(void)              // lastone == 1 for last byte
+ 126          {
+ 127   1              idata unsigned char i, res;
+ 128   1              res = 0;
+ 129   1              RTC_SDA = 1;
+ 130   1      
+ 131   1              for (i=0; i<8; i++)                 // each bit at a time, MSB first
+ 132   1              {
+ 133   2                      RTC_SCL = 1;
+ 134   2                  RTC_BitDly();
+ 135   2                            res <<= 1;
+ 136   2                      if (RTC_SDA)            res |= 1;
+ 137   2                          RTC_SCL = 0;
+ 138   2                          RTC_BitDly();
+ 139   2              }
+ 140   1              RTC_SDA = 1;                    // send ACK according to 'lastone'
+ 141   1              RTC_SCL = 1;
+ 142   1              RTC_BitDly();
+ 143   1              RTC_SCL = 0;
+ 144   1              RTC_SDA = 1;
+ 145   1              RTC_BitDly();
+ 146   1              return(res);
+ 147   1      }
+ 148          //==========================================
+ 149          void RTC_write_byte(unsigned char reg_addr, unsigned char reg_data)
+ 150          {
+ 151   1              RTC_start0();                                           //send start bit
+ 152   1              RTC_write_byte0(RTC_WRITE_COM);
+ 153   1              RTC_write_byte0(reg_addr);                      //send low address
+ 154   1              RTC_write_byte0(reg_data);                      //send low data
+ 155   1              RTC_stop0();                                            //stop
+ 156   1              RTC_Delay(100);                                             // wait for write cycle time
+ 157   1      }
+ 158          //=====================================================
+ 159          unsigned char RTC_read_byte(unsigned char reg_addr)
+ 160          {
+ 161   1              unsigned char retb;
+ 162   1      
+ 163   1              RTC_start0();                                                                           //send start bit
+ 164   1              RTC_write_byte0(RTC_WRITE_COM);                                 //send address byte
+ 165   1              RTC_write_byte0(reg_addr);                              //send high address
+ 166   1              RTC_restart0();
+ 167   1              RTC_write_byte0(RTC_READ_COM);                                  //send address byte
+ 168   1              retb = RTC_read_byte0();                        //get high data
+ 169   1              RTC_stop0();                                            //stop    
+ 170   1          
+ 171   1              return retb;
+ 172   1      }
+ 173          /***************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    277    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+C51 COMPILER V9.02   MCP79411                                                              07/30/2015 20:58:17 PAGE 4   
+
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----       3
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
